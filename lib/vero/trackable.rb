@@ -39,8 +39,12 @@ module Vero
 
     private
     def post_now(url, params)
-      job = Vero::Jobs::RestPostJob.new(url, params)
-      job.perform
+      begin
+        job = Vero::Jobs::RestPostJob.new(url, params)
+        job.perform
+      rescue => e
+        Rails.logger.info "Vero: Error attempting to track event: #{params.to_s} error: #{e.message}"
+      end
     end
 
     def post_later(url, params)

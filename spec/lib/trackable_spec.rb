@@ -34,7 +34,7 @@ describe Vero::Trackable do
       @user = User.new
     end
 
-    describe "#track" do
+    describe :track do
       before :each do
         @request_params = {
           event_name: 'test_event',
@@ -45,6 +45,15 @@ describe Vero::Trackable do
           development_mode: true
         }
         @url = "http://www.getvero.com/api/v1/track.json"
+      end
+
+      it "should not send a track request when the required parameters are invalid" do
+        @user.stub(:post_now).and_return(200)
+
+        expect { @user.track(nil) }.to raise_error
+        expect { @user.track('') }.to raise_error
+        expect { @user.track('test', '') }.to raise_error
+        expect { @user.track('test', {}, 8) }.to raise_error
       end
 
       it "should send a track request when async is set to false" do
@@ -63,13 +72,12 @@ describe Vero::Trackable do
         @user.track(@request_params[:event_name]).should == 'success'
       end
 
-      it "should not send a track request when the required parameters are invalid" do
-        @user.stub(:post_now).and_return(200)
+      it "should not raise an error when async is set to false and the request times out" do
+        Vero::App.config.async = false
+        Vero::App.config.domain = "localhost"
+        Rails.stub(:logger).and_return(Logger.new('info'))
 
-        expect { @user.track(nil) }.to raise_error
-        expect { @user.track('') }.to raise_error
-        expect { @user.track('test', '') }.to raise_error
-        expect { @user.track('test', {}, 8) }.to raise_error
+        expect { @user.track(@request_params[:event_name], @request_params[:data], 'test') }.to_not raise_error
       end
     end
   end
