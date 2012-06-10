@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Vero::App do
-  describe "#init" do
+  describe :init do
     it "should create a Config object" do
       Vero::App.config.should be_nil
       Vero::App.init {}

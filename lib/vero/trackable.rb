@@ -4,25 +4,36 @@ require 'vero/jobs/rest_post_job'
 module Vero
   module Trackable
     def self.included(base)
-      @@vero_trackable_map = []
+      @vero_trackable_map = []
       base.extend(ClassMethods)
     end
 
     module ClassMethods
       def trackable(*args)
-        @@vero_trackable_map = args
+        if @vero_trackable_map.kind_of?(Array)
+          @vero_trackable_map = (@vero_trackable_map << args).flatten
+        else
+          @vero_trackable_map = args
+        end
       end
 
       def trackable_map
-        @@vero_trackable_map
+        @vero_trackable_map
+      end
+
+      def trackable_map_reset!
+        @vero_trackable_map = nil
       end
     end
 
     def to_vero
-      self.class.trackable_map.inject({}) do |hash, symbol|
+      result = self.class.trackable_map.inject({}) do |hash, symbol|
         hash[symbol] = self.send(symbol)
         hash
       end
+
+      result[:email] = result.delete(:email_address) if result.has_key?(:email_address)
+      result
     end
 
     def track(event_name, event_data = {}, cta = '')
@@ -49,7 +60,16 @@ module Vero
 
     def post_later(url, params)
       job = Vero::Jobs::RestPostJob.new(url, params)
-      ::Delayed::Job.enqueue job
+
+      begin
+        ::Delayed::Job.enqueue job
+      rescue ActiveRecord::StatementInvalid => e
+        if e.message == "Could not find table 'delayed_jobs'"
+          raise "To send ratings asynchronously, you must configure delayed_job. Run `rails generate delayed_job:active_record` then `rake db:migrate`."
+        else
+          raise e
+        end
+      end
       'success'
     end
 

@@ -5,3 +5,11 @@ module Vero
   autoload :App,        'vero/app'
   autoload :Trackable,  'vero/trackable'
 end
+
+if defined? ActiveRecord
+  require 'delayed_job_active_record'
+end
+
+if defined? Mongoid
+  require 'delayed_job_mongoid'
+end

@@ -80,5 +80,38 @@ describe Vero::Trackable do
         expect { @user.track(@request_params[:event_name], @request_params[:data], 'test') }.to_not raise_error
       end
     end
+
+    describe :trackable do
+      after :each do
+        User.trackable_map_reset!
+        User.trackable :email, :age
+      end
+
+      it "should build an array of trackable params" do
+        User.trackable_map_reset!
+        User.trackable :email, :age
+        User.trackable_map.should == [:email, :age]
+      end
+
+      it "should append new trackable items to an existing trackable map" do
+        User.trackable_map_reset!
+        User.trackable :email, :age
+        User.trackable :hair_colour
+        User.trackable_map.should == [:email, :age, :hair_colour]
+      end
+    end
+
+    describe :to_vero do
+      it "should return a hash of all values mapped by trackable" do
+        user = User.new
+        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+
+        user = UserWithoutEmail.new
+        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+
+        user = UserWithEmailAddress.new
+        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+      end
+    end
   end
 end

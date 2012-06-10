@@ -1,2 +1,0 @@
-# Logfile created on 2012-06-09 15:28:35 -0700 by logger.rb/31641
-Vero: Error attempting to track event: {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20}, :data=>{:test=>1}, :cta=>"test"} error: Connection refused - connect(2)

@@ -1,20 +1,18 @@
 # vero
 
-vero makes it easy to interact with Vero's REST API from your Rails 3.x app. Vero is a user lifecycle platform that allows you to engage and re-engage your customer base via email, based on the actions they perform in your software. For more information about the platform, visit [Vero](http://getvero.com).
+vero makes it easy to interact with Vero's REST API from your Rails 3.x app. Vero is a user lifecycle platform that allows you to engage and re-engage your customer base via email, based on the actions they perform in your software. 
+
+For more information about the platform, [click here](http://getvero.com) to visit Vero.
 
 ## Installation
 
 Include in your Gemfile:
 
     gem 'vero'
-    gem 'delayed_job'
 
 Or install the gem:
 
-    gem install 'delayed_job'
     gem install 'vero'
-
-__NOTE: vero uses delayed_job to asynchrously send events to the API__.
 
 Create a [Vero account](http://getvero.com). Create an initializer in your config/initializers folder called vero.rb with the following:
     
@@ -26,7 +24,7 @@ Create a [Vero account](http://getvero.com). Create an initializer in your confi
 
 You will be able to find your API key and secret by logging into Vero and clicking the 'Account' button at the top of the page.
 
-To send events synchronously (i.e. avoid delayed_job), add the following to your initializer:
+By default, events are sent asynchronously using DelayedJob. To force all events to be sent synchronously, add the following line to your initializer:
 
     config.async = false
 
@@ -58,19 +56,19 @@ Each symbol passed to trackable should reference either an instance method or an
       end
     end
 
-__NOTE: 'email' is a required field__. 
-
-If the user's email address is stored under a different field, you can do the following:
+There is one caveat, email (or email_address) is a required field. If the user's email address is stored under a different field, you can do the following:
     
     # app/models/user.rb
     class User < ActiveRecord::Base
       include Vero::Trackable 
       trackable :email
 
-      def email; self.email_address; end
+      def email; self.primary_contact; end
     end
 
 ## Sending events
+
+Events can be sent by any model which has been previously marked as trackable.
 
 To send an event:
     
@@ -95,8 +93,6 @@ To send an event:
         end
       end
     end
-
-You can only send events on models which are trackable.
 
 You may want to send additional data about an event:
     

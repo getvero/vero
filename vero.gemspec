@@ -14,7 +14,9 @@ Gem::Specification.new do |s|
   
   dependencies = [
     [:runtime, 'rest-client'],
-    [:runtime, 'delayed_job']
+    [:runtime, 'delayed_job'],
+    [:runtime, 'delayed_job_active_record'],
+    [:runtime, 'delayed_job_mongoid']
   ]
   
   s.files         = Dir['**/*']

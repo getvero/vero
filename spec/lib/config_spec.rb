@@ -9,7 +9,7 @@ describe Vero::Config do
     @config.async.should be_true
   end
 
-  describe "#auth_token" do
+  describe :auth_token do
     it "should return nil if either api_key or secret are not set" do
       @config.api_key = nil
       @config.secret = "abcd"
@@ -31,7 +31,7 @@ describe Vero::Config do
     end
   end
 
-  describe "#request_params" do
+  describe :request_params do
     it "should return a hash of auth_token and development_mode if they are set" do
       @config.api_key = nil
       @config.secret = nil
@@ -47,7 +47,7 @@ describe Vero::Config do
     end
   end
 
-  describe "#domain" do
+  describe :domain do
     it "should return www.getvero.com when not set" do
       @config.domain.should == 'www.getvero.com'
       @config.domain = 'blah.com'
