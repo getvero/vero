@@ -6,7 +6,7 @@ require "vero/version"
 Gem::Specification.new do |s|
   s.name     = "vero"
   s.version  = Vero::VERSION.dup
-  s.date     = "2012-06-03"
+  s.date     = "2012-06-09"
   s.summary  = "Rails 3.x gem for Vero"
   s.email    = "support@getvero.com"
   s.homepage = "http://getvero.com/"
