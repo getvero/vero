@@ -1,19 +1,21 @@
 require 'spec_helper'
 
 describe Vero::Trackable do
+  before :each do
+    @request_params = {
+      :event_name => 'test_event',
+      :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+      :identity => {:email => 'durkster@gmail.com', :age => 20},
+      :data => { :test => 1 },
+      :development_mode => true
+    }
+    @url = "http://www.getvero.com/api/v1/track.json"
+    @user = User.new
+  end
+
   context "the gem has not been configured" do
     before :each do
       Vero::App.reset!
-      @request_params = {
-        event_name: 'test_event',
-        auth_token: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-        identity: {email: 'durkster@gmail.com', age: 20},
-        data: { test: 1 },
-        cta: 'test',
-        development_mode: true
-      }
-      @url = "http://www.getvero.com/api/v1/track.json"
-      @user = User.new
     end
 
     describe :track do
@@ -31,29 +33,15 @@ describe Vero::Trackable do
         c.secret = 'efgh5678'
         c.async = false
       end
-      @user = User.new
     end
 
     describe :track do
-      before :each do
-        @request_params = {
-          event_name: 'test_event',
-          auth_token: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          identity: {email: 'durkster@gmail.com', age: 20},
-          data: { test: 1 },
-          cta: 'test',
-          development_mode: true
-        }
-        @url = "http://www.getvero.com/api/v1/track.json"
-      end
-
       it "should not send a track request when the required parameters are invalid" do
         @user.stub(:post_now).and_return(200)
 
         expect { @user.track(nil) }.to raise_error
         expect { @user.track('') }.to raise_error
         expect { @user.track('test', '') }.to raise_error
-        expect { @user.track('test', {}, 8) }.to raise_error
       end
 
       it "should send a track request when async is set to false" do
@@ -103,14 +91,16 @@ describe Vero::Trackable do
 
     describe :to_vero do
       it "should return a hash of all values mapped by trackable" do
+        temp_params = {:email => 'durkster@gmail.com', :age => 20}
+
         user = User.new
-        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+        user.to_vero.should == temp_params
 
         user = UserWithoutEmail.new
-        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+        user.to_vero.should == temp_params
 
         user = UserWithEmailAddress.new
-        user.to_vero.should == {email: 'durkster@gmail.com', age: 20}
+        user.to_vero.should == temp_params
       end
     end
   end

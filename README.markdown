@@ -107,7 +107,7 @@ You may want to send additional data about an event:
 
         if @contest.save
           # Tell Vero that a new contest has been created, and the id and name
-          current_user.track('new_contest_created', {id: @contest.id, name: @content.name})
+          current_user.track('new_contest_created', {:id => @contest.id, :name => @content.name})
           
           flash[:notice] = "New contest saved successfully!"
           redirect_to contests_path

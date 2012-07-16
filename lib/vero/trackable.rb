@@ -38,11 +38,11 @@ module Vero
 
     def track(event_name, event_data = {}, cta = '')
       validate_configured!
-      validate_track_params!(event_name, event_data, cta)
+      validate_track_params!(event_name, event_data)
 
       config = Vero::App.config
       request_params = config.request_params
-      request_params.merge!(event_name: event_name, identity: self.to_vero, data: event_data, cta: cta)
+      request_params.merge!({:event_name => event_name, :identity => self.to_vero, :data => event_data})
       
       method = !config.async ? :post_now : :post_later
       self.send(method, "http://#{config.domain}/api/v1/track.json", request_params)
@@ -54,7 +54,7 @@ module Vero
         job = Vero::Jobs::RestPostJob.new(url, params)
         job.perform
       rescue => e
-        Rails.logger.info "Vero: Error attempting to track event: #{params.to_s} error: #{e.message}"
+        Rails.logger.info "Vero: Error attempting to track event: #{params.to_s} error: #{e.message}" if defined? Rails && Rails.logger
       end
     end
 
@@ -79,14 +79,13 @@ module Vero
       end
     end
 
-    def validate_track_params!(event_name, event_data, cta)
+    def validate_track_params!(event_name, event_data)
       result = true
 
       result &&= event_name.kind_of?(String) && !event_name.blank?
       result &&= event_data.nil? || event_data.kind_of?(Hash)
-      result &&= cta.nil? || cta.kind_of?(String)
 
-      raise ArgumentError.new({event_name: event_name, event_data: event_data, cta: cta}) unless result
+      raise ArgumentError.new({:event_name => event_name, :event_data => event_data}) unless result
     end
   end
 end

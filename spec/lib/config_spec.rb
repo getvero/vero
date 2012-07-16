@@ -40,10 +40,10 @@ describe Vero::Config do
 
       @config.api_key = "abcd1234"
       @config.secret = "abcd1234"
-      @config.request_params.should == {auth_token: "YWJjZDEyMzQ6YWJjZDEyMzQ="}
+      @config.request_params.should == {:auth_token => "YWJjZDEyMzQ6YWJjZDEyMzQ="}
 
       @config.development_mode = true
-      @config.request_params.should == {auth_token: "YWJjZDEyMzQ6YWJjZDEyMzQ=", development_mode: true}
+      @config.request_params.should == {:auth_token => "YWJjZDEyMzQ6YWJjZDEyMzQ=", :development_mode => true}
     end
   end
 
