@@ -1,9 +1,10 @@
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :configured
+    attr_accessor :api_key, :secret, :development_mode, :async, :configured, :disabled
 
     def initialize
+      self.disabled         = false
       self.configured       = false
       self.development_mode = !Rails.env.production?
       self.async            = true
@@ -11,8 +12,7 @@ module Vero
 
     def request_params
       temp = {}
-
-      temp_auth_token = self.auth_token
+      temp_auth_token         = self.auth_token
       temp[:auth_token]       = temp_auth_token       unless temp_auth_token.nil?
       temp[:development_mode] = self.development_mode unless self.development_mode.nil?
 

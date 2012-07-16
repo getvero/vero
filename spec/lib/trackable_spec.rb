@@ -103,5 +103,24 @@ describe Vero::Trackable do
         user.to_vero.should == temp_params
       end
     end
+
+    describe :execute_unless_disabled do
+      it "should only execute the block unless config.disabled" do
+        user = User.new
+        test_val = 1
+        test_val.should == 1
+
+        user.send(:execute_unless_disabled) do 
+          test_val = 2
+        end
+        test_val.should == 2
+
+        Vero::App.disable_requests!
+        user.send(:execute_unless_disabled) do 
+          test_val = 3
+        end
+        test_val.should == 2
+      end
+    end
   end
 end

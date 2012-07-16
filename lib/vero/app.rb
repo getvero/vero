@@ -15,6 +15,10 @@ module Vero
       @@config = nil
     end
 
+    def self.disable_requests!
+      @@config.disabled = true
+    end
+
     def self.config
       @@config
     end

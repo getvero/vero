@@ -35,4 +35,17 @@ describe Vero::App do
       Vero::App.config.async.should be_true
     end
   end
+
+  describe :disable_requests! do
+    before :each do
+      Vero::App.init {}
+    end
+
+    it "should change config.disabled" do
+      Vero::App.config.disabled.should be_false
+
+      Vero::App.disable_requests!
+      Vero::App.config.disabled.should be_true            
+    end
+  end
 end

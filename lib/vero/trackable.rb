@@ -51,8 +51,10 @@ module Vero
     private
     def post_now(url, params)
       begin
-        job = Vero::Jobs::RestPostJob.new(url, params)
-        job.perform
+        execute_unless_disabled do
+          job = Vero::Jobs::RestPostJob.new(url, params)
+          job.perform
+        end
       rescue => e
         Rails.logger.info "Vero: Error attempting to track event: #{params.to_s} error: #{e.message}" if defined? Rails && Rails.logger
       end
@@ -62,7 +64,9 @@ module Vero
       job = Vero::Jobs::RestPostJob.new(url, params)
 
       begin
-        ::Delayed::Job.enqueue job
+        execute_unless_disabled do
+          ::Delayed::Job.enqueue job
+        end
       rescue ActiveRecord::StatementInvalid => e
         if e.message == "Could not find table 'delayed_jobs'"
           raise "To send ratings asynchronously, you must configure delayed_job. Run `rails generate delayed_job:active_record` then `rake db:migrate`."
@@ -86,6 +90,13 @@ module Vero
       result &&= event_data.nil? || event_data.kind_of?(Hash)
 
       raise ArgumentError.new({:event_name => event_name, :event_data => event_data}) unless result
+    end
+
+    def execute_unless_disabled(&block)
+      config = Vero::App.config
+      if !config.disabled && block_given?
+        block.call
+      end
     end
   end
 end
