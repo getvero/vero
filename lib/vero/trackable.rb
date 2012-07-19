@@ -79,7 +79,7 @@ module Vero
 
     def validate_configured!
       unless Vero::App.configured?
-        raise "You must configure the 'vero' gem. Visit https://bitbucket.org/semblance/vero/overview for more details."
+        raise "You must configure the 'vero' gem. Visit https://github.com/semblancesystems/vero for more details."
       end
     end
 

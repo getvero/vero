@@ -13,3 +13,5 @@ end
 if defined? Mongoid
   require 'delayed_job_mongoid'
 end
+
+require 'vero/railtie' if defined?(Rails)

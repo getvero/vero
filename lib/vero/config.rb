@@ -1,13 +1,16 @@
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :configured, :disabled
+    attr_accessor :api_key, :secret, :development_mode, :async, :disabled
 
     def initialize
       self.disabled         = false
-      self.configured       = false
       self.development_mode = !Rails.env.production?
       self.async            = true
+    end
+
+    def config_params
+      options = {api_key: self.api_key, secret: self.secret}
     end
 
     def request_params
@@ -26,6 +29,10 @@ module Vero
     def auth_token
       return if api_key.blank? || secret.blank?
       Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
+    end
+
+    def configured
+      !api_key.blank? && !secret.blank?
     end
   end
 end

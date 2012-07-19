@@ -7,7 +7,6 @@ module Vero
 
       if block_given?
         block.call(self.config)
-        @@config.configured = true
       end
     end
 
