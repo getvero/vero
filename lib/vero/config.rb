@@ -11,7 +11,7 @@ module Vero
     end
 
     def config_params
-      options = {api_key: self.api_key, secret: self.secret}
+      options = {:api_key => self.api_key, :secret => self.secret}
     end
 
     def request_params

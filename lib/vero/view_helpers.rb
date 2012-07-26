@@ -13,7 +13,7 @@ module Vero
 
     private
     def default_vero_javascript_tag(options = {})
-      content_tag :script, {type: "text/javascript"} do
+      content_tag :script, {:type => "text/javascript"} do
         result = "var _veroq = _veroq || [];" +
         "setTimeout(function(){if(typeof window.Semblance==\"undefined\"){console.log(\"Vero did not load in time.\");for(var i=0;i<_veroq.length;i++){a=_veroq[i];if(a.length==3&&typeof a[2]==\"function\")a[2](null,false);}}},3000);" +
         "_veroq.push(['init', {" +
@@ -32,7 +32,7 @@ module Vero
 
     def options_to_string(options)
       options = {} unless options.kind_of?(Hash)
-      result = options.keys.collect { |k| "#{k}: \"#{options[k]}\"" }
+      result = options.keys.collect { |k| "\"#{k}\": \"#{options[k]}\"" }
       result.join(", ")
     end
   end

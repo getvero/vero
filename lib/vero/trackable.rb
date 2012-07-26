@@ -1,4 +1,5 @@
 require 'delayed_job'
+require 'json'
 require 'vero/jobs/rest_post_job'
 
 module Vero
