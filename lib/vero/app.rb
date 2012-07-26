@@ -25,5 +25,15 @@ module Vero
     def self.configured?
       self.config && self.config.configured
     end
+
+    def self.log(object, message)
+      message = "#{object.class.name}: #{message}"
+
+      if defined?(Rails) && Rails.logger
+        Rails.logger.info message
+      else
+        puts message
+      end
+    end
   end
 end

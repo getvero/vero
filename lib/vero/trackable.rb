@@ -52,20 +52,19 @@ module Vero
     def post_now(url, params)
       begin
         execute_unless_disabled do
-          job = Vero::Jobs::RestPostJob.new(url, params)
-          job.perform
+          Vero::Jobs::RestPostJob.new(url, params).perform
+          Vero::App.log(self, "method: track, params: #{params.to_json}, response: job performed")
         end
       rescue => e
-        Rails.logger.info "Vero: Error attempting to track event: #{params.to_s} error: #{e.message}" if defined? Rails && Rails.logger
+        Vero::App.log(self, "Error attempting to track event: #{params.to_s} error: #{e.message}")
       end
     end
 
     def post_later(url, params)
-      job = Vero::Jobs::RestPostJob.new(url, params)
-
       begin
         execute_unless_disabled do
-          ::Delayed::Job.enqueue job
+          ::Delayed::Job.enqueue Vero::Jobs::RestPostJob.new(url, params)
+          Vero::App.log(self, "method: track, params: #{params.to_json}, response: delayed job queued")
         end
       rescue ActiveRecord::StatementInvalid => e
         if e.message == "Could not find table 'delayed_jobs'"
