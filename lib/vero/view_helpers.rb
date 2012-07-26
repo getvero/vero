@@ -18,7 +18,8 @@ module Vero
         "setTimeout(function(){if(typeof window.Semblance==\"undefined\"){console.log(\"Vero did not load in time.\");for(var i=0;i<_veroq.length;i++){a=_veroq[i];if(a.length==3&&typeof a[2]==\"function\")a[2](null,false);}}},3000);" +
         "_veroq.push(['init', {" +
         options_to_string(options) +
-        "}]);"
+        "}]);" + 
+        "(function() {var ve = document.createElement('script'); ve.type = 'text/javascript'; ve.async = true; ve.src = '//getvero.com/assets/m.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ve, s);})();"
         result.html_safe
       end.html_safe
     end
