@@ -1,12 +1,13 @@
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :disabled
+    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
 
     def initialize
       self.disabled         = false
       self.development_mode = !Rails.env.production?
       self.async            = true
+      self.logging          = false
     end
 
     def config_params

@@ -56,7 +56,7 @@ module Vero
           Vero::App.log(self, "method: track, params: #{params.to_json}, response: job performed")
         end
       rescue => e
-        Vero::App.log(self, "Error attempting to track event: #{params.to_s} error: #{e.message}")
+        Vero::App.log(self, "method: track, params: #{params.to_json} error: #{e.message}")
       end
     end
 

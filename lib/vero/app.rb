@@ -27,12 +27,24 @@ module Vero
     end
 
     def self.log(object, message)
+      return unless config.logging
+
+      logger  = self.logger
       message = "#{object.class.name}: #{message}"
 
-      if defined?(Rails) && Rails.logger
-        Rails.logger.info message
+      if logger
+        logger.info message
       else
         puts message
+      end
+    end
+
+    def self.logger
+      return nil unless config.logging
+      if defined?(Rails) && Rails.logger
+        Rails.logger
+      else
+        nil
       end
     end
   end
