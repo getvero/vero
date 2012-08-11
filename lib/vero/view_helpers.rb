@@ -1,14 +1,15 @@
 module Vero
   module ViewHelpers
-    def vero_javascript_tag(method = :default)
-      return "" unless Vero::App.configured?
+    def vero_javascript_tag(method = :default, context = Vero::App.default_context)
+      return "" unless context.configured?
+      config = context.config
 
       unless [:default, :mixpanel, :kissmetrics].include?(method)
         method = :default
       end
 
       method_name = method.to_s + "_vero_javascript_tag"
-      self.send(method_name.to_sym, Vero::App.config.config_params)
+      self.send(method_name.to_sym, config.config_params)
     end
 
     private

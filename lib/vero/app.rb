@@ -1,51 +1,25 @@
 module Vero
   class App
-    @@config = nil
+    include Vero::Logger
+
+    def self.default_context
+      @@default_context ||= Context.new
+    end
 
     def self.init(&block)
-      @@config = Config.new
-
-      if block_given?
-        block.call(self.config)
-      end
+      default_context.configure(&block) if block_given?
     end
 
     def self.reset!
-      @@config = nil
+      default_context.reset!
     end
 
     def self.disable_requests!
-      @@config.disabled = true
-    end
-
-    def self.config
-      @@config
+      default_context.disable_requests!
     end
 
     def self.configured?
-      self.config && self.config.configured
-    end
-
-    def self.log(object, message)
-      return unless config.logging
-
-      logger  = self.logger
-      message = "#{object.class.name}: #{message}"
-
-      if logger
-        logger.info message
-      else
-        puts message
-      end
-    end
-
-    def self.logger
-      return nil unless config.logging
-      if defined?(Rails) && Rails.logger
-        Rails.logger
-      else
-        nil
-      end
+      default_context.configured?
     end
   end
 end

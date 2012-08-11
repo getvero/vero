@@ -1,37 +1,27 @@
 require 'spec_helper'
 
-describe Vero::App do
-  describe 'self.default_context' do
-    it "inherits from Vero::Context" do
-      actual = Vero::App.default_context
-      actual.should be_a(Vero::Context)
-    end
-  end
-
-  let (:context) { Vero::App.default_context }
-  describe :init do
+describe Vero::Context do 
+  let(:context) { Vero::Context.new }
+  describe :configure do
     it "should ignore configuring the config if no block is provided" do
-      Vero::App.init
+      context.configure
       context.configured?.should be_false
     end
 
     it "should pass configuration defined in the block to the config file" do
-      Vero::App.init
-
-      context.config.api_key.should be_nil
-      Vero::App.init do |c|
+      context.configure do |c|
         c.api_key = "abcd1234"
       end
       context.config.api_key.should == "abcd1234"
     end
 
     it "should init should be able to set async" do
-      Vero::App.init do |c|
+      context.configure do |c|
         c.async = false
       end
       context.config.async.should be_false
 
-      Vero::App.init do |c|
+      context.configure do |c|
         c.async = true
       end
       context.config.async.should be_true
@@ -40,19 +30,9 @@ describe Vero::App do
 
   describe :disable_requests! do
     it "should change config.disabled" do
-      Vero::App.init {}
       context.config.disabled.should be_false
-
-      Vero::App.disable_requests!
+      context.disable_requests!
       context.config.disabled.should be_true            
-    end
-  end
-
-  describe :log do
-    it "should have a log method" do
-      Vero::App.init {}
-      Vero::App.should_receive(:log)
-      Vero::App.log(Object, "test")
     end
   end
 end

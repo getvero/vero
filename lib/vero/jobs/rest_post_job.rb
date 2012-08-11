@@ -11,6 +11,7 @@ module Vero
       private
       def setup_logging
         return unless Vero::App.logger
+
         RestClient.log = Object.new.tap do |proxy|
           def proxy.<<(message)
             Vero::App.logger.info message

@@ -9,6 +9,17 @@ describe Vero::Config do
     @config.async.should be_true
   end
 
+  describe :reset! do
+    it "should reset all attributes" do
+      @config.api_key = "abcd1234"
+      @config.secret  = "abcd1234"
+
+      @config.reset!
+      @config.api_key.should be_nil
+      @config.secret.should be_nil
+    end
+  end
+
   describe :auth_token do
     it "should return nil if either api_key or secret are not set" do
       @config.api_key = nil

@@ -21,7 +21,7 @@ describe Vero::Trackable do
     describe :track do
       it "should raise an error" do
         @user.stub(:post_later).and_return('success')
-        expect { @user.track(@request_params[:event_name], @request_params[:data], 'test') }.to raise_error
+        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
       end
     end
   end
@@ -45,44 +45,54 @@ describe Vero::Trackable do
       end
 
       it "should send a track request when async is set to false" do
-        @user.stub(:post_now).and_return(200)
-        @user.should_receive(:post_now).with(@url, @request_params).at_least(:once)
-        @user.track(@request_params[:event_name], @request_params[:data], 'test').should == 200
+        context = Vero::Context.new(Vero::App.default_context, @user)
+        context.stub(:post_now).and_return(200)
+        context.should_receive(:post_now).with(@url, @request_params).at_least(:once)
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.track(@request_params[:event_name], @request_params[:data]).should == 200
         @user.track(@request_params[:event_name]).should == 200
       end
 
       it "should create a delayed job when async is set to true" do
-        @user.stub(:post_later).and_return('success')
-        @user.should_receive(:post_later).with(@url, @request_params).at_least(:once)
-        
-        Vero::App.config.async = true
-        @user.track(@request_params[:event_name], @request_params[:data], 'test').should == 'success'
+        context = Vero::Context.new(Vero::App.default_context, @user)
+        context.config.async = true
+
+        context.stub(:post_later).and_return('success')
+        context.should_receive(:post_later).with(@url, @request_params).at_least(:once)
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.track(@request_params[:event_name], @request_params[:data]).should == 'success'
         @user.track(@request_params[:event_name]).should == 'success'
       end
 
       it "should not raise an error when async is set to false and the request times out" do
-        Vero::App.config.async = false
-        Vero::App.config.domain = "localhost"
         Rails.stub(:logger).and_return(Logger.new('info'))
+        
+        context = Vero::App.default_context
+        context.config.async = false
+        context.config.domain = "localhost"
 
-        expect { @user.track(@request_params[:event_name], @request_params[:data], 'test') }.to_not raise_error
+        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to_not raise_error
       end
     end
 
     describe :trackable do
       after :each do
-        User.trackable_map_reset!
+        User.reset_trackable_map!
         User.trackable :email, :age
       end
 
       it "should build an array of trackable params" do
-        User.trackable_map_reset!
+        User.reset_trackable_map!
         User.trackable :email, :age
         User.trackable_map.should == [:email, :age]
       end
 
       it "should append new trackable items to an existing trackable map" do
-        User.trackable_map_reset!
+        User.reset_trackable_map!
         User.trackable :email, :age
         User.trackable :hair_colour
         User.trackable_map.should == [:email, :age, :hair_colour]
@@ -101,25 +111,6 @@ describe Vero::Trackable do
 
         user = UserWithEmailAddress.new
         user.to_vero.should == temp_params
-      end
-    end
-
-    describe :execute_unless_disabled do
-      it "should only execute the block unless config.disabled" do
-        user = User.new
-        test_val = 1
-        test_val.should == 1
-
-        user.send(:execute_unless_disabled) do 
-          test_val = 2
-        end
-        test_val.should == 2
-
-        Vero::App.disable_requests!
-        user.send(:execute_unless_disabled) do 
-          test_val = 3
-        end
-        test_val.should == 2
       end
     end
   end

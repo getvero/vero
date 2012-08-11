@@ -4,10 +4,7 @@ module Vero
     attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
 
     def initialize
-      self.disabled         = false
-      self.development_mode = !Rails.env.production?
-      self.async            = true
-      self.logging          = false
+      self.reset!
     end
 
     def config_params
@@ -32,8 +29,17 @@ module Vero
       Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
     end
 
-    def configured
+    def configured?
       !api_key.blank? && !secret.blank?
+    end
+
+    def reset!
+      self.disabled         = false
+      self.development_mode = !Rails.env.production?
+      self.async            = true
+      self.logging          = false
+      self.api_key          = nil
+      self.secret           = nil
     end
   end
 end
