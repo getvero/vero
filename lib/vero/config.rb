@@ -3,6 +3,10 @@ module Vero
     attr_writer :domain
     attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
 
+    def self.available_attributes
+      [:api_key, :secret, :development_mode, :async, :disabled, :logging, :domain]
+    end
+
     def initialize
       self.reset!
     end
@@ -40,6 +44,15 @@ module Vero
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
+    end
+
+    def update_attributes(attributes = {})
+      return unless attributes.is_a?(Hash)
+
+      Vero::Config.available_attributes.each do |symbol|
+        method_name = "#{symbol.to_s}=".to_sym
+        self.send(method_name, attributes[symbol]) if self.respond_to?(method_name) && attributes.has_key?(symbol)
+      end
     end
   end
 end

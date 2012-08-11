@@ -6,18 +6,31 @@ module Vero
   class Context
     attr_accessor :config, :subject
 
-    def initialize(config_or_context = Config.new, subject = nil)
-      case config_or_context
+    def initialize(object = {})
+      case object
+      when Hash 
+        #stub
       when Vero::Context
-        @config   ||= config_or_context.config
-        @subject  ||= (config_or_context.subject || subject)
+        @config = object.config
+        @subject = object.subject
       else
-        @config   ||= config_or_context
-        @subject  ||= subject
+        object = Vero::Config.available_attributes.inject({}) do |hash, symbol|
+          hash[symbol] = object.respond_to?(symbol) ? object.send(symbol) : nil
+          hash
+        end
+      end
+
+      if object.is_a?(Hash)
+        @config = Vero::Config.new
+        self.configure(object)
       end
     end
 
-    def configure(&block)
+    def configure(hash = {}, &block)
+      if hash.is_a?(Hash) && hash.any?
+        @config.update_attributes(hash)
+      end
+
       block.call(@config) if block_given?
     end
 

@@ -35,18 +35,7 @@ module Vero
     end
 
     def with_vero_context(context = {})
-      context = case context
-      when Vero::Context
-        Vero::Context.new(context, nil)
-      when Vero::Config
-        config = context
-        Vero::Context.new(config, nil)
-      when Hash
-        config = Vero::Config.new
-        Vero::Context.new(config, nil)
-      else
-        raise ArgumentError.new(context)
-      end
+      context = Vero::Context.new(context)
       context.subject = self
       context
     end

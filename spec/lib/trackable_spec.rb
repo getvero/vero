@@ -45,7 +45,8 @@ describe Vero::Trackable do
       end
 
       it "should send a track request when async is set to false" do
-        context = Vero::Context.new(Vero::App.default_context, @user)
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
         context.stub(:post_now).and_return(200)
         context.should_receive(:post_now).with(@url, @request_params).at_least(:once)
 
@@ -56,7 +57,8 @@ describe Vero::Trackable do
       end
 
       it "should create a delayed job when async is set to true" do
-        context = Vero::Context.new(Vero::App.default_context, @user)
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
         context.config.async = true
 
         context.stub(:post_later).and_return('success')

@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe Vero::Context do 
   let(:context) { Vero::Context.new }
+
+  it "accepts multiple parameter types in contructor" do
+    context1 = Vero::Context.new({ :api_key => 'blah', :secret => 'didah' })
+    context1.should be_a(Vero::Context)
+    context1.config.api_key.should == 'blah'
+    context1.config.secret.should == 'didah'
+
+    context2 = Vero::Context.new(context1)
+    context2.should be_a(Vero::Context)
+    context2.should_not be(context1)
+    context2.config.api_key.should == 'blah'
+    context2.config.secret.should == 'didah'
+
+    context3 = Vero::Context.new VeroUser.new('api_key', 'secret')
+    context3.should be_a(Vero::Context)
+    context3.config.api_key.should == 'api_key'
+    context3.config.secret.should == 'secret'
+  end
+
   describe :configure do
     it "should ignore configuring the config if no block is provided" do
       context.configure
