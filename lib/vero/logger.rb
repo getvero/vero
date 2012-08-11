@@ -5,22 +5,20 @@ module Vero
     end
 
     module ClassMethods
-      def log(object, message, context = Vero::App.default_context)
-        return unless context.config.logging
+      def log(object, message)
+        return unless Vero::App.default_context.config.logging
 
-        logger  = self.logger(context)
         message = "#{object.class.name}: #{message}"
 
-        if logger
+        if (logger = self.logger)
           logger.info(message)
         else
           puts(message)
         end
       end
 
-      def logger(context)
-        return unless context.config.logging
-        Rails.logger if defined?(Rails) && Rails.logger
+      def logger
+        defined?(Rails) && Rails.logger ? Rails.logger : nil
       end
     end
   end

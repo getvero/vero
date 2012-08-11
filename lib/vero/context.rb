@@ -67,6 +67,7 @@ module Vero
         Vero::Jobs::RestPostJob.new(url, params).perform
         Vero::App.log(self, "method: track, params: #{params.to_json}, response: job performed")
       end
+      'success'
     rescue => e
       Vero::App.log(self, "method: track, params: #{params.to_json} error: #{e.message}")
     end
@@ -76,7 +77,6 @@ module Vero
         ::Delayed::Job.enqueue Vero::Jobs::RestPostJob.new(url, params)
         Vero::App.log(self, "method: track, params: #{params.to_json}, response: delayed job queued")
       end
-
       'success'
     rescue => e
       if e.message == "Could not find table 'delayed_jobs'"
