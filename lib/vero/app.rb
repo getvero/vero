@@ -1,6 +1,6 @@
 module Vero
   class App
-    include Vero::Logger
+    include Vero::Utility::Logger
 
     def self.default_context
       @@default_context ||= Context.new

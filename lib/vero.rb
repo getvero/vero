@@ -2,10 +2,13 @@ require 'rails'
 
 module Vero 
   autoload :Config,     'vero/config'
-  autoload :Logger,     'vero/logger'
   autoload :App,        'vero/app'
   autoload :Context,    'vero/context'
   autoload :Trackable,  'vero/trackable'
+
+  module Utility
+    autoload :Logger,    'vero/utility/logger'
+  end
 end
 
 if defined? ActiveRecord

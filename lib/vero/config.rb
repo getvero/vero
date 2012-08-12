@@ -16,12 +16,14 @@ module Vero
     end
 
     def request_params
-      temp = {}
-      temp_auth_token         = self.auth_token
-      temp[:auth_token]       = temp_auth_token       unless temp_auth_token.nil?
-      temp[:development_mode] = self.development_mode unless self.development_mode.nil?
-
-      temp
+      [:auth_token, :development_mode].inject({}) do |h, symbol|
+        method_name = "from_#{symbol}".to_sym
+        if respond_to?(symbol)
+          temp = send(symbol)
+          h[symbol] = temp unless temp.blank?
+        end
+        h
+      end
     end
 
     def domain
@@ -29,12 +31,16 @@ module Vero
     end
 
     def auth_token
-      return if api_key.blank? || secret.blank?
+      return unless auth_token?
       Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
     end
 
-    def configured?
+    def auth_token?
       !api_key.blank? && !secret.blank?
+    end
+
+    def configured?
+      auth_token?
     end
 
     def reset!
@@ -50,7 +56,7 @@ module Vero
       return unless attributes.is_a?(Hash)
 
       Vero::Config.available_attributes.each do |symbol|
-        method_name = "#{symbol.to_s}=".to_sym
+        method_name = "#{symbol}=".to_sym
         self.send(method_name, attributes[symbol]) if self.respond_to?(method_name) && attributes.has_key?(symbol)
       end
     end
