@@ -6,13 +6,16 @@ require "vero/version"
 Gem::Specification.new do |s|
   s.name     = "vero"
   s.version  = Vero::VERSION.dup
-  s.date     = "2012-06-09"
+  s.date     = Time.now.strftime("%Y-%m-%d")
   s.summary  = "Rails 3.x gem for Vero"
   s.email    = "support@getvero.com"
-  s.homepage = "http://getvero.com/"
+  s.homepage = "http://www.getvero.com/"
   s.authors  = ['James Lamont']
   
   dependencies = [
+    [:development, 'rails'],
+    [:development, 'debugger'],
+    [:development, 'rspec'],
     [:runtime, 'rest-client'],
     [:runtime, 'delayed_job'],
     [:runtime, 'delayed_job_active_record'],
@@ -23,7 +26,6 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['test/**/*'] + Dir['spec/**/*']
   s.executables   = Dir['bin/*'].map { |f| File.basename(f) }
   s.require_paths = ["lib"]
-  
   
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.8.23"
