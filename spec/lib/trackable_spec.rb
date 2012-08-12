@@ -5,7 +5,7 @@ describe Vero::Trackable do
     @request_params = {
       :event_name => 'test_event',
       :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-      :identity => {:email => 'durkster@gmail.com', :age => 20},
+      :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
       :data => { :test => 1 },
       :development_mode => true
     }
@@ -103,16 +103,14 @@ describe Vero::Trackable do
 
     describe :to_vero do
       it "should return a hash of all values mapped by trackable" do
-        temp_params = {:email => 'durkster@gmail.com', :age => 20}
-
         user = User.new
-        user.to_vero.should == temp_params
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
 
         user = UserWithoutEmail.new
-        user.to_vero.should == temp_params
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutEmail"}
 
         user = UserWithEmailAddress.new
-        user.to_vero.should == temp_params
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithEmailAddress"}
       end
     end
   end

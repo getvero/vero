@@ -31,6 +31,7 @@ module Vero
       end
 
       result[:email] = result.delete(:email_address) if result.has_key?(:email_address)
+      result[:_user_type] = self.class.name
       result
     end
 
