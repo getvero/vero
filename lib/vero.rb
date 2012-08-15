@@ -5,9 +5,15 @@ module Vero
   autoload :App,        'vero/app'
   autoload :Context,    'vero/context'
   autoload :Trackable,  'vero/trackable'
+  autoload :Sender,     'vero/sender'
+
+  module API
+    autoload :BaseAPI,  'vero/api/base_api'
+    autoload :TrackAPI, 'vero/api/track_api'
+  end
 
   module Utility
-    autoload :Logger,    'vero/utility/logger'
+    autoload :Logger,   'vero/utility/logger'
   end
 end
 

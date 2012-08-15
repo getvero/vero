@@ -27,7 +27,11 @@ module Vero
     end
 
     def domain
-      @domain || 'www.getvero.com'
+      if @domain.blank?
+        'https://www.getvero.com'
+      else
+        @domain =~ /http[s]?\:\/\/.+/ ? @domain : "http://#{@domain}" 
+      end
     end
 
     def auth_token
