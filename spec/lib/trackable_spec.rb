@@ -111,7 +111,40 @@ describe Vero::Trackable do
 
         user = UserWithEmailAddress.new
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithEmailAddress"}
+
+        user = UserWithoutInterface.new
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutInterface"}
       end
+    end
+
+    describe :with_vero_context do
+      it "should be able to change contexts" do
+        user = User.new
+        user.with_default_vero_context.config.config_params.should == {:api_key=>"abcd1234", :secret=>"efgh5678"}
+        user.with_vero_context({api_key: "boom", secret: "tish"}).config.config_params.should == {:api_key=>"boom", :secret=>"tish"}
+      end
+    end
+    
+    it "should work when Vero::Trackable::Interface is not included" do
+      user = UserWithoutInterface.new
+
+      request_params = {
+        :event_name => 'test_event',
+        :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+        :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutInterface"},
+        :data => { :test => 1 },
+        :development_mode => true
+      }
+
+      context = Vero::Context.new(Vero::App.default_context)
+      context.subject = user
+      context.config.domain = "www.getvero.com"
+      context.stub(:post_now).and_return(200)
+      context.should_receive(:post_now).with(@url, request_params).at_least(:once)
+
+      user.stub(:with_vero_context).and_return(context)
+
+      user.vero_track(request_params[:event_name], request_params[:data]).should == 200
     end
   end
 end
