@@ -58,24 +58,39 @@ module Vero
       else
         :post_now
       end
-      self.send(method, "http://#{@config.domain}/api/v1/track.json", request_params)
+      self.send(method, "http://#{@config.domain}/api/v1/track.json", request_params, 'track')
+    end
+
+    def identify!
+      validate_configured!
+
+      data = subject.to_vero
+      request_params = @config.request_params
+      request_params.merge!({:email => data[:email], :data => data})
+
+      method = if @config.async
+        :post_later
+      else
+        :post_now
+      end
+      self.send(method, "http://#{@config.domain}/api/v1/user.json", request_params, 'identify!')
     end
 
     private
-    def post_now(url, params)
+    def post_now(url, params, method_name)
       unless @config.disabled
         Vero::Jobs::RestPostJob.new(url, params).perform
-        Vero::App.log(self, "method: track, params: #{params.to_json}, response: job performed")
+        Vero::App.log(self, "method: #{method_name}, params: #{params.to_json}, response: job performed")
       end
       'success'
     rescue => e
-      Vero::App.log(self, "method: track, params: #{params.to_json} error: #{e.message}")
+      Vero::App.log(self, "method: #{method_name}, params: #{params.to_json} error: #{e.message}")
     end
 
-    def post_later(url, params)
+    def post_later(url, params, method_name)
       unless @config.disabled
         ::Delayed::Job.enqueue Vero::Jobs::RestPostJob.new(url, params)
-        Vero::App.log(self, "method: track, params: #{params.to_json}, response: delayed job queued")
+        Vero::App.log(self, "method: #{method_name}, params: #{params.to_json}, response: delayed job queued")
       end
       'success'
     rescue => e

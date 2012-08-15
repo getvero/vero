@@ -4,6 +4,10 @@ module Vero
       def track(event_name, event_data = {})
         with_default_vero_context.track(event_name, event_data)
       end
+
+      def identify!
+        with_default_vero_context.identify!
+      end
     end
   end
 end

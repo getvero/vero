@@ -2,14 +2,6 @@ require 'spec_helper'
 
 describe Vero::Trackable do
   before :each do
-    @request_params = {
-      :event_name => 'test_event',
-      :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-      :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-      :data => { :test => 1 },
-      :development_mode => true
-    }
-    @url = "http://www.getvero.com/api/v1/track.json"
     @user = User.new
   end
 
@@ -21,7 +13,14 @@ describe Vero::Trackable do
     describe :track do
       it "should raise an error" do
         @user.stub(:post_later).and_return('success')
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
+        expect { @user.track("test_event", {}) }.to raise_error
+      end
+    end
+
+    describe :identity! do
+      it "should raise an error" do
+        @user.stub(:post_later).and_return('success')
+        expect { @user.identity! }.to raise_error
       end
     end
   end
@@ -36,6 +35,17 @@ describe Vero::Trackable do
     end
 
     describe :track do
+      before do
+        @request_params = {
+          :event_name => 'test_event',
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :data => { :test => 1 },
+          :development_mode => true
+        }
+        @url = "http://www.getvero.com/api/v1/track.json"
+      end
+
       it "should not send a track request when the required parameters are invalid" do
         @user.stub(:post_now).and_return(200)
 
@@ -44,11 +54,11 @@ describe Vero::Trackable do
         expect { @user.track('test', '') }.to raise_error
       end
 
-      it "should send a track request when async is set to false" do
+      it "should send a `track` request when async is set to false" do
         context = Vero::Context.new(Vero::App.default_context)
         context.subject = @user
         context.stub(:post_now).and_return(200)
-        context.should_receive(:post_now).with(@url, @request_params).at_least(:once)
+        context.should_receive(:post_now).with(@url, @request_params, "track").at_least(:once)
 
         @user.stub(:with_vero_context).and_return(context)
 
@@ -62,7 +72,7 @@ describe Vero::Trackable do
         context.config.async = true
 
         context.stub(:post_later).and_return('success')
-        context.should_receive(:post_later).with(@url, @request_params).at_least(:once)
+        context.should_receive(:post_later).with(@url, @request_params, "track").at_least(:once)
 
         @user.stub(:with_vero_context).and_return(context)
 
@@ -73,11 +83,49 @@ describe Vero::Trackable do
       it "should not raise an error when async is set to false and the request times out" do
         Rails.stub(:logger).and_return(Logger.new('info'))
         
-        context = Vero::App.default_context
+        context = Vero::Context.new(Vero::App.default_context)
         context.config.async = false
         context.config.domain = "localhost"
 
         expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to_not raise_error
+
+        context.config.domain = "www.getvero.com"
+      end
+    end
+
+    describe :identify! do
+      before do
+        @request_params = {
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :development_mode => true,
+          :email => 'durkster@gmail.com'
+        }
+        @url = "http://www.getvero.com/api/v1/user.json"
+      end
+
+      it "should send an `identify` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.stub(:post_now).and_return(200)
+        context.should_receive(:post_now).with(@url, @request_params, "identify!").at_least(:once)
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.identify!.should == 200
+      end
+
+      it "should create a delayed job when async is set to true" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
+
+        context.stub(:post_later).and_return('success')
+        context.should_receive(:post_later).with(@url, @request_params, "identify!").at_least(:once)
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.identify!.should == 'success'
       end
     end
 
@@ -121,7 +169,7 @@ describe Vero::Trackable do
       it "should be able to change contexts" do
         user = User.new
         user.with_default_vero_context.config.config_params.should == {:api_key=>"abcd1234", :secret=>"efgh5678"}
-        user.with_vero_context({api_key: "boom", secret: "tish"}).config.config_params.should == {:api_key=>"boom", :secret=>"tish"}
+        user.with_vero_context({:api_key => "boom", :secret => "tish"}).config.config_params.should == {:api_key=>"boom", :secret=>"tish"}
       end
     end
     
@@ -135,12 +183,12 @@ describe Vero::Trackable do
         :data => { :test => 1 },
         :development_mode => true
       }
+      url = "http://www.getvero.com/api/v1/track.json"
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user
-      context.config.domain = "www.getvero.com"
       context.stub(:post_now).and_return(200)
-      context.should_receive(:post_now).with(@url, request_params).at_least(:once)
+      context.should_receive(:post_now).with(url, request_params, "track").at_least(:once)
 
       user.stub(:with_vero_context).and_return(context)
 
