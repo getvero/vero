@@ -9,8 +9,14 @@ module Vero
   
   module API
     autoload :BaseAPI,    'vero/api/base_api'
-    autoload :TrackAPI,   'vero/api/track_api'
-    autoload :UserAPI,    'vero/api/user_api'
+
+    module Events
+      autoload :TrackAPI, 'vero/api/events/track_api'
+    end
+
+    module Users
+      autoload :TrackAPI, 'vero/api/users/track_api'
+    end
   end
   
   module Utility

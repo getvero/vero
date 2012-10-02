@@ -47,7 +47,7 @@ module Vero
       options = @config.request_params.merge(:data => event_data, :event_name => event_name, :identity => subject.to_vero)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::TrackAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::API::Events::TrackAPI, @config.async, @config.domain, options
       end
     end
 
@@ -59,7 +59,7 @@ module Vero
       options.merge!(:email => data[:email], :data => data)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::UserAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::API::Users::TrackAPI, @config.async, @config.domain, options
       end
     end
 

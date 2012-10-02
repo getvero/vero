@@ -68,10 +68,10 @@ describe Vero::Trackable do
 
         RestClient.stub(:post).and_return(200)
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v1/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
+        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
         @user.track(@request_params[:event_name], @request_params[:data]).should == 200
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v1/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
+        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
         @user.track(@request_params[:event_name]).should == 200
       end
 
@@ -105,7 +105,7 @@ describe Vero::Trackable do
           :development_mode => true,
           :email => 'durkster@gmail.com'
         }
-        @url = "https://www.getvero.com/api/v1/user.json"
+        @url = "https://www.getvero.com/api/v2/users/track.json"
       end
 
       it "should send an `identify` request when async is set to false" do
