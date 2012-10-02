@@ -177,6 +177,41 @@ describe Vero::Trackable do
       end
     end
 
+    describe :update_user_tags! do
+      before do
+        @request_params = {
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :add => [],
+          :remove => [],
+          :email => 'durkster@gmail.com',
+          :development_mode => true
+        }
+        @url = "https://www.getvero.com/api/v2/users/tags/edit.json"
+      end
+
+      it "should send an `update_user_tags` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        RestClient.stub(:put).and_return(200)
+        RestClient.should_receive(:put).with(@url, @request_params)
+        
+        @user.with_vero_context.update_user_tags!.should == 200
+      end
+
+      it "should send using another thread when async is set to true" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.with_vero_context.update_user_tags!.should be_true
+      end
+    end
+
     describe :unsubscribe! do
       before do
         @request_params = {

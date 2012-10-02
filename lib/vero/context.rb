@@ -43,7 +43,7 @@ module Vero
     end
 
     ### API methods
-    
+
     def track!(event_name, event_data)
       validate_configured!
       
@@ -79,6 +79,18 @@ module Vero
         Vero::Sender.send Vero::API::Users::EditAPI, @config.async, @config.domain, options
       end
     end
+
+    def update_user_tags!(add = [], remove = [])
+      validate_configured!
+      
+      identity = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => identity[:email], :add => add, :remove => remove)
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::Users::EditTagsAPI, @config.async, @config.domain, options
+      end
+    end    
 
     def unsubscribe!
       validate_configured!
