@@ -51,6 +51,18 @@ module Vero
       end
     end
 
+    def identify!
+      validate_configured!
+      
+      data = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => data[:email], :data => data)
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::UserAPI, @config.async, @config.domain, options
+      end
+    end
+
     private
     def validate_configured!
       unless @config.configured?

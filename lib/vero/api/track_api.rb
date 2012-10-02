@@ -1,13 +1,12 @@
 module Vero
   module API
     class TrackAPI < BaseAPI
-      protected
-      def request
-        RestClient.post(self.url, @options)
-      end
-
       def url
         "#{@domain}/api/v1/track.json"
+      end
+      
+      def request
+        RestClient.post(self.url, @options)
       end
 
       def validate!

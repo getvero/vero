@@ -50,7 +50,7 @@ describe Vero::Trackable do
           :data => { :test => 1 },
           :development_mode => true
         }
-        @url = "http://www.getvero.com/api/v1/track.json"
+        @url = "https://www.getvero.com/api/v1/track.json"
       end
 
       it "should not send a track request when the required parameters are invalid" do
@@ -97,41 +97,39 @@ describe Vero::Trackable do
       # end
     end
 
-    # describe :identify! do
-    #   before do
-    #     @request_params = {
-    #       :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-    #       :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-    #       :development_mode => true,
-    #       :email => 'durkster@gmail.com'
-    #     }
-    #     @url = "http://www.getvero.com/api/v1/user.json"
-    #   end
+    describe :identify! do
+      before do
+        @request_params = {
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :development_mode => true,
+          :email => 'durkster@gmail.com'
+        }
+        @url = "https://www.getvero.com/api/v1/user.json"
+      end
 
-    #   it "should send an `identify` request when async is set to false" do
-    #     context = Vero::Context.new(Vero::App.default_context)
-    #     context.subject = @user
-    #     context.stub(:post_now).and_return(200)
-    #     context.should_receive(:post_now).with(@url, @request_params, "identify!").at_least(:once)
+      it "should send an `identify` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
 
-    #     @user.stub(:with_vero_context).and_return(context)
+        @user.stub(:with_vero_context).and_return(context)
 
-    #     @user.identify!.should == 200
-    #   end
+        RestClient.stub(:post).and_return(200)
+        RestClient.should_receive(:post).with(@url, @request_params)
+        
+        @user.identify!.should == 200
+      end
 
-    #   it "should create a delayed job when async is set to true" do
-    #     context = Vero::Context.new(Vero::App.default_context)
-    #     context.subject = @user
-    #     context.config.async = true
+      it "should send using another thread when async is set to true" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
 
-    #     context.stub(:post_later).and_return('success')
-    #     context.should_receive(:post_later).with(@url, @request_params, "identify!").at_least(:once)
+        @user.stub(:with_vero_context).and_return(context)
 
-    #     @user.stub(:with_vero_context).and_return(context)
-
-    #     @user.identify!.should == 'success'
-    #   end
-    # end
+        expect { @user.identify! }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
+      end
+    end
 
     describe :trackable do
       after :each do
@@ -190,7 +188,7 @@ describe Vero::Trackable do
         :data => { :test => 1 },
         :development_mode => true
       }
-      url = "http://www.getvero.com/api/v1/track.json"
+      url = "https://www.getvero.com/api/v1/track.json"
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user
