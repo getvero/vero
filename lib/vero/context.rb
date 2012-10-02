@@ -42,12 +42,17 @@ module Vero
       @config.configured?
     end
 
-    def track(event_name, event_data)
+    ### API methods
+
+    def track!(event_name, event_data)
       validate_configured!
-      options = @config.request_params.merge(:data => event_data, :event_name => event_name, :identity => subject.to_vero)
+      
+      identity = subject.to_vero
+      options = @config.request_params
+      options.merge!(:data => event_data, :event_name => event_name, :identity => identity)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::TrackAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::API::Events::TrackAPI, @config.async, @config.domain, options
       end
     end
 
@@ -59,7 +64,43 @@ module Vero
       options.merge!(:email => data[:email], :data => data)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::UserAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::API::Users::TrackAPI, @config.async, @config.domain, options
+      end
+    end
+
+    def update_user!(email = nil)
+      validate_configured!
+      
+      changes = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => (email || changes[:email]), :changes => changes)
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::Users::EditAPI, @config.async, @config.domain, options
+      end
+    end
+
+    def update_user_tags!(add = [], remove = [])
+      validate_configured!
+      
+      identity = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => identity[:email], :add => add, :remove => remove)
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::Users::EditTagsAPI, @config.async, @config.domain, options
+      end
+    end    
+
+    def unsubscribe!
+      validate_configured!
+      
+      identity = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => identity[:email])
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::Users::UnsubscribeAPI, @config.async, @config.domain, options
       end
     end
 
