@@ -162,6 +162,9 @@ describe Vero::Trackable do
 
         user = UserWithoutInterface.new
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutInterface"}
+
+        user = UserWithNilAttributes.new
+        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithNilAttributes"}
       end
     end
 

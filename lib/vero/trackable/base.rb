@@ -27,7 +27,8 @@ module Vero
       def to_vero
         klass = self.class
         result = klass.trackable_map.inject({}) do |hash, symbol|
-          hash[symbol] = self.send(symbol)
+          t = respond_to?(symbol) ? send(symbol) : nil
+          hash[symbol] = t unless t.nil?
           hash
         end
 
