@@ -1,4 +1,5 @@
 require 'rails'
+require 'rest-client'
 
 module Vero 
   autoload :Config,       'vero/config'
