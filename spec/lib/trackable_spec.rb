@@ -41,7 +41,7 @@ describe Vero::Trackable do
       end
     end
 
-    describe :track do
+    describe :track! do
       before do
         @request_params = {
           :event_name => 'test_event',
@@ -54,12 +54,12 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track(nil) }.to raise_error(ArgumentError, "{:event_name=>nil, :data=>{}}")
-        expect { @user.track('') }.to raise_error(ArgumentError, "{:event_name=>\"\", :data=>{}}")
-        expect { @user.track('test', '') }.to raise_error(ArgumentError, "{:event_name=>\"test\", :data=>\"\"}")
+        expect { @user.track!(nil) }.to raise_error(ArgumentError, "{:event_name=>nil, :data=>{}}")
+        expect { @user.track!('') }.to raise_error(ArgumentError, "{:event_name=>\"\", :data=>{}}")
+        expect { @user.track!('test', '') }.to raise_error(ArgumentError, "{:event_name=>\"test\", :data=>\"\"}")
       end
 
-      it "should send a `track` request when async is set to false" do
+      it "should send a `track!` request when async is set to false" do
         context = Vero::Context.new(Vero::App.default_context)
         context.subject = @user
         context.config.logging = true
@@ -69,10 +69,10 @@ describe Vero::Trackable do
         RestClient.stub(:post).and_return(200)
 
         RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
-        @user.track(@request_params[:event_name], @request_params[:data]).should == 200
+        @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
 
         RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}})
-        @user.track(@request_params[:event_name]).should == 200
+        @user.track!(@request_params[:event_name]).should == 200
       end
 
       it "should send using another thread when async is set to true" do
@@ -83,8 +83,8 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.track(@request_params[:event_name], @request_params[:data]).should be_true
-        @user.track(@request_params[:event_name]).should be_true
+        @user.track!(@request_params[:event_name], @request_params[:data]).should be_true
+        @user.track!(@request_params[:event_name]).should be_true
       end
 
       # it "should raise an error when async is set to false and the request times out" do
@@ -174,6 +174,39 @@ describe Vero::Trackable do
         @user.stub(:with_vero_context).and_return(context)
 
         @user.with_vero_context.update_user!.should be_true
+      end
+    end
+
+    describe :unsubscribe! do
+      before do
+        @request_params = {
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :email => 'durkster@gmail.com',
+          :development_mode => true
+        }
+        @url = "https://www.getvero.com/api/v2/users/unsubscribe.json"
+      end
+
+      it "should send an `update_user` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        RestClient.stub(:post).and_return(200)
+        RestClient.should_receive(:post).with(@url, @request_params)
+        
+        @user.with_vero_context.unsubscribe!.should == 200
+      end
+
+      it "should send using another thread when async is set to true" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.with_vero_context.unsubscribe!.should be_true
       end
     end
 

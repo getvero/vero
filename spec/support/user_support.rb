@@ -54,7 +54,7 @@ class UserWithoutInterface
   end
 
   def vero_track(event_name, event_data)
-    with_default_vero_context.track(event_name, event_data)
+    with_default_vero_context.track!(event_name, event_data)
   end
 end
 
