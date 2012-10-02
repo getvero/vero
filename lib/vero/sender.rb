@@ -7,6 +7,7 @@ module Vero
       sender.perform(api_class, domain, options)
     rescue => e
       Vero::App.log(self.new(nil), "method: #{api_class.name}, options: #{options.to_json}, error: #{e.message}")
+      raise e
     end
 
     def initialize(strategy)
@@ -19,23 +20,27 @@ module Vero
 
     private
     def method_for_strategy
-      if @strategy == :thread || @strategy == true
-        :send_thread
-      elsif @strategy == :delayed_job
-        :send_delayed_job
+      case @strategy
+      when true         then :send_thread
+      when :thread      then :send_thread
+      when :delayed_job then :send_delayed_job
       else
         :send_synchronous
       end
     end
 
     def send_synchronous(api_class, domain, options)
-      api_class.perform(domain, options)
+      response = api_class.perform(domain, options)
       Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+
+      response
     end
 
     def send_delayed_job(api_class, domain, options)
-      ::Delayed::Job.enqueue api_class.new(domain, options)
+      response = ::Delayed::Job.enqueue api_class.new(domain, options)
       Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: delayed job queued")
+
+      response
     rescue => e
       if e.message == "Could not find table 'delayed_jobs'"
         raise "To send ratings asynchronously, you must configure delayed_job. Run `rails generate delayed_job:active_record` then `rake db:migrate`."
