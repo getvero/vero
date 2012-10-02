@@ -83,8 +83,8 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
-        expect { @user.track(@request_params[:event_name]) }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
+        @user.track(@request_params[:event_name], @request_params[:data]).should be_true
+        @user.track(@request_params[:event_name]).should be_true
       end
 
       # it "should raise an error when async is set to false and the request times out" do
@@ -127,7 +127,7 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        expect { @user.identify! }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
+        @user.identify!.should be_true
       end
     end
 

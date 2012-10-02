@@ -1,12 +1,12 @@
 module Vero
   class Sender
     def self.senders
-      @senders = {
+      @senders ||= {
         true          => Vero::Senders::Thread,
         false         => Vero::Senders::Base,
+        :none         => Vero::Senders::Base,
         :thread       => Vero::Senders::Thread,
-        :delayed_job  => Vero::Senders::DelayedJob,
-        :synch        => Vero::Senders::Base,
+        :delayed_job  => Vero::Senders::DelayedJob
       }
     end
 
