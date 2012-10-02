@@ -42,9 +42,14 @@ module Vero
       @config.configured?
     end
 
+    ### API methods
+
     def track(event_name, event_data)
       validate_configured!
-      options = @config.request_params.merge(:data => event_data, :event_name => event_name, :identity => subject.to_vero)
+      
+      identity = subject.to_vero
+      options = @config.request_params
+      options.merge!(:data => event_data, :event_name => event_name, :identity => identity)
 
       unless @config.disabled
         Vero::Sender.send Vero::API::Events::TrackAPI, @config.async, @config.domain, options
@@ -60,6 +65,18 @@ module Vero
 
       unless @config.disabled
         Vero::Sender.send Vero::API::Users::TrackAPI, @config.async, @config.domain, options
+      end
+    end
+
+    def update_user!(email = nil)
+      validate_configured!
+      
+      changes = subject.to_vero
+      options = @config.request_params
+      options.merge!(:email => (email || changes[:email]), :changes => changes)
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::Users::EditAPI, @config.async, @config.domain, options
       end
     end
 

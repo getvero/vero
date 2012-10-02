@@ -131,6 +131,52 @@ describe Vero::Trackable do
       end
     end
 
+    describe :update_user! do
+      before do
+        @request_params = {
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :email => 'durkster@gmail.com',
+          :development_mode => true
+        }
+        @url = "https://www.getvero.com/api/v2/users/edit.json"
+      end
+
+      it "should be able to choose an email address" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        RestClient.stub(:put).and_return(200)
+        RestClient.should_receive(:put).with(@url, @request_params.merge(:email => "durkster1@gmail.com"))
+        
+        @user.with_vero_context.update_user!("durkster1@gmail.com").should == 200
+      end
+
+      it "should send an `update_user` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        RestClient.stub(:put).and_return(200)
+        RestClient.should_receive(:put).with(@url, @request_params)
+        
+        @user.with_vero_context.update_user!.should == 200
+      end
+
+      it "should send using another thread when async is set to true" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        @user.with_vero_context.update_user!.should be_true
+      end
+    end
+
     describe :trackable do
       after :each do
         User.reset_trackable_map!

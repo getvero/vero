@@ -16,6 +16,7 @@ module Vero
 
     module Users
       autoload :TrackAPI, 'vero/api/users/track_api'
+      autoload :EditAPI,  'vero/api/users/edit_api'
     end
   end
   
