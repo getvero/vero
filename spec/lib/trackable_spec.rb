@@ -20,7 +20,7 @@ describe Vero::Trackable do
 
     describe :track do
       it "should raise an error" do
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
+        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError, "You must configure the 'vero' gem. Visit https://github.com/semblancesystems/vero for more details.")
       end
     end
   end
@@ -36,9 +36,9 @@ describe Vero::Trackable do
 
     describe :track do
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track(nil) }.to raise_error
-        expect { @user.track('') }.to raise_error
-        expect { @user.track('test', '') }.to raise_error
+        expect { @user.track(nil) }.to raise_error(ArgumentError, "{:event_name=>nil, :data=>{}}")
+        expect { @user.track('') }.to raise_error(ArgumentError, "{:event_name=>\"\", :data=>{}}")
+        expect { @user.track('test', '') }.to raise_error(ArgumentError, "{:event_name=>\"test\", :data=>\"\"}")
       end
 
       it "should send a track request when async is set to false" do
@@ -65,8 +65,8 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
-        expect { @user.track(@request_params[:event_name]) }.to raise_error
+        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
+        expect { @user.track(@request_params[:event_name]) }.to raise_error(RuntimeError, "Vero::Senders::Thread does not support sending in another thread.")
       end
 
       # it "should raise an error when async is set to false and the request times out" do

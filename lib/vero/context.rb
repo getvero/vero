@@ -46,7 +46,10 @@ module Vero
       validate_configured!
 
       options = @config.request_params.merge(:data => event_data, :event_name => event_name, :identity => subject.to_vero)
-      Vero::Sender.send(Vero::API::TrackAPI, @config.async, @config.domain, options) unless @config.disabled
+
+      unless @config.disabled
+        Vero::Sender.send Vero::API::TrackAPI, @config.async, @config.domain, options
+      end
     end
 
     private
