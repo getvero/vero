@@ -24,9 +24,11 @@ Create a [Vero account](http://getvero.com). Create an initializer in your confi
 
 You will be able to find your API key and secret by logging into Vero and clicking the 'Account' button at the top of the page.
 
-By default, events are sent asynchronously using DelayedJob. To force all events to be sent synchronously, add the following line to your initializer:
+By default, events are sent asynchronously using DelayedJob. We do however offer a few alternatives:
 
-    config.async = false
+    config.async = :thread          # Background thread
+    config.async = :none            # Synchronously
+    config.async = :delayed_job     # DelayedJob (default)
 
 ## Setup tracking
 
