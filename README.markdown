@@ -26,8 +26,8 @@ You will be able to find your API key and secret by logging into Vero and clicki
 
 By default, events are sent asynchronously using DelayedJob. We do however offer a few alternatives:
 
-    config.async = :thread          # Background thread
     config.async = :none            # Synchronously
+    config.async = :thread          # Background thread
     config.async = :delayed_job     # DelayedJob (default)
 
 ## Setup tracking
