@@ -12,7 +12,7 @@ Include in your Gemfile:
 
 Or install the gem:
 
-    gem install 'vero'
+    gem install vero
 
 Create a [Vero account](http://getvero.com). Create an initializer in your config/initializers folder called vero.rb with the following:
     
