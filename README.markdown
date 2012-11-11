@@ -30,7 +30,11 @@ By default, events are sent asynchronously using a background thread. We do howe
     config.async = :thread          # Background thread (default)
     config.async = :delayed_job     # DelayedJob
 
-**Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either :none or :delayed_job.
+**Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either `:none` or `:delayed_job`.
+
+Finally, vero will automatcially choose whether to send requests to your **development** or **live** environment based on your Rails environment. You can override this in your initializer:
+
+    config.development_mode = true # or false
 
 ## Setup tracking
 
