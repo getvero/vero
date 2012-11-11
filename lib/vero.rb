@@ -29,17 +29,10 @@ module Vero
   module Senders
     autoload :Base,             'vero/senders/base'
     autoload :DelayedJob,       'vero/senders/delayed_job'
+    autoload :Invalid,          'vero/senders/invalid'
     autoload :Thread,           'vero/senders/thread'
   end
   autoload :Sender,             'vero/sender'
-end
-
-if defined? ActiveRecord
-  require 'delayed_job_active_record'
-end
-
-if defined? Mongoid
-  require 'delayed_job_mongoid'
 end
 
 require 'vero/railtie' if defined?(Rails)

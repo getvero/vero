@@ -3,7 +3,7 @@ require 'girl_friday'
 module Vero
   module Senders
     class Thread
-      VERO_SENDER_QUEUE ||= ::GirlFriday::WorkQueue.new(:vero_queue, :size => 1) do |msg|
+      VERO_SENDER_QUEUE = ::GirlFriday::WorkQueue.new(:vero_queue, :size => 1) do |msg|
         api_class = msg[:api_class]
         domain    = msg[:domain]
         options   = msg[:options]

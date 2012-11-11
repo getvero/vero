@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   
   dependencies = [
     [:development, 'rails'],
-    [:development, 'debugger'],
     [:development, 'rspec'],
     [:runtime, 'rest-client'],
     [:runtime, 'delayed_job'],

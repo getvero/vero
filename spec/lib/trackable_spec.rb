@@ -83,8 +83,13 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.track!(@request_params[:event_name], @request_params[:data]).should be_true
-        @user.track!(@request_params[:event_name]).should be_true
+        if RUBY_VERSION =~ /1\.9\./
+          @user.track!(@request_params[:event_name], @request_params[:data]).should be_true
+          @user.track!(@request_params[:event_name]).should be_true
+        else
+          expect { @user.track!(@request_params[:event_name], @request_params[:data]) }.to raise_error
+          expect { @user.track!(@request_params[:event_name]) }.to raise_error
+        end
       end
 
       # it "should raise an error when async is set to false and the request times out" do
@@ -127,7 +132,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.identify!.should be_true
+        if RUBY_VERSION =~ /1\.9\./
+          @user.identify!.should be_true
+        else
+          expect { @user.identify! }.to raise_error
+        end
       end
     end
 
@@ -173,7 +182,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.with_vero_context.update_user!.should be_true
+        if RUBY_VERSION =~ /1\.9\./
+          @user.with_vero_context.update_user!.should be_true
+        else
+          expect { @user.with_vero_context.update_user! }.to raise_error
+        end
       end
     end
 
@@ -208,7 +221,7 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.with_vero_context.update_user_tags!.should be_true
+        expect { @user.with_vero_context.update_user_tags! }.to raise_error
       end
     end
 
@@ -241,7 +254,7 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        @user.with_vero_context.unsubscribe!.should be_true
+        expect { @user.with_vero_context.unsubscribe! }.to raise_error
       end
     end
 

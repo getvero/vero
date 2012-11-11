@@ -24,11 +24,13 @@ Create a [Vero account](http://getvero.com). Create an initializer in your confi
 
 You will be able to find your API key and secret by logging into Vero and clicking the 'Account' button at the top of the page.
 
-By default, events are sent asynchronously using DelayedJob. We do however offer a few alternatives:
+By default, events are sent asynchronously using a background thread. We do however offer a few alternatives:
 
     config.async = :none            # Synchronously
-    config.async = :thread          # Background thread
-    config.async = :delayed_job     # DelayedJob (default)
+    config.async = :thread          # Background thread (default)
+    config.async = :delayed_job     # DelayedJob
+
+**Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either :none or :delayed_job.
 
 ## Setup tracking
 
