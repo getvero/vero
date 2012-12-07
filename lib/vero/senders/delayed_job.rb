@@ -1,6 +1,5 @@
 require 'delayed_job'
 require 'delayed_job_active_record' if defined?(ActiveRecord)
-require 'delayed_job_mongoid' if defined?(Mongoid)
 
 module Vero
   module Senders

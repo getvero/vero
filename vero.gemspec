@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
     [:runtime, 'rest-client'],
     [:runtime, 'delayed_job'],
     [:runtime, 'delayed_job_active_record'],
-    [:runtime, 'delayed_job_mongoid'],
     [:runtime, 'girl_friday']
   ]
   
