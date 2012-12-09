@@ -205,6 +205,7 @@ describe Vero::Trackable do
       it "should send an `update_user_tags` request when async is set to false" do
         context = Vero::Context.new(Vero::App.default_context)
         context.subject = @user
+        context.config.async = false
 
         @user.stub(:with_vero_context).and_return(context)
 
@@ -221,7 +222,7 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        expect { @user.with_vero_context.update_user_tags! }.to raise_error
+        @user.with_vero_context.update_user_tags!.should be_true
       end
     end
 
@@ -238,6 +239,7 @@ describe Vero::Trackable do
       it "should send an `update_user` request when async is set to false" do
         context = Vero::Context.new(Vero::App.default_context)
         context.subject = @user
+        context.config.async = false
 
         @user.stub(:with_vero_context).and_return(context)
 
@@ -254,7 +256,7 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        expect { @user.with_vero_context.unsubscribe! }.to raise_error
+        @user.with_vero_context.unsubscribe!.should be_true
       end
     end
 
