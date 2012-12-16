@@ -7,7 +7,7 @@ module Vero
 
       module ClassMethods
         def log(object, message)
-          return unless Vero::App.default_context.config.logging
+          return unless Vero::App.default_context.config.logging && !defined?(RSpec)
 
           message = "#{object.class.name}: #{message}"
 

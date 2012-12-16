@@ -23,9 +23,9 @@ describe Vero::Sender do
     # end
 
     context "~> Ruby 1.9" do
-      before :all do
-        Object.const_set :RUBY_VERSION, "1.9.3"
-      end
+      # before :all do
+      #   Object.const_set :RUBY_VERSION, "1.9.3"
+      # end
 
       it "should have a default set of senders (true, false, none, thread)" do
         subject.senders.should == {
