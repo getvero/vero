@@ -1,9 +1,7 @@
 PATH
   remote: .
   specs:
-    vero (0.4.2)
-      delayed_job
-      delayed_job_active_record
+    vero (0.4.4)
       girl_friday
       rest-client
 
@@ -114,6 +112,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  delayed_job
+  delayed_job_active_record
   rails
   rspec
   vero!

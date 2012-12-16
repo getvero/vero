@@ -1,14 +1,28 @@
 module Vero
+  class SenderHash < ::Hash
+    def [](key)
+      puts key
+
+      if self.has_key?(key)
+        super
+      else
+        klass_name = key.to_s.split("_").map(&:capitalize).join
+        eval("Vero::Senders::#{klass_name}")
+      end
+    end
+  end
+
   class Sender
     def self.senders
       @senders ||= begin
-        t = {
+        t = Vero::SenderHash.new
+
+        t.merge!({
           true          => Vero::Senders::Invalid,
           false         => Vero::Senders::Base,
           :none         => Vero::Senders::Base,
-          :thread       => Vero::Senders::Invalid,
-          :delayed_job  => Vero::Senders::DelayedJob
-        }
+          :thread       => Vero::Senders::Invalid
+        })
 
         if RUBY_VERSION =~ /1\.9\./
           t.merge!(
