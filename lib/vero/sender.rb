@@ -1,8 +1,6 @@
 module Vero
   class SenderHash < ::Hash
     def [](key)
-      puts key
-
       if self.has_key?(key)
         super
       else
