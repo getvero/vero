@@ -41,6 +41,7 @@ describe Vero::Sender do
       subject.senders[:delayed_job].should  == Vero::Senders::DelayedJob
       subject.senders[:invalid].should      == Vero::Senders::Invalid
       subject.senders[:none].should         == Vero::Senders::Base
+      subject.senders[:sidekiq].should      == Vero::Senders::Sidekiq
     end
   end
 end

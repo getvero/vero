@@ -29,6 +29,7 @@ By default, events are sent asynchronously using a background thread. We do howe
     config.async = :none            # Synchronously
     config.async = :thread          # Background thread (default)
     config.async = :delayed_job     # DelayedJob
+    config.async = :sidekiq         # Sidekiq
 
 **Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either `:none` or `:delayed_job`.
 
