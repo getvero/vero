@@ -7,7 +7,7 @@ module Vero
         end
 
         def request
-          RestClient.post(url, @options)
+          RestClient.post(url, self.request_params_as_json, self.request_content_type)
         end
 
         def validate!

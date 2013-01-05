@@ -16,7 +16,7 @@ describe Vero::API::Users::EditTagsAPI do
 
   describe :request do
     it "should send a request to the Vero API" do
-      RestClient.should_receive(:put).with("https://www.getvero.com/api/v2/users/tags/edit.json", {:auth_token => 'abcd', :email => 'test@test.com', :add => ["test"]})
+      RestClient.should_receive(:put).with("https://www.getvero.com/api/v2/users/tags/edit.json", {:auth_token => 'abcd', :email => 'test@test.com', :add => ["test"]}.to_json, {:content_type => :json, :accept => :json})
       RestClient.stub(:put).and_return(200)
       subject.send(:request)
     end
