@@ -43,6 +43,14 @@ module Vero
 
       def request
       end
+
+      def request_content_type
+        {:content_type => :json, :accept => :json}
+      end
+
+      def request_params_as_json
+        @options.to_json
+      end
     end
   end
 end

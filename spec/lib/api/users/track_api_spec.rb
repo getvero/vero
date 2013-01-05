@@ -39,7 +39,7 @@ describe Vero::API::Users::TrackAPI do
   
   describe :request do
     it "should send a request to the Vero API" do
-      RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/users/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'})
+      RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/users/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}.to_json, {:content_type => :json, :accept => :json})
       RestClient.stub(:post).and_return(200)
       subject.send(:request)
     end
