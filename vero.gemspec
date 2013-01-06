@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   dependencies = [
     [:development, 'rails'],
     [:development, 'rspec'],
-    [:development, 'delayed_job'],
-    [:development, 'delayed_job_active_record'],
+    [:runtime, 'delayed_job'],
+    [:runtime, 'delayed_job_active_record'],
     [:runtime, 'rest-client'],
     [:runtime, 'girl_friday']
   ]
