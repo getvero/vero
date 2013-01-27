@@ -33,10 +33,6 @@ module Vero
     autoload :Thread,           'vero/senders/thread'
   end
   autoload :Sender,             'vero/sender'
-
-  module Jobs
-    autoload :RestPostJob,      'vero/jobs/rest_post_job'
-  end
 end
 
 require 'vero/railtie' if defined?(Rails)

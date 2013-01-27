@@ -1,5 +1,4 @@
 require 'json'
-require 'delayed_job'
 require 'rest-client'
 
 module Vero
