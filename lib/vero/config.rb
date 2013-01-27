@@ -1,3 +1,5 @@
+require 'base64'
+
 module Vero
   class Config
     attr_writer :domain
@@ -36,7 +38,7 @@ module Vero
 
     def auth_token
       return unless auth_token?
-      Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
+      ::Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
     end
 
     def auth_token?
