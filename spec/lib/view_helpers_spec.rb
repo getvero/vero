@@ -1,6 +1,9 @@
 require 'spec_helper'
+
+require 'rails'
 require 'action_view'
 require 'active_support'
+require 'vero/view_helpers/javascript'
 
 include Vero::ViewHelpers::Javascript
 include ActionView::Helpers

@@ -1,6 +1,6 @@
 # vero
 
-vero makes it easy to interact with Vero's REST API from your Rails 3.x app. Vero is a user lifecycle platform that allows you to engage and re-engage your customer base via email, based on the actions they perform in your software. 
+vero makes it easy to interact with Vero's REST API from your Ruby app. Vero is a user lifecycle platform that allows you to engage and re-engage your customer base via email, based on the actions they perform in your software. 
 
 For more information about the platform, [click here](http://getvero.com) to visit Vero.
 
@@ -34,7 +34,7 @@ By default, events are sent asynchronously using a background thread. We do howe
 
 **Note:** If you're using DelayedJob and Mongoid, you must add `gem "delayed_job_mongoid"` to your Gemfile.
 
-Finally, vero will automatcially choose whether to send requests to your **development** or **live** environment based on your Rails environment. You can override this in your initializer:
+Finally, vero will automatcially choose whether to send requests to your **development** or **live** environment if you are using Rails 3.x. You can override this in your initializer:
 
     config.development_mode = true # or false
 

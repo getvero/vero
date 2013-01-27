@@ -49,11 +49,15 @@ module Vero
 
     def reset!
       self.disabled         = false
-      self.development_mode = !Rails.env.production?
+      self.development_mode = false
       self.async            = true
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
+
+      if defined?(Rails)
+        self.development_mode = !Rails.env.production?
+      end
     end
 
     def update_attributes(attributes = {})
