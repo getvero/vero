@@ -72,14 +72,9 @@ class UserWithExtras
   include Vero::Trackable
   trackable :email, {:extras => :properties}
 
+  attr_accessor :properties
+
   def email
     'durkster@gmail.com'
-  end
-
-  def properties
-    {
-      :age => 20,
-      :gender => "female"
-    }
   end
 end

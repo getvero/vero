@@ -312,6 +312,19 @@ describe Vero::Trackable do
 
       it "should take into account any defined extras" do
         user = UserWithExtras.new
+        user.properties = nil
+        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+
+        user.properties = "test"
+        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+
+        user.properties = {}
+        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+
+        user.properties = {
+          :age => 20,
+          :gender => "female"
+        }
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :gender => "female", :_user_type => "UserWithExtras"}
       end
     end
