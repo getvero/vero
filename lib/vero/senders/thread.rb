@@ -1,3 +1,4 @@
+require 'json'
 require 'girl_friday'
 
 module Vero
@@ -8,11 +9,12 @@ module Vero
         domain    = msg[:domain]
         options   = msg[:options]
 
+        options_s = JSON.dump(options)
         begin
           api_class.perform(domain, options)
-          Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+          Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: job performed")
         rescue => e
-          Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
+          Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: #{e.message}")
         end
       end
 

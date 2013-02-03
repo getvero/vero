@@ -48,7 +48,7 @@ module Vero
       end
 
       def request_params_as_json
-        @options.to_json
+        JSON.dump(@options)
       end
     end
   end

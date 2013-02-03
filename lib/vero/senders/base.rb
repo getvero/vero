@@ -1,9 +1,12 @@
+require 'json'
+
 module Vero
   module Senders
     class Base
       def call(api_class, domain, options)
         response = api_class.perform(domain, options)
-        Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+        options_s = JSON.dump(options)
+        Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: job performed")
         response
       end
     end
