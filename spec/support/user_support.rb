@@ -67,3 +67,19 @@ class UserWithNilAttributes
   end
   def age; nil; end
 end
+
+class UserWithExtras
+  include Vero::Trackable
+  trackable :email, {:extras => :properties}
+
+  def email
+    'durkster@gmail.com'
+  end
+
+  def properties
+    {
+      :age => 20,
+      :gender => "female"
+    }
+  end
+end

@@ -26,10 +26,21 @@ module Vero
 
       def to_vero
         klass = self.class
-        result = klass.trackable_map.inject({}) do |hash, symbol|
+        symbols, other = klass.trackable_map.partition { |i| i.is_a?(Symbol) }
+        
+        result = symbols.inject({}) do |hash, symbol|
           t = respond_to?(symbol) ? send(symbol) : nil
           hash[symbol] = t unless t.nil?
           hash
+        end
+
+        if other.is_a?(Array) && !other.empty?
+          other.reject! { |i| !(i.is_a?(Hash) && i.has_key?(:extras)) }
+          other.each do |h|
+            symbol = h[:extras]
+            t = respond_to?(symbol) ? send(symbol) : nil
+            result.merge!(t) if t.is_a?(Hash)
+          end
         end
 
         result[:email] = result.delete(:email_address) if result.has_key?(:email_address)

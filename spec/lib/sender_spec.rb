@@ -6,7 +6,6 @@ describe Vero::Sender do
     it "should be a Hash" do
       subject.senders.should be_a(Hash)
     end
-
     
     unless RUBY_VERSION =~ /1\.9\./
       context "< Ruby 1.9" do
