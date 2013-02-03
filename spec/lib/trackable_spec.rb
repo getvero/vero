@@ -284,6 +284,12 @@ describe Vero::Trackable do
         User.trackable :hair_colour
         User.trackable_map.should == [:email, :age, :hair_colour]
       end
+
+      it "should append an extra's hash to the trackable map" do
+        User.reset_trackable_map!
+        User.trackable :email, {:extras => :properties}
+        User.trackable_map.should == [:email, {:extras => :properties}]
+      end
     end
 
     describe :to_vero do
@@ -302,6 +308,11 @@ describe Vero::Trackable do
 
         user = UserWithNilAttributes.new
         user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithNilAttributes"}
+      end
+
+      it "should take into account any defined extras" do
+        user = UserWithExtras.new
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :gender => "female", :_user_type => "UserWithExtras"}
       end
     end
 
