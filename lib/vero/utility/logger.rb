@@ -19,7 +19,11 @@ module Vero
         end
 
         def logger
-          return Rails.logger if defined?(Rails) && Rails.logger
+          if defined?(Rails)
+            Rails.logger
+          else
+            nil
+          end
         end
       end
     end

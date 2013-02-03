@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name     = "vero"
   s.version  = Vero::VERSION.dup
   s.date     = Time.now.strftime("%Y-%m-%d")
-  s.summary  = "Rails 3.x gem for Vero"
+  s.summary  = "Ruby gem for Vero"
   s.email    = "support@getvero.com"
   s.homepage = "http://www.getvero.com/"
   s.authors  = ['James Lamont']

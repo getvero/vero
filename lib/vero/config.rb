@@ -1,3 +1,5 @@
+require 'base64'
+
 module Vero
   class Config
     attr_writer :domain
@@ -36,7 +38,7 @@ module Vero
 
     def auth_token
       return unless auth_token?
-      Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
+      ::Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
     end
 
     def auth_token?
@@ -49,11 +51,15 @@ module Vero
 
     def reset!
       self.disabled         = false
-      self.development_mode = !Rails.env.production?
+      self.development_mode = false
       self.async            = true
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
+
+      if defined?(Rails)
+        self.development_mode = !Rails.env.production?
+      end
     end
 
     def update_attributes(attributes = {})
