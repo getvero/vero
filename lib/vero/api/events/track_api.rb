@@ -16,7 +16,8 @@ module Vero
           result &&= (options[:data].nil? || options[:data].is_a?(Hash))
 
           unless result
-            raise ArgumentError.new(:event_name => options[:event_name], :data => options[:data])
+            hash = {:data => options[:data], :event_name => options[:event_name]}
+            raise ArgumentError.new(JSON.dump(hash))
           end
         end
       end

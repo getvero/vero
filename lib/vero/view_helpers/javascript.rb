@@ -34,8 +34,9 @@ module Vero
 
       def options_to_string(options)
         options = {} unless options.kind_of?(Hash)
-        result = options.keys.collect { |k| "\"#{k}\": \"#{options[k]}\"" }
-        result.join(", ")
+
+        keys = options.keys.map(&:to_s)
+        keys.sort.map { |k| "\"#{k}\": \"#{options[k.to_sym]}\"" }.join(", ")
       end
     end
   end

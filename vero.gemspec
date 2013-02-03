@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
     [:development, 'rspec'],
     [:development, 'delayed_job'],
     [:development, 'delayed_job_active_record'],
+    [:runtime, 'json'],
     [:runtime, 'rest-client'],
     [:runtime, 'girl_friday']
   ]

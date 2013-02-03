@@ -56,9 +56,9 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track!(nil) }.to raise_error(ArgumentError, "{:event_name=>nil, :data=>{}}")
-        expect { @user.track!('') }.to raise_error(ArgumentError, "{:event_name=>\"\", :data=>{}}")
-        expect { @user.track!('test', '') }.to raise_error(ArgumentError, "{:event_name=>\"test\", :data=>\"\"}")
+        expect { @user.track!(nil) }.to raise_error(ArgumentError, "{\"data\":{},\"event_name\":null}")
+        expect { @user.track!('') }.to raise_error(ArgumentError, "{\"data\":{},\"event_name\":\"\"}")
+        expect { @user.track!('test', '') }.to raise_error(ArgumentError, "{\"data\":\"\",\"event_name\":\"test\"}")
       end
 
       it "should send a `track!` request when async is set to false" do
@@ -217,14 +217,16 @@ describe Vero::Trackable do
         @user.with_vero_context.update_user_tags!.should == 200
       end
 
-      it "should send using another thread when async is set to true" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-        context.config.async = true
+      if RUBY_VERSION =~ /1\.9\./
+        it "should send using another thread when async is set to true" do
+          context = Vero::Context.new(Vero::App.default_context)
+          context.subject = @user
+          context.config.async = true
 
-        @user.stub(:with_vero_context).and_return(context)
+          @user.stub(:with_vero_context).and_return(context)
 
-        @user.with_vero_context.update_user_tags!.should be_true
+          @user.with_vero_context.update_user_tags!.should be_true
+        end
       end
     end
 
@@ -251,14 +253,16 @@ describe Vero::Trackable do
         @user.with_vero_context.unsubscribe!.should == 200
       end
 
-      it "should send using another thread when async is set to true" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-        context.config.async = true
+      if RUBY_VERSION =~ /1\.9\./
+        it "should send using another thread when async is set to true" do
+          context = Vero::Context.new(Vero::App.default_context)
+          context.subject = @user
+          context.config.async = true
 
-        @user.stub(:with_vero_context).and_return(context)
+          @user.stub(:with_vero_context).and_return(context)
 
-        @user.with_vero_context.unsubscribe!.should be_true
+          @user.with_vero_context.unsubscribe!.should be_true
+        end
       end
     end
 

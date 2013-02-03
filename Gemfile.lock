@@ -3,6 +3,7 @@ PATH
   specs:
     vero (0.5.0)
       girl_friday
+      json
       rest-client
 
 GEM
