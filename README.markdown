@@ -76,6 +76,23 @@ There is one caveat, email (or email_address) is a required field. If the user's
       def email; self.primary_contact; end
     end
 
+Finally, you can track multiple properties stored in a Hash by doing the following:
+
+    # app/models/user.rb
+    class User < ActiveRecord::Base
+      include Vero::Trackable 
+      trackable :email, {:extras => :properties}
+
+      def email; self.primary_contact; end
+
+      def properties
+        {
+          :first_name => "James",
+          :last_name => "Lamont"
+        }
+      end
+    end
+
 ## Sending events
 
 Events can be sent by any model which has been previously marked as trackable.
