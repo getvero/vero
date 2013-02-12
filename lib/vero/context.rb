@@ -52,7 +52,7 @@ module Vero
       options.merge!(:data => event_data, :event_name => event_name, :identity => identity)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::Events::TrackAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::Api::Workers::Events::TrackAPI, @config.async, @config.domain, options
       end
     end
 
@@ -64,7 +64,7 @@ module Vero
       options.merge!(:email => data[:email], :data => data)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::Users::TrackAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::Api::Workers::Users::TrackAPI, @config.async, @config.domain, options
       end
     end
 
@@ -76,7 +76,7 @@ module Vero
       options.merge!(:email => (email || changes[:email]), :changes => changes)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::Users::EditAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::Api::Workers::Users::EditAPI, @config.async, @config.domain, options
       end
     end
 
@@ -88,7 +88,7 @@ module Vero
       options.merge!(:email => identity[:email], :add => add, :remove => remove)
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::Users::EditTagsAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::Api::Workers::Users::EditTagsAPI, @config.async, @config.domain, options
       end
     end    
 
@@ -100,7 +100,7 @@ module Vero
       options.merge!(:email => identity[:email])
 
       unless @config.disabled
-        Vero::Sender.send Vero::API::Users::UnsubscribeAPI, @config.async, @config.domain, options
+        Vero::Sender.send Vero::Api::Workers::Users::UnsubscribeAPI, @config.async, @config.domain, options
       end
     end
 

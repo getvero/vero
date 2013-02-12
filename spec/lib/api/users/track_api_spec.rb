@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe Vero::API::Users::TrackAPI do
-  subject { Vero::API::Users::TrackAPI.new('https://www.getvero.com', {}) }
-  it "should inherit from Vero::API::BaseCaller" do
-    subject.should be_a(Vero::API::BaseAPI)
+describe Vero::Api::Workers::Users::TrackAPI do
+  subject { Vero::Api::Workers::Users::TrackAPI.new('https://www.getvero.com', {}) }
+  it "should inherit from Vero::Api::Workers::BaseCaller" do
+    subject.should be_a(Vero::Api::Workers::BaseAPI)
   end
 
   it "should map to current version of Vero API" do
     subject.send(:url).should == "https://www.getvero.com/api/v2/users/track.json"
   end
 
-  subject { Vero::API::Users::TrackAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}) }
+  subject { Vero::Api::Workers::Users::TrackAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}) }
   describe :validate! do
     it "should raise an error if email is a blank String" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => nil}
