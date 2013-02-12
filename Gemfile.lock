@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vero (0.5.0)
+    vero (0.5.1)
       girl_friday
       json
       rest-client
