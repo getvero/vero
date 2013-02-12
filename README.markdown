@@ -92,6 +92,8 @@ Finally, you can track multiple properties stored in a Hash by doing the followi
         }
       end
     end
+    
+**Note:** You may choose to bypass extending the `User` model by calling the API directly. More information can be found below.
 
 ## Sending events
 
@@ -144,3 +146,24 @@ You may want to send additional data about an event:
         end
       end
     end
+
+## Calling the API directly
+
+To avoid having to extend the `User` model, we offer the option to call our API directly, as you would from the Javascript library.
+
+First, ensure you've correctly configured the gem following the instructions as outlined in Installation. Now you can call the API using the following methods:
+
+    # Tracking an event
+    Vero::Api::Events.track!({:event_name => "test_event", :data => {:date => "2013-02-12 16:17"}, :identity => {:email => "james@getvero.com"}})
+    
+    # Identifying a user
+    Vero::Api::Users.track!({:email => "james@getvero.com"})
+    
+    # Editing a user
+    Vero::Api::Users.edit_user!({:email => "james@getvero.com", :changes => {:age => 25}})
+    
+    # Editing a user tags
+    Vero::Api::Users.edit_user_tags!({:email => "james@getvero.com", :add => [], :remove => ["awesome"]})
+    
+    # Unsubscribe a user
+    Vero::Api::Users.unsubscribe!({:email => "james@getvero.com"})
