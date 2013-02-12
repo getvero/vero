@@ -47,9 +47,9 @@ describe Vero::Trackable do
       before do
         @request_params = {
           :event_name => 'test_event',
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
           :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
           :data => { :test => 1 },
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
           :development_mode => true
         }
         @url = "https://www.getvero.com/api/v1/track.json"
@@ -70,10 +70,10 @@ describe Vero::Trackable do
 
         RestClient.stub(:post).and_return(200)
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}}.to_json, @content_type_params)
+        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
         @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true, :data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}}.to_json, @content_type_params)
+        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
         @user.track!(@request_params[:event_name]).should == 200
       end
 
@@ -107,10 +107,10 @@ describe Vero::Trackable do
     describe :identify! do
       before do
         @request_params = {
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true,
           :email => 'durkster@gmail.com',
-          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
+          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :development_mode => true
         }
         @url = "https://www.getvero.com/api/v2/users/track.json"
       end
@@ -145,10 +145,10 @@ describe Vero::Trackable do
     describe :update_user! do
       before do
         @request_params = {
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true,
           :email => 'durkster@gmail.com',
-          :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
+          :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :development_mode => true
         }
         @url = "https://www.getvero.com/api/v2/users/edit.json"
       end
@@ -195,11 +195,11 @@ describe Vero::Trackable do
     describe :update_user_tags! do
       before do
         @request_params = {
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true,
           :email => 'durkster@gmail.com',
           :add => [],
-          :remove => []
+          :remove => [],
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+          :development_mode => true
         }
         @url = "https://www.getvero.com/api/v2/users/tags/edit.json"
       end
@@ -233,8 +233,8 @@ describe Vero::Trackable do
     describe :unsubscribe! do
       before do
         @request_params = {
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
           :email => 'durkster@gmail.com',
+          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
           :development_mode => true
         }
         @url = "https://www.getvero.com/api/v2/users/unsubscribe.json"

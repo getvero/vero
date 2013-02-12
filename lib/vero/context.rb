@@ -45,70 +45,37 @@ module Vero
     ### API methods
 
     def track!(event_name, event_data)
-      validate_configured!
+      options = {:data => event_data, :event_name => event_name, :identity => subject.to_vero}
       
-      identity = subject.to_vero
-      options = @config.request_params
-      options.merge!(:data => event_data, :event_name => event_name, :identity => identity)
-
-      unless @config.disabled
-        Vero::Sender.send Vero::API::Events::TrackAPI, @config.async, @config.domain, options
-      end
+      Vero::Api::Events.track!(options, self)
     end
 
     def identify!
-      validate_configured!
-      
-      data = subject.to_vero
-      options = @config.request_params
-      options.merge!(:email => data[:email], :data => data)
+      data    = subject.to_vero
+      options = {:email => data[:email], :data => data}
 
-      unless @config.disabled
-        Vero::Sender.send Vero::API::Users::TrackAPI, @config.async, @config.domain, options
-      end
+      Vero::Api::Users.track!(options, self)
     end
 
     def update_user!(email = nil)
-      validate_configured!
-      
       changes = subject.to_vero
-      options = @config.request_params
-      options.merge!(:email => (email || changes[:email]), :changes => changes)
+      options = {:email => (email || changes[:email]), :changes => changes}
 
-      unless @config.disabled
-        Vero::Sender.send Vero::API::Users::EditAPI, @config.async, @config.domain, options
-      end
+      Vero::Api::Users.edit_user!(options, self)
     end
 
     def update_user_tags!(add = [], remove = [])
-      validate_configured!
+      identity  = subject.to_vero
+      options   = {:email => identity[:email], :add => add, :remove => remove}
       
-      identity = subject.to_vero
-      options = @config.request_params
-      options.merge!(:email => identity[:email], :add => add, :remove => remove)
-
-      unless @config.disabled
-        Vero::Sender.send Vero::API::Users::EditTagsAPI, @config.async, @config.domain, options
-      end
+      Vero::Api::Users.edit_user_tags!(options, self)
     end    
 
     def unsubscribe!
-      validate_configured!
-      
-      identity = subject.to_vero
-      options = @config.request_params
-      options.merge!(:email => identity[:email])
+      identity  = subject.to_vero
+      options   = {:email => identity[:email]}
 
-      unless @config.disabled
-        Vero::Sender.send Vero::API::Users::UnsubscribeAPI, @config.async, @config.domain, options
-      end
-    end
-
-    private
-    def validate_configured!
-      unless @config.configured?
-        raise "You must configure the 'vero' gem. Visit https://github.com/semblancesystems/vero for more details."
-      end
+      Vero::Api::Users.unsubscribe!(options, self)
     end
   end
 end

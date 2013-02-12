@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe Vero::API::Users::EditAPI do
-  subject { Vero::API::Users::EditAPI.new('https://www.getvero.com', {}) }
-  it "should inherit from Vero::API::BaseCaller" do
-    subject.should be_a(Vero::API::BaseAPI)
+describe Vero::Api::Workers::Users::EditAPI do
+  subject { Vero::Api::Workers::Users::EditAPI.new('https://www.getvero.com', {}) }
+  it "should inherit from Vero::Api::Workers::BaseCaller" do
+    subject.should be_a(Vero::Api::Workers::BaseAPI)
   end
 
   it "should map to current version of Vero API" do
     subject.send(:url).should == "https://www.getvero.com/api/v2/users/edit.json"
   end
 
-  subject { Vero::API::Users::EditAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }}) }
+  subject { Vero::Api::Workers::Users::EditAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }}) }
   describe :validate! do
   end
 
