@@ -7,19 +7,24 @@ module Vero
   autoload :Context,            'vero/context'
   autoload :Trackable,          'vero/trackable'
   
-  module API
-    autoload :BaseAPI,          'vero/api/base_api'
+  module Api
+    module Workers
+      autoload :BaseAPI,          'vero/api/base_api'
 
-    module Events
-      autoload :TrackAPI,       'vero/api/events/track_api'
+      module Events
+        autoload :TrackAPI,       'vero/api/events/track_api'
+      end
+
+      module Users
+        autoload :TrackAPI,       'vero/api/users/track_api'
+        autoload :EditAPI,        'vero/api/users/edit_api'
+        autoload :EditTagsAPI,    'vero/api/users/edit_tags_api'
+        autoload :UnsubscribeAPI, 'vero/api/users/unsubscribe_api'
+      end
     end
 
-    module Users
-      autoload :TrackAPI,       'vero/api/users/track_api'
-      autoload :EditAPI,        'vero/api/users/edit_api'
-      autoload :EditTagsAPI,    'vero/api/users/edit_tags_api'
-      autoload :UnsubscribeAPI, 'vero/api/users/unsubscribe_api'
-    end
+    autoload :Events,             'vero/api'
+    autoload :Users,              'vero/api'
   end
   
   module Utility
