@@ -22,6 +22,9 @@ module Vero
         autoload :UnsubscribeAPI, 'vero/api/users/unsubscribe_api'
       end
     end
+
+    autoload :Events,             'vero/api'
+    autoload :Users,              'vero/api'
   end
   
   module Utility
