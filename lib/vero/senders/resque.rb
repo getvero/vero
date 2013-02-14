@@ -13,7 +13,7 @@ module Vero
       end
 
       api_class.new(domain, new_options).perform
-      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: sidekiq job queued")
+      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: resque job queued")
     end
   end
 
