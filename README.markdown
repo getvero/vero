@@ -158,7 +158,7 @@ First, ensure you've correctly configured the gem following the instructions as 
     Vero::Api::Events.track!({:event_name => "test_event", :data => {:date => "2013-02-12 16:17"}, :identity => {:email => "james@getvero.com"}})
     
     # Identifying a user
-    Vero::Api::Users.track!({:email => "james@getvero.com"})
+    Vero::Api::Users.track!({:email => "james@getvero.com", :data => {}})
     
     # Editing a user
     Vero::Api::Users.edit_user!({:email => "james@getvero.com", :changes => {:age => 25}})
