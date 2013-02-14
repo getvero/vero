@@ -35,7 +35,11 @@ module Vero
     end
 
     def self.send(api_class, sender_strategy, domain, options)
-      sender_class = self.senders.fetch(sender_strategy) { self.senders[false] }
+      sender_class = if self.senders[sender_strategy]
+        self.senders[sender_strategy]
+      else
+        self.senders[false]
+      end
       (sender_class.new).call(api_class, domain, options)
     rescue => e
       options_s = JSON.dump(options)

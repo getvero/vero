@@ -39,6 +39,7 @@ module Vero
     autoload :Thread,           'vero/senders/thread'
   end
   autoload :Sender,             'vero/sender'
+  autoload :ResqueWorker,       'vero/senders/resque'
 end
 
 require 'vero/railtie' if defined?(Rails)
