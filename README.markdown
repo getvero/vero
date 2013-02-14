@@ -29,8 +29,9 @@ By default, events are sent asynchronously using a background thread. We do howe
     config.async = :none            # Synchronously
     config.async = :thread          # Background thread (default)
     config.async = :delayed_job     # DelayedJob
+    config.async = :resque          # Resque
 
-**Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either `:none` or `:delayed_job`.
+**Note:** Background threads are not supported by Ruby 1.8.7 or earlier. You must explicitly set `config.async` to either `:none`, `:delayed_job` or `:resque`.
 
 **Note:** If you're using DelayedJob and Mongoid, you must add `gem "delayed_job_mongoid"` to your Gemfile.
 
