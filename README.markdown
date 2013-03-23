@@ -148,23 +148,38 @@ You may want to send additional data about an event:
       end
     end
 
-## Calling the API directly
+## Simple DSL
 
-To avoid having to extend the `User` model, we offer the option to call our API directly, as you would from the Javascript library.
+To avoid having to extend the `User` model, we offer the option to call our API using a simple DSL (thanks @jherdman) as you would from the Javascript library.
 
 First, ensure you've correctly configured the gem following the instructions as outlined in Installation. Now you can call the API using the following methods:
 
-    # Tracking an event
-    Vero::Api::Events.track!({:event_name => "test_event", :data => {:date => "2013-02-12 16:17"}, :identity => {:email => "james@getvero.com"}})
-    
-    # Identifying a user
-    Vero::Api::Users.track!({:email => "james@getvero.com", :data => {}})
-    
-    # Editing a user
-    Vero::Api::Users.edit_user!({:email => "james@getvero.com", :changes => {:age => 25}})
-    
-    # Editing a user tags
-    Vero::Api::Users.edit_user_tags!({:email => "james@getvero.com", :add => [], :remove => ["awesome"]})
-    
-    # Unsubscribe a user
-    Vero::Api::Users.unsubscribe!({:email => "james@getvero.com"})
+    class UsersController < ApplicationController
+      include Vero::DSL
+
+      def perform_action
+        # Tracking an event
+        vero.events.track!({
+          :event_name => "test_event", 
+          :data => {:date => "2013-02-12 16:17"}, 
+          :identity => {:email => "james@getvero.com"}
+        })
+      end
+
+      def create
+        # Identifying a user
+        vero.users.track!({:email => "james@getvero.com", :data => {}})
+      end
+
+      def update
+        # Editing a user
+        vero.users.edit_user!({:email => "james@getvero.com", :changes => {:age => 25}})
+
+        # Editing a user's tags
+        vero.users.edit_user_tags!({:email => "james@getvero.com", :add => [], :remove => ["awesome"]})
+      end
+
+      def destroy
+        vero.users.unsubscribe!({:email => "james@getvero.com"})
+      end
+    end
