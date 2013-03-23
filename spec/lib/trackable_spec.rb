@@ -56,9 +56,9 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track!(nil) }.to raise_error(ArgumentError, "{\"data\":{},\"event_name\":null}")
-        expect { @user.track!('') }.to raise_error(ArgumentError, "{\"data\":{},\"event_name\":\"\"}")
-        expect { @user.track!('test', '') }.to raise_error(ArgumentError, "{\"data\":\"\",\"event_name\":\"test\"}")
+        expect { @user.track!(nil) }.to raise_error(ArgumentError)
+        expect { @user.track!('') }.to raise_error(ArgumentError)
+        expect { @user.track!('test', '') }.to raise_error(ArgumentError)
       end
 
       it "should send a `track!` request when async is set to false" do

@@ -12,13 +12,8 @@ module Vero
           end
 
           def validate!
-            result = true
-            result &&= options[:email].to_s.blank? == false
-            result &&= options[:changes].is_a?(Hash)
-
-            unless result
-              raise ArgumentError.new(:email => options[:email], :changes => options[:changes])
-            end
+            raise ArgumentError.new("Missing :email") if options[:email].to_s.blank?
+            raise ArgumentError.new(":changes must be a Hash") unless options[:changes].is_a?(Hash)
           end
         end
       end
