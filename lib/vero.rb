@@ -6,6 +6,7 @@ module Vero
   autoload :App,                'vero/app'
   autoload :Context,            'vero/context'
   autoload :Trackable,          'vero/trackable'
+  autoload :DSL,                'vero/dsl'
   
   module Api
     module Workers
