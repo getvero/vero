@@ -12,12 +12,7 @@ module Vero
           end
 
           def validate!
-            result = true
-            result &&= options[:email].to_s.blank? == false
-
-            unless result
-              raise ArgumentError.new(:email => options[:email])
-            end
+            raise ArgumentError.new("Missing :email") if options[:email].to_s.blank?
           end
         end
       end
