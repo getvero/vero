@@ -1,6 +1,5 @@
 require 'json'
 require 'delayed_job'
-require 'delayed_job_active_record' if defined?(ActiveRecord)
 
 module Vero
   module Senders
