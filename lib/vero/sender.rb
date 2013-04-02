@@ -7,7 +7,7 @@ module Vero
         super
       else
         klass_name = key.to_s.split("_").map(&:capitalize).join
-        eval("Vero::Senders::#{klass_name}")
+        Vero::Senders.const_get(klass_name)
       end
     end
   end
