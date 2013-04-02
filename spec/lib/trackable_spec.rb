@@ -48,9 +48,7 @@ describe Vero::Trackable do
         @request_params = {
           :event_name => 'test_event',
           :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-          :data => { :test => 1 },
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true
+          :data => { :test => 1 }
         }
         @url = "https://www.getvero.com/api/v1/track.json"
       end
@@ -70,10 +68,16 @@ describe Vero::Trackable do
 
         RestClient.stub(:post).and_return(200)
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+        # RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+
+        Vero::Api::Events.stub(:track!).and_return(200)
+        Vero::Api::Events.should_receive(:track!).with(@request_params, context)
         @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
 
-        RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+        # RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+
+        Vero::Api::Events.stub(:track!).and_return(200)
+        Vero::Api::Events.should_receive(:track!).with(@request_params.merge(:data => {}), context)
         @user.track!(@request_params[:event_name]).should == 200
       end
 
@@ -116,9 +120,7 @@ describe Vero::Trackable do
       before do
         @request_params = {
           :email => 'durkster@gmail.com',
-          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true
+          :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
         }
         @url = "https://www.getvero.com/api/v2/users/track.json"
       end
@@ -129,8 +131,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        RestClient.stub(:post).and_return(200)
-        RestClient.should_receive(:post).with(@url, @request_params.to_json, @content_type_params)
+        # RestClient.stub(:post).and_return(200)
+        # RestClient.should_receive(:post).with(@url, @request_params.to_json, @content_type_params)
+
+        Vero::Api::Users.stub(:track!).and_return(200)
+        Vero::Api::Users.should_receive(:track!).with(@request_params, context)
         
         @user.identify!.should == 200
       end
@@ -170,8 +175,6 @@ describe Vero::Trackable do
         @request_params = {
           :email => 'durkster@gmail.com',
           :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true
         }
         @url = "https://www.getvero.com/api/v2/users/edit.json"
       end
@@ -182,8 +185,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        RestClient.stub(:put).and_return(200)
-        RestClient.should_receive(:put).with(@url, @request_params.merge(:email => "durkster1@gmail.com").to_json, @content_type_params)
+        # RestClient.stub(:put).and_return(200)
+        # RestClient.should_receive(:put).with(@url, @request_params.merge(:email => "durkster1@gmail.com").to_json, @content_type_params)
+
+        Vero::Api::Users.stub(:edit_user!).and_return(200)
+        Vero::Api::Users.should_receive(:edit_user!).with(@request_params.merge(:email => "durkster1@gmail.com"), context)
         
         @user.with_vero_context.update_user!("durkster1@gmail.com").should == 200
       end
@@ -194,8 +200,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        RestClient.stub(:put).and_return(200)
-        RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
+        # RestClient.stub(:put).and_return(200)
+        # RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
+
+        Vero::Api::Users.stub(:edit_user!).and_return(200)
+        Vero::Api::Users.should_receive(:edit_user!).with(@request_params, context)
         
         @user.with_vero_context.update_user!.should == 200
       end
@@ -237,9 +246,7 @@ describe Vero::Trackable do
         @request_params = {
           :email => 'durkster@gmail.com',
           :add => [],
-          :remove => [],
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true
+          :remove => []
         }
         @url = "https://www.getvero.com/api/v2/users/tags/edit.json"
       end
@@ -251,8 +258,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        RestClient.stub(:put).and_return(200)
-        RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
+        # RestClient.stub(:put).and_return(200)
+        # RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
+
+        Vero::Api::Users.stub(:edit_user_tags!).and_return(200)
+        Vero::Api::Users.should_receive(:edit_user_tags!).with(@request_params, context)
         
         @user.with_vero_context.update_user_tags!.should == 200
       end
@@ -273,9 +283,7 @@ describe Vero::Trackable do
     describe :unsubscribe! do
       before do
         @request_params = {
-          :email => 'durkster@gmail.com',
-          :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
-          :development_mode => true
+          :email => 'durkster@gmail.com'
         }
         @url = "https://www.getvero.com/api/v2/users/unsubscribe.json"
       end
@@ -287,8 +295,11 @@ describe Vero::Trackable do
 
         @user.stub(:with_vero_context).and_return(context)
 
-        RestClient.stub(:post).and_return(200)
-        RestClient.should_receive(:post).with(@url, @request_params)
+        # RestClient.stub(:post).and_return(200)
+        # RestClient.should_receive(:post).with(@url, @request_params)
+
+        Vero::Api::Users.stub(:unsubscribe!).and_return(200)
+        Vero::Api::Users.should_receive(:unsubscribe!).with(@request_params, context)
         
         @user.with_vero_context.unsubscribe!.should == 200
       end
