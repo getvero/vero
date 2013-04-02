@@ -39,6 +39,12 @@ describe Vero::Api::Workers::Events::TrackAPI do
         subject.options = options
         expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
       end
+
+      it "should not raise an error when the keys are Strings" do
+        options = {"auth_token" => 'abcd', "identity" => {"email" => 'test@test.com'}, "event_name" => 'test_event', "data" => {}}
+        subject.options = options
+        expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+      end
     end
     
     describe :request do

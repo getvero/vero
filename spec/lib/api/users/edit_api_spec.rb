@@ -12,6 +12,11 @@ describe Vero::Api::Workers::Users::EditAPI do
 
   subject { Vero::Api::Workers::Users::EditAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }}) }
   describe :validate! do
+    it "should not raise an error when the keys are Strings" do
+      options = {"auth_token" => 'abcd', "email" => 'test@test.com', "changes" => { "email" => 'test@test.com' }}
+      subject.options = options
+      expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+    end
   end
 
   describe :request do

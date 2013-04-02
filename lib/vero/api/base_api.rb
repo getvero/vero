@@ -23,6 +23,10 @@ module Vero
           request
         end
 
+        def options=(val)
+          @options = options_with_symbolized_keys(val)
+        end
+
         protected
         def setup_logging
           return unless Vero::App.logger
@@ -50,6 +54,13 @@ module Vero
 
         def request_params_as_json
           JSON.dump(@options)
+        end
+
+        def options_with_symbolized_keys(val)
+          val.inject({}) do |h,(k,v)|
+            h[k.to_sym] = v
+            h
+          end
         end
       end
     end

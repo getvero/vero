@@ -50,6 +50,12 @@ describe Vero::Api::Workers::Users::EditTagsAPI do
       subject.options = options
       expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
     end
+
+    it "should not raise an error when the keys are Strings" do
+      options = {"auth_token" => 'abcd', "identity" => {"email" => 'test@test.com'}, "email" => 'test@test.com', "remove" => [ "Hi" ] }
+      subject.options = options
+      expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+    end
   end
 
   describe :request do
