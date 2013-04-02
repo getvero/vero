@@ -1,4 +1,5 @@
 # vero
+[![Build Status](https://travis-ci.org/getvero/vero.png?branch=master)](https://travis-ci.org/getvero/vero)
 
 vero makes it easy to interact with Vero's REST API from your Ruby app. Vero is a user lifecycle platform that allows you to engage and re-engage your customer base via email, based on the actions they perform in your software. 
 
