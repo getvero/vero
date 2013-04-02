@@ -14,24 +14,23 @@ module Vero
 
   class Sender
     def self.senders
-      @senders ||= begin
-        t = Vero::SenderHash.new
+      t = Vero::SenderHash.new
 
-        t.merge!({
-          true          => Vero::Senders::Invalid,
-          false         => Vero::Senders::Base,
-          :none         => Vero::Senders::Base,
-          :thread       => Vero::Senders::Invalid
-        })
+      t.merge!({
+        true          => Vero::Senders::Invalid,
+        false         => Vero::Senders::Base,
+        :none         => Vero::Senders::Base,
+        :thread       => Vero::Senders::Invalid
+      })
 
-        if RUBY_VERSION =~ /1\.9\./
-          t.merge!(
-            true        => Vero::Senders::Thread,
-            :thread     => Vero::Senders::Thread
-          )
-        end
-        t
+      if RUBY_VERSION !~ /1\.8\./
+        t.merge!(
+          true        => Vero::Senders::Thread,
+          :thread     => Vero::Senders::Thread
+        )
       end
+
+      t
     end
 
     def self.send(api_class, sender_strategy, domain, options)
