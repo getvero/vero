@@ -32,7 +32,7 @@ module Vero
       if @domain.blank?
         'https://www.getvero.com'
       else
-        @domain =~ /http[s]?\:\/\/.+/ ? @domain : "http://#{@domain}" 
+        @domain =~ /http[s]?\:\/\/.+/ ? @domain : "http://#{@domain}"
       end
     end
 
@@ -47,6 +47,10 @@ module Vero
 
     def configured?
       auth_token?
+    end
+
+    def disable_requests!
+      self.disabled = true
     end
 
     def reset!

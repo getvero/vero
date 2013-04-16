@@ -1,13 +1,16 @@
 require 'rest-client'
 require 'vero/utility/ext'
 
-module Vero 
-  autoload :Config,             'vero/config'
-  autoload :App,                'vero/app'
-  autoload :Context,            'vero/context'
-  autoload :Trackable,          'vero/trackable'
-  autoload :DSL,                'vero/dsl'
-  
+module Vero
+  autoload :Config,               'vero/config'
+  autoload :App,                  'vero/app'
+  autoload :Context,              'vero/context'
+  autoload :APIContext,           'vero/context/api'
+  autoload :Trackable,            'vero/trackable'
+  autoload :DSL,                  'vero/dsl'
+  autoload :Sender,               'vero/sender'
+  autoload :ResqueWorker,         'vero/senders/resque'
+
   module Api
     module Workers
       autoload :BaseAPI,          'vero/api/base_api'
@@ -27,20 +30,18 @@ module Vero
     autoload :Events,             'vero/api'
     autoload :Users,              'vero/api'
   end
-  
-  module Utility
-    autoload :Logger,           'vero/utility/logger'
-  end
 
   module Senders
-    autoload :Base,             'vero/senders/base'
-    autoload :DelayedJob,       'vero/senders/delayed_job'
-    autoload :Resque,           'vero/senders/resque'
-    autoload :Invalid,          'vero/senders/invalid'
-    autoload :Thread,           'vero/senders/thread'
+    autoload :Base,               'vero/senders/base'
+    autoload :DelayedJob,         'vero/senders/delayed_job'
+    autoload :Resque,             'vero/senders/resque'
+    autoload :Invalid,            'vero/senders/invalid'
+    autoload :Thread,             'vero/senders/thread'
   end
-  autoload :Sender,             'vero/sender'
-  autoload :ResqueWorker,       'vero/senders/resque'
+
+  module Utility
+    autoload :Logger,             'vero/utility/logger'
+  end
 end
 
 require 'vero/railtie' if defined?(Rails)

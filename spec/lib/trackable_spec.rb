@@ -48,7 +48,8 @@ describe Vero::Trackable do
         @request_params = {
           :event_name => 'test_event',
           :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-          :data => { :test => 1 }
+          :data => { :test => 1 },
+          :extras => {}
         }
         @url = "https://www.getvero.com/api/v1/track.json"
       end
@@ -136,7 +137,7 @@ describe Vero::Trackable do
 
         Vero::Api::Users.stub(:track!).and_return(200)
         Vero::Api::Users.should_receive(:track!).with(@request_params, context)
-        
+
         @user.identify!.should == 200
       end
 
@@ -190,7 +191,7 @@ describe Vero::Trackable do
 
         Vero::Api::Users.stub(:edit_user!).and_return(200)
         Vero::Api::Users.should_receive(:edit_user!).with(@request_params.merge(:email => "durkster1@gmail.com"), context)
-        
+
         @user.with_vero_context.update_user!("durkster1@gmail.com").should == 200
       end
 
@@ -205,7 +206,7 @@ describe Vero::Trackable do
 
         Vero::Api::Users.stub(:edit_user!).and_return(200)
         Vero::Api::Users.should_receive(:edit_user!).with(@request_params, context)
-        
+
         @user.with_vero_context.update_user!.should == 200
       end
 
@@ -263,7 +264,7 @@ describe Vero::Trackable do
 
         Vero::Api::Users.stub(:edit_user_tags!).and_return(200)
         Vero::Api::Users.should_receive(:edit_user_tags!).with(@request_params, context)
-        
+
         @user.with_vero_context.update_user_tags!.should == 200
       end
 
@@ -300,7 +301,7 @@ describe Vero::Trackable do
 
         Vero::Api::Users.stub(:unsubscribe!).and_return(200)
         Vero::Api::Users.should_receive(:unsubscribe!).with(@request_params, context)
-        
+
         @user.with_vero_context.unsubscribe!.should == 200
       end
 
@@ -406,7 +407,7 @@ describe Vero::Trackable do
         user.with_vero_context({:api_key => "boom", :secret => "tish"}).config.config_params.should == {:api_key=>"boom", :secret=>"tish"}
       end
     end
-    
+
     it "should work when Vero::Trackable::Interface is not included" do
       user = UserWithoutInterface.new
 
