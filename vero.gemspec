@@ -13,14 +13,14 @@ Gem::Specification.new do |s|
   s.authors  = ['James Lamont']
 
   dependencies = [
-    [:development, 'rails', "> 3"],
+    [:development, 'rails', ">= 3"],
     [:development, 'rspec'],
     [:development, 'delayed_job'],
     [:development, 'delayed_job_active_record'],
     [:development, 'resque'],
-    [:runtime, 'json'],
-    [:runtime, 'rest-client'],
-    [:runtime, 'girl_friday', "~> 0.11.2"]
+    [:runtime,     'json'],
+    [:runtime,     'rest-client'],
+    [:runtime,     'girl_friday', ">= 0.11.2"]
   ]
 
   s.files         = Dir['**/*']
