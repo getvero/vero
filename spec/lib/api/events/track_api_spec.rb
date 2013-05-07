@@ -16,7 +16,7 @@ describe Vero::Api::Workers::Events::TrackAPI do
   context "request with properties" do
     subject { Vero::Api::Workers::Events::TrackAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}) }
     describe :validate! do
-      it "should raise an error if test_event is a blank String" do
+      it "should raise an error if event_name is a blank String" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => nil}
         subject.options = options
         expect { subject.send(:validate!) }.to raise_error(ArgumentError)
@@ -46,7 +46,7 @@ describe Vero::Api::Workers::Events::TrackAPI do
         expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
       end
     end
-    
+
     describe :request do
       it "should send a JSON request to the Vero API" do
         RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}.to_json, {:content_type => :json, :accept => :json})

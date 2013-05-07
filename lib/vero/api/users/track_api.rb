@@ -12,7 +12,7 @@ module Vero
           end
 
           def validate!
-            raise ArgumentError.new("Missing :email") if options[:email].to_s.blank?
+            raise ArgumentError.new("Missing :id or :email") if options[:id].to_s.blank? && options[:email].to_s.blank?
             raise ArgumentError.new(":data must be either nil or a Hash") unless (options[:data].nil? || options[:data].is_a?(Hash))
           end
         end

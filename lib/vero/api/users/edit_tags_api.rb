@@ -12,7 +12,7 @@ module Vero
           end
 
           def validate!
-            raise ArgumentError.new("Missing :email") if options[:email].to_s.blank?
+            raise ArgumentError.new("Missing :id or :email") if options[:id].to_s.blank? && options[:email].to_s.blank?
             raise ArgumentError.new(":add must an Array if present") unless options[:add].nil? || options[:add].is_a?(Array)
             raise ArgumentError.new(":remove must an Array if present") unless options[:remove].nil? || options[:remove].is_a?(Array)
             raise ArgumentError.new("Either :add or :remove must be present") if (options[:remove].nil? && options[:add].nil?)

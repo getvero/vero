@@ -12,12 +12,20 @@ describe Vero::Api::Workers::Users::TrackAPI do
 
   subject { Vero::Api::Workers::Users::TrackAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}) }
   describe :validate! do
-    it "should raise an error if email is a blank String" do
-      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => nil}
+    it "should raise an error if email and id are are blank String" do
+      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => nil, :email => nil}
       subject.options = options
       expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
-      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}
+      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => nil, :email => 'test@test.com'}
+      subject.options = options
+      expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+
+      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => "", :email => nil}
+      subject.options = options
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
+
+      options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => "user123", :email => nil}
       subject.options = options
       expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
     end
@@ -42,7 +50,7 @@ describe Vero::Api::Workers::Users::TrackAPI do
       expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
     end
   end
-  
+
   describe :request do
     it "should send a request to the Vero API" do
       RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/users/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}.to_json, {:content_type => :json, :accept => :json})
