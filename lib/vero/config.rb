@@ -30,7 +30,7 @@ module Vero
 
     def domain
       if @domain.blank?
-        'https://www.getvero.com'
+        'https://api.getvero.com'
       else
         @domain =~ /http[s]?\:\/\/.+/ ? @domain : "http://#{@domain}"
       end

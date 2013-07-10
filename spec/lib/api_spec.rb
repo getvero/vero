@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Vero::Api::Events do
   let (:subject) { Vero::Api::Events }
-  
+
   describe :track! do
     it "should call the TrackAPI object via the configured sender" do
       input = {:event_name => "test_event", :identity => {:email => "james@getvero.com"}, :data => {:test => "test"}}
@@ -14,7 +14,7 @@ describe Vero::Api::Events do
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
-      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Events::TrackAPI, true, "https://www.getvero.com", expected)
+      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Events::TrackAPI, true, "https://api.getvero.com", expected)
 
       subject.track!(input)
     end
@@ -23,7 +23,7 @@ end
 
 describe Vero::Api::Users do
   let (:subject) { Vero::Api::Users }
-  
+
   describe :track! do
     it "should call the TrackAPI object via the configured sender" do
       input = {:email => "james@getvero.com", :data => {:age => 25}}
@@ -35,7 +35,7 @@ describe Vero::Api::Users do
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
-      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::TrackAPI, true, "https://www.getvero.com", expected)
+      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::TrackAPI, true, "https://api.getvero.com", expected)
 
       subject.track!(input)
     end
@@ -52,7 +52,7 @@ describe Vero::Api::Users do
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
-      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::EditAPI, true, "https://www.getvero.com", expected)
+      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::EditAPI, true, "https://api.getvero.com", expected)
 
       subject.edit_user!(input)
     end
@@ -69,7 +69,7 @@ describe Vero::Api::Users do
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
-      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI, true, "https://www.getvero.com", expected)
+      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI, true, "https://api.getvero.com", expected)
 
       subject.edit_user_tags!(input)
     end
@@ -86,7 +86,7 @@ describe Vero::Api::Users do
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
-      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI, true, "https://www.getvero.com", expected)
+      Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI, true, "https://api.getvero.com", expected)
 
       subject.unsubscribe!(input)
     end

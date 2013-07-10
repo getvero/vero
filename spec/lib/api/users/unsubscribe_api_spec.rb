@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Users::UnsubscribeAPI do
-  subject { Vero::Api::Workers::Users::UnsubscribeAPI.new('https://www.getvero.com', {}) }
+  subject { Vero::Api::Workers::Users::UnsubscribeAPI.new('https://api.getvero.com', {}) }
   it "should inherit from Vero::Api::Workers::BaseCaller" do
     subject.should be_a(Vero::Api::Workers::BaseAPI)
   end
 
   it "should map to current version of Vero API" do
-    subject.send(:url).should == "https://www.getvero.com/api/v2/users/unsubscribe.json"
+    subject.send(:url).should == "https://api.getvero.com/api/v2/users/unsubscribe.json"
   end
 
-  subject { Vero::Api::Workers::Users::UnsubscribeAPI.new('https://www.getvero.com', {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }}) }
+  subject { Vero::Api::Workers::Users::UnsubscribeAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }}) }
   describe :validate! do
     it "should not raise an error when the keys are Strings" do
       options = {"auth_token" => 'abcd', "email" => 'test@test.com', "changes" => { "email" => 'test@test.com' }}
@@ -21,7 +21,7 @@ describe Vero::Api::Workers::Users::UnsubscribeAPI do
 
   describe :request do
     it "should send a request to the Vero API" do
-      RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/users/unsubscribe.json", {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }})
+      RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/users/unsubscribe.json", {:auth_token => 'abcd', :email => 'test@test.com', :changes => { :email => 'test@test.com' }})
       RestClient.stub(:post).and_return(200)
       subject.send(:request)
     end

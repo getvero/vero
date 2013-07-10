@@ -59,10 +59,10 @@ describe Vero::Config do
   end
 
   describe :domain do
-    it "should return https://www.getvero.com when not set" do
-      @config.domain.should == 'https://www.getvero.com'
+    it "should return https://api.getvero.com when not set" do
+      @config.domain.should == 'https://api.getvero.com'
       @config.domain = 'blah.com'
-      @config.domain.should_not == 'https://www.getvero.com'
+      @config.domain.should_not == 'https://api.getvero.com'
     end
 
     it "should return the domain value" do

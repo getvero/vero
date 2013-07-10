@@ -9,7 +9,7 @@ describe Vero::Trackable do
       :data => { :test => 1 },
       :development_mode => true
     }
-    @url = "https://www.getvero.com/api/v1/track.json"
+    @url = "https://api.getvero.com/api/v1/track.json"
     @user = User.new
 
     @content_type_params = {:content_type => :json, :accept => :json}
@@ -51,7 +51,7 @@ describe Vero::Trackable do
           :data => { :test => 1 },
           :extras => {}
         }
-        @url = "https://www.getvero.com/api/v1/track.json"
+        @url = "https://api.getvero.com/api/v1/track.json"
       end
 
       it "should not send a track request when the required parameters are invalid" do
@@ -69,13 +69,13 @@ describe Vero::Trackable do
 
         RestClient.stub(:post).and_return(200)
 
-        # RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+        # RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
 
         Vero::Api::Events.stub(:track!).and_return(200)
         Vero::Api::Events.should_receive(:track!).with(@request_params, context)
         @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
 
-        # RestClient.should_receive(:post).with("https://www.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
+        # RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
 
         Vero::Api::Events.stub(:track!).and_return(200)
         Vero::Api::Events.should_receive(:track!).with(@request_params.merge(:data => {}), context)
@@ -123,7 +123,7 @@ describe Vero::Trackable do
           :email => 'durkster@gmail.com',
           :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
         }
-        @url = "https://www.getvero.com/api/v2/users/track.json"
+        @url = "https://api.getvero.com/api/v2/users/track.json"
       end
 
       it "should send an `identify` request when async is set to false" do
@@ -177,7 +177,7 @@ describe Vero::Trackable do
           :email => 'durkster@gmail.com',
           :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
         }
-        @url = "https://www.getvero.com/api/v2/users/edit.json"
+        @url = "https://api.getvero.com/api/v2/users/edit.json"
       end
 
       it "should be able to choose an email address" do
@@ -249,7 +249,7 @@ describe Vero::Trackable do
           :add => [],
           :remove => []
         }
-        @url = "https://www.getvero.com/api/v2/users/tags/edit.json"
+        @url = "https://api.getvero.com/api/v2/users/tags/edit.json"
       end
 
       it "should send an `update_user_tags` request when async is set to false" do
@@ -286,7 +286,7 @@ describe Vero::Trackable do
         @request_params = {
           :email => 'durkster@gmail.com'
         }
-        @url = "https://www.getvero.com/api/v2/users/unsubscribe.json"
+        @url = "https://api.getvero.com/api/v2/users/unsubscribe.json"
       end
 
       it "should send an `update_user` request when async is set to false" do
@@ -418,7 +418,7 @@ describe Vero::Trackable do
         :data => { :test => 1 },
         :development_mode => true
       }
-      url = "https://www.getvero.com/api/v1/track.json"
+      url = "https://api.getvero.com/api/v1/track.json"
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user
