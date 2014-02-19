@@ -15,7 +15,7 @@ module Vero
   #   end
   module DSL
     def vero
-      @proxy ||= Proxy.new
+      @_vero_proxy ||= Proxy.new
     end
 
     # :nodoc:
