@@ -38,7 +38,7 @@ module Vero
           other.reject! { |i| !(i.is_a?(Hash) && i.has_key?(:extras)) }
           other.each do |h|
             symbol = h[:extras]
-            t = respond_to?(symbol) ? send(symbol) : nil
+            t = respond_to?(symbol, true) ? send(symbol) : nil
             result.merge!(t) if t.is_a?(Hash)
           end
         end
