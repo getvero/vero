@@ -70,6 +70,10 @@ module Vero
       def unsubscribe!(options)
         run_api(Vero::Api::Workers::Users::UnsubscribeAPI, options)
       end
+
+      def reidentify!(options)
+        run_api(Vero::Api::Workers::Users::ReidentifyAPI, options)
+      end
     end
   end
 end
