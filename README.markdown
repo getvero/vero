@@ -178,6 +178,9 @@ First, ensure you've correctly configured the gem following the instructions as 
 
         # Editing a user's tags
         vero.users.edit_user_tags!({:email => "james@getvero.com", :add => [], :remove => ["awesome"]})
+        
+        # Changing a user's id
+        vero.users.reidentify!({:id => "james@getvero.com", :new_id => "honeybadger@getvero.com"})
       end
 
       def destroy
