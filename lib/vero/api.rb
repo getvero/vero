@@ -11,6 +11,15 @@ module Vero
         self.context.config
       end
 
+      def run_api(api_klass, options)
+        validate_configured!
+        options.merge!(config.request_params)
+
+        unless config.disabled
+          Vero::Sender.send(api_klass, config.async, config.domain, options)
+        end
+      end
+
       protected
       def validate_configured!
         unless config.configured?
@@ -25,12 +34,7 @@ module Vero
       end
 
       def track!(options)
-        validate_configured!
-
-        options.merge!(config.request_params)
-        unless config.disabled
-          Vero::Sender.send Vero::Api::Workers::Events::TrackAPI, config.async, config.domain, options
-        end
+        run_api(Vero::Api::Workers::Events::TrackAPI, options)
       end
     end
 
@@ -52,41 +56,23 @@ module Vero
       end
 
       def track!(options)
-        validate_configured!
-
-        options.merge!(config.request_params)
-        unless config.disabled
-          Vero::Sender.send Vero::Api::Workers::Users::TrackAPI, config.async, config.domain, options
-        end
+        run_api(Vero::Api::Workers::Users::TrackAPI, options)
       end
 
       def edit_user!(options)
-        validate_configured!
-        options.merge!(config.request_params)
-
-        unless config.disabled
-          Vero::Sender.send Vero::Api::Workers::Users::EditAPI, config.async, config.domain, options
-        end
+        run_api(Vero::Api::Workers::Users::EditAPI, options)
       end
 
       def edit_user_tags!(options)
-        validate_configured!
-        
-        options.merge!(config.request_params)
-
-        unless config.disabled
-          Vero::Sender.send Vero::Api::Workers::Users::EditTagsAPI, config.async, config.domain, options
-        end
+        run_api(Vero::Api::Workers::Users::EditTagsAPI, options)
       end
 
       def unsubscribe!(options)
-        validate_configured!
-        
-        options.merge!(config.request_params)
+        run_api(Vero::Api::Workers::Users::UnsubscribeAPI, options)
+      end
 
-        unless config.disabled
-          Vero::Sender.send Vero::Api::Workers::Users::UnsubscribeAPI, config.async, config.domain, options
-        end
+      def reidentify!(options)
+        run_api(Vero::Api::Workers::Users::ReidentifyAPI, options)
       end
     end
   end
