@@ -51,6 +51,10 @@ module Vero
         new(context).edit_user_tags!(options)
       end
 
+      def self.reidentify!(options, context = Vero::App.default_context)
+        new(context).reidentify!(options)
+      end
+
       def self.unsubscribe!(options, context = Vero::App.default_context)
         new(context).unsubscribe!(options)
       end

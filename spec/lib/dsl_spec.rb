@@ -17,6 +17,10 @@ describe Vero::DSL::Proxy do
     it 'is a pointer to Vero::Api::Users' do
       expect(proxy.users).to eql(Vero::Api::Users)
     end
+
+    it "should respond to reidentify!" do
+      expect(proxy.users.respond_to?(:reidentify!)).to be_true
+    end
   end
 
   describe '#events' do
