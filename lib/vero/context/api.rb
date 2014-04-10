@@ -6,27 +6,33 @@ module Vero
     end
 
     def identify!
-      data    = subject.to_vero
-      options = {:email => data[:email], :data => data}
+      identity = subject.to_vero
+      options = {:id => identity[:id], :email => identity[:email], :data => identity}
       Vero::Api::Users.track!(options, self)
     end
 
-    def update_user!(email = nil)
-      changes = subject.to_vero
-      options = {:email => (email || changes[:email]), :changes => changes}
+    def update_user!
+      identity = subject.to_vero
+      options = {:id => identity[:id], :email => identity[:email], :changes => identity}
       Vero::Api::Users.edit_user!(options, self)
     end
 
     def update_user_tags!(add = [], remove = [])
-      identity  = subject.to_vero
-      options   = {:email => identity[:email], :add => add, :remove => remove}
+      identity = subject.to_vero
+      options = {:id => identity[:id], :email => identity[:email], :add => Array(add), :remove => Array(remove)}
       Vero::Api::Users.edit_user_tags!(options, self)
     end
 
     def unsubscribe!
-      identity  = subject.to_vero
-      options   = {:email => identity[:email]}
+      identity = subject.to_vero
+      options = {:id => identity[:id], :email => identity[:email]}
       Vero::Api::Users.unsubscribe!(options, self)
+    end
+
+    def reidentify!(previous_id)
+      identity = subject.to_vero
+      options = {:id => previous_id, :new_id => identity[:id]}
+      Vero::Api::Users.reidentify!(options, self)
     end
   end
 end

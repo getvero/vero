@@ -101,6 +101,7 @@ describe Vero::Trackable do
     describe :identify! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
         }
@@ -144,22 +145,11 @@ describe Vero::Trackable do
     describe :update_user! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
         }
         @url = "https://api.getvero.com/api/v2/users/edit.json"
-      end
-
-      it "should be able to choose an email address" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-
-        @user.stub(:with_vero_context).and_return(context)
-
-        Vero::Api::Users.stub(:edit_user!).and_return(200)
-        Vero::Api::Users.should_receive(:edit_user!).with(@request_params.merge(:email => "durkster1@gmail.com"), context)
-
-        @user.with_vero_context.update_user!("durkster1@gmail.com").should == 200
       end
 
       it "should send an `update_user` request when async is set to false" do
@@ -205,6 +195,7 @@ describe Vero::Trackable do
     describe :update_user_tags! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :add => [],
           :remove => []
@@ -241,6 +232,7 @@ describe Vero::Trackable do
     describe :unsubscribe! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com'
         }
         @url = "https://api.getvero.com/api/v2/users/unsubscribe.json"
