@@ -28,7 +28,7 @@ following:
     end
 
 You will be able to find your API key and secret by logging into Vero
-([sign up](http://getvero.com), if you haven't already) and clicking the
+([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
 
 By default, events are sent asynchronously using a background thread.
@@ -54,7 +54,8 @@ override this in your initializer:
 
 ## Setup tracking
 
-You will need to define who should be tracked and what information about them you'd like to send to Vero. In this example we'll track users:
+You will need to define who should be tracked and what information about them
+you would like sent to Vero. In this example we'll track users:
 
     # app/models/user.rb
     class User < ActiveRecord::Base
@@ -64,9 +65,11 @@ You will need to define who should be tracked and what information about them yo
       ...
     end
 
-As you can see we're saying that a User is trackable and that we'd like to pass up their user id, email address, and name.
+As you can see we're saying that a User is trackable and that we'd like to pass
+up their user id, email address, and name.
 
-Each symbol passed to trackable should reference either an instance method or field. Therefore it's perfectly legal to do something like:
+Each symbol passed to trackable should reference either an instance method or
+field. Therefore it's perfectly legal to do something like:
 
     # app/models/user.rb
     class User < ActiveRecord::Base
@@ -85,22 +88,24 @@ requests. In many cases the user "id" will simply be their email address. The
 API will assume that if an "id" is not present that it should use "email" as
 the "id".
 
-If the user's email address is stored under a different field, you can do the following:
+If the user's email address is stored under a different field, you can do the
+following:
 
     # app/models/user.rb
     class User < ActiveRecord::Base
       include Vero::Trackable
-      trackable :email
+      trackable :id, :email
 
       def email; self.primary_contact; end
     end
 
-Finally, you can track multiple properties stored in a Hash by doing the following:
+Finally, you can track multiple properties stored in a Hash by doing the
+following:
 
     # app/models/user.rb
     class User < ActiveRecord::Base
       include Vero::Trackable
-      trackable :email, {:extras => :properties}
+      trackable :id, :email, {:extras => :properties}
 
       def email; self.primary_contact; end
 
@@ -112,7 +117,8 @@ Finally, you can track multiple properties stored in a Hash by doing the followi
       end
     end
 
-**Note:** You may choose to bypass extending the `User` model by calling the API directly. More information can be found below.
+**Note:** You may choose to bypass extending the `User` model by calling the
+API via [simple DSL](https://github.com/getvero/vero#simple-dsl) found below.
 
 ## Sending events
 
@@ -131,7 +137,7 @@ To send an event:
 
         if @contest.save
           # Tell Vero that a new contest has been created
-          current_user.track('new_contest_created')
+          current_user.track!('new_contest_created')
 
           flash[:notice] = "New contest saved successfully!"
           redirect_to contests_path
@@ -155,7 +161,7 @@ You may want to send additional data about an event:
 
         if @contest.save
           # Tell Vero that a new contest has been created, and the id and name
-          current_user.track('new_contest_created', {:id => @contest.id, :name => @content.name})
+          current_user.track!('new_contest_created', {:id => @contest.id, :name => @content.name})
 
           flash[:notice] = "New contest saved successfully!"
           redirect_to contests_path
@@ -168,9 +174,11 @@ You may want to send additional data about an event:
 
 ## Simple DSL
 
-To avoid having to extend the `User` model, we offer the option to call our API using a simple DSL (thanks @jherdman) as you would from the Javascript library.
+To avoid having to extend the `User` model, we offer the option to call our API
+using a simple DSL (thanks @jherdman) as you would from the Javascript library.
 
-First, ensure you've correctly configured the gem following the instructions as outlined in Installation. Now you can call the API using the following methods:
+First, ensure you've correctly configured the gem following the instructions as
+outlined in Installation. Now you can call the API using the following methods:
 
     class UsersController < ApplicationController
       include Vero::DSL
@@ -186,22 +194,22 @@ First, ensure you've correctly configured the gem following the instructions as 
 
       def create
         # Identifying a user
-        vero.users.track!({:email => "james@getvero.com", :data => {}})
+        vero.users.track!({:id => 123, :data => {}})
       end
 
       def update
         # Editing a user
-        vero.users.edit_user!({:email => "james@getvero.com", :changes => {:age => 25}})
+        vero.users.edit_user!({:id => 123, :changes => {:age => 25}})
 
         # Editing a user's tags
-        vero.users.edit_user_tags!({:email => "james@getvero.com", :add => [], :remove => ["awesome"]})
+        vero.users.edit_user_tags!({:id => 123, :add => ["awesome"], :remove => []})
 
         # Changing a user's id
-        vero.users.reidentify!({:id => "james@getvero.com", :new_id => "honeybadger@getvero.com"})
+        vero.users.reidentify!({:id => 123, :new_id => "honeybadger@getvero.com"})
       end
 
       def destroy
-        vero.users.unsubscribe!({:email => "james@getvero.com"})
+        vero.users.unsubscribe!({:id => 123})
       end
     end
 
@@ -211,8 +219,20 @@ This gem is distributed under the MIT License.
 
 Copyright (C) 2013 Vero (Invc Me Inc.)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
