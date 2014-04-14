@@ -217,7 +217,7 @@ outlined in Installation. Now you can call the API using the following methods:
 
 This gem is distributed under the MIT License.
 
-Copyright (C) 2013 Vero (Invc Me Inc.)
+Copyright (C) 2014 Vero (Invc Me Inc.)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
