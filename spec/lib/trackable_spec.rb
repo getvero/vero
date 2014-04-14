@@ -1,5 +1,14 @@
 require 'spec_helper'
 
+def vero_context(user, logging = true, async = false)
+  context = Vero::Context.new(Vero::App.default_context)
+  context.subject = user
+  context.config.logging = logging
+  context.config.async = async
+
+  context
+end
+
 describe Vero::Trackable do
   before :each do
     @request_params = {
@@ -16,26 +25,17 @@ describe Vero::Trackable do
   end
 
   context "the gem has not been configured" do
-    before :each do
-      Vero::App.reset!
-    end
+    before { Vero::App.reset! }
+    it "should raise an error when API requests are made" do
+      expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
 
-    describe :track do
-      it "should raise an error" do
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
-      end
-    end
-
-    describe :identity! do
-      it "should raise an error" do
-        @user.stub(:post_later).and_return('success')
-        expect { @user.identity! }.to raise_error
-      end
+      @user.stub(:post_later).and_return('success')
+      expect { @user.identity! }.to raise_error
     end
   end
 
   context "the gem has been configured" do
-    before :each do
+    before do
       Vero::App.init do |c|
         c.api_key = 'abcd1234'
         c.secret = 'efgh5678'
@@ -61,21 +61,14 @@ describe Vero::Trackable do
       end
 
       it "should send a `track!` request when async is set to false" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-        context.config.logging = true
-
+        context = vero_context(@user)
         @user.stub(:with_vero_context).and_return(context)
 
         RestClient.stub(:post).and_return(200)
 
-        # RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:data=>{:test=>1}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
-
         Vero::Api::Events.stub(:track!).and_return(200)
         Vero::Api::Events.should_receive(:track!).with(@request_params, context)
         @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
-
-        # RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:data=>{}, :event_name=>"test_event", :identity=>{:email=>"durkster@gmail.com", :age=>20, :_user_type=>"User"}, :auth_token=>"YWJjZDEyMzQ6ZWZnaDU2Nzg=", :development_mode=>true}.to_json, @content_type_params)
 
         Vero::Api::Events.stub(:track!).and_return(200)
         Vero::Api::Events.should_receive(:track!).with(@request_params.merge(:data => {}), context)
@@ -83,20 +76,10 @@ describe Vero::Trackable do
       end
 
       context 'when set to be async' do
-        let(:my_context) { Vero::Context.new(Vero::App.default_context) }
-
-        before do
-          my_context.config.logging = true
-          my_context.subject = @user
-          my_context.config.async = true
-
-          @user.stub(:with_vero_context).and_return(my_context)
-        end
+        before { @user.stub(:with_vero_context).and_return vero_context(@user, true, true) }
 
         context 'using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.8.7')
-          end
+          before { stub_const('RUBY_VERSION', '1.8.7') }
 
           it 'raises an error' do
             expect { @user.track!(@request_params[:event_name], @request_params[:data]) }.to raise_error
@@ -105,9 +88,7 @@ describe Vero::Trackable do
         end
 
         context 'not using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.9.3')
-          end
+          before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
             @user.track!(@request_params[:event_name], @request_params[:data]).should be_true
@@ -120,6 +101,7 @@ describe Vero::Trackable do
     describe :identify! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :data => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
         }
@@ -127,13 +109,8 @@ describe Vero::Trackable do
       end
 
       it "should send an `identify` request when async is set to false" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-
+        context = vero_context(@user)
         @user.stub(:with_vero_context).and_return(context)
-
-        # RestClient.stub(:post).and_return(200)
-        # RestClient.should_receive(:post).with(@url, @request_params.to_json, @content_type_params)
 
         Vero::Api::Users.stub(:track!).and_return(200)
         Vero::Api::Users.should_receive(:track!).with(@request_params, context)
@@ -142,17 +119,13 @@ describe Vero::Trackable do
       end
 
       context 'when set to use async' do
-        let(:my_context) { Vero::Context.new(Vero::App.default_context) }
-
         before do
-          my_context.subject = @user
-          my_context.config.async = true
+          context = vero_context(@user, false, true)
+          @user.stub(:with_vero_context).and_return(context)
         end
 
         context 'and using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.8.7')
-          end
+          before { stub_const('RUBY_VERSION', '1.8.7') }
 
           it 'raises an error' do
             expect { @user.identify! }.to raise_error
@@ -160,9 +133,7 @@ describe Vero::Trackable do
         end
 
         context 'and not using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.9.3')
-          end
+          before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
             @user.identify!.should be_true
@@ -174,25 +145,11 @@ describe Vero::Trackable do
     describe :update_user! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :changes => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
         }
         @url = "https://api.getvero.com/api/v2/users/edit.json"
-      end
-
-      it "should be able to choose an email address" do
-        context = Vero::Context.new(Vero::App.default_context)
-        context.subject = @user
-
-        @user.stub(:with_vero_context).and_return(context)
-
-        # RestClient.stub(:put).and_return(200)
-        # RestClient.should_receive(:put).with(@url, @request_params.merge(:email => "durkster1@gmail.com").to_json, @content_type_params)
-
-        Vero::Api::Users.stub(:edit_user!).and_return(200)
-        Vero::Api::Users.should_receive(:edit_user!).with(@request_params.merge(:email => "durkster1@gmail.com"), context)
-
-        @user.with_vero_context.update_user!("durkster1@gmail.com").should == 200
       end
 
       it "should send an `update_user` request when async is set to false" do
@@ -200,9 +157,6 @@ describe Vero::Trackable do
         context.subject = @user
 
         @user.stub(:with_vero_context).and_return(context)
-
-        # RestClient.stub(:put).and_return(200)
-        # RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
 
         Vero::Api::Users.stub(:edit_user!).and_return(200)
         Vero::Api::Users.should_receive(:edit_user!).with(@request_params, context)
@@ -221,9 +175,7 @@ describe Vero::Trackable do
         end
 
         context 'and using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.8.7')
-          end
+          before { stub_const('RUBY_VERSION', '1.8.7') }
 
           it 'raises an error' do
             expect { @user.with_vero_context.update_user! }.to raise_error
@@ -231,9 +183,7 @@ describe Vero::Trackable do
         end
 
         context 'and not using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.9.3')
-          end
+          before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
             @user.with_vero_context.update_user!.should be_true
@@ -245,6 +195,7 @@ describe Vero::Trackable do
     describe :update_user_tags! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com',
           :add => [],
           :remove => []
@@ -258,9 +209,6 @@ describe Vero::Trackable do
         context.config.async = false
 
         @user.stub(:with_vero_context).and_return(context)
-
-        # RestClient.stub(:put).and_return(200)
-        # RestClient.should_receive(:put).with(@url, @request_params.to_json, @content_type_params)
 
         Vero::Api::Users.stub(:edit_user_tags!).and_return(200)
         Vero::Api::Users.should_receive(:edit_user_tags!).with(@request_params, context)
@@ -284,6 +232,7 @@ describe Vero::Trackable do
     describe :unsubscribe! do
       before do
         @request_params = {
+          :id => nil,
           :email => 'durkster@gmail.com'
         }
         @url = "https://api.getvero.com/api/v2/users/unsubscribe.json"
@@ -295,9 +244,6 @@ describe Vero::Trackable do
         context.config.async = false
 
         @user.stub(:with_vero_context).and_return(context)
-
-        # RestClient.stub(:post).and_return(200)
-        # RestClient.should_receive(:post).with(@url, @request_params)
 
         Vero::Api::Users.stub(:unsubscribe!).and_return(200)
         Vero::Api::Users.should_receive(:unsubscribe!).with(@request_params, context)
@@ -316,9 +262,7 @@ describe Vero::Trackable do
         end
 
         context 'and using Ruby 1.8.7' do
-          before do
-            stub_const('RUBY_VERSION', '1.8.7')
-          end
+          before { stub_const('RUBY_VERSION', '1.8.7') }
 
           it 'raises an error' do
             expect { @user.with_vero_context.unsubscribe! }.to raise_error
@@ -326,9 +270,7 @@ describe Vero::Trackable do
         end
 
         context 'and using Ruby 1.9.3' do
-          before do
-            stub_const('RUBY_VERSION', '1.9.3')
-          end
+          before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
             @user.with_vero_context.unsubscribe!.should be_true
@@ -338,32 +280,31 @@ describe Vero::Trackable do
     end
 
     describe :trackable do
-      after :each do
-        User.reset_trackable_map!
-        User.trackable :email, :age
-      end
+      before { User.reset_trackable_map! }
 
       it "should build an array of trackable params" do
-        User.reset_trackable_map!
         User.trackable :email, :age
         User.trackable_map.should == [:email, :age]
       end
 
       it "should append new trackable items to an existing trackable map" do
-        User.reset_trackable_map!
         User.trackable :email, :age
         User.trackable :hair_colour
         User.trackable_map.should == [:email, :age, :hair_colour]
       end
 
       it "should append an extra's hash to the trackable map" do
-        User.reset_trackable_map!
         User.trackable :email, {:extras => :properties}
         User.trackable_map.should == [:email, {:extras => :properties}]
       end
     end
 
     describe :to_vero do
+      before :all do
+        User.reset_trackable_map!
+        User.trackable :email, :age
+      end
+
       it "should return a hash of all values mapped by trackable" do
         user = User.new
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
