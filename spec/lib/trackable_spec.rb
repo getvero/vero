@@ -22,7 +22,7 @@ describe Vero::Trackable do
 
     describe :track do
       it "should raise an error" do
-        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError, "You must configure the 'vero' gem. Visit https://github.com/semblancesystems/vero for more details.")
+        expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
       end
     end
 
@@ -55,9 +55,9 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track!(nil) }.to raise_error(ArgumentError)
-        expect { @user.track!('') }.to raise_error(ArgumentError)
-        expect { @user.track!('test', '') }.to raise_error(ArgumentError)
+        expect { @user.track!(nil) }.to raise_error
+        expect { @user.track!('') }.to raise_error
+        expect { @user.track!('test', '') }.to raise_error
       end
 
       it "should send a `track!` request when async is set to false" do

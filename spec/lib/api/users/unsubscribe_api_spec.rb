@@ -15,7 +15,7 @@ describe Vero::Api::Workers::Users::UnsubscribeAPI do
     it "should not raise an error when the keys are Strings" do
       options = {"auth_token" => 'abcd', "email" => 'test@test.com', "changes" => { "email" => 'test@test.com' }}
       subject.options = options
-      expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+      expect { subject.send(:validate!) }.to_not raise_error
     end
   end
 

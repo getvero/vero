@@ -19,31 +19,31 @@ describe Vero::Api::Workers::Events::TrackAPI do
       it "should raise an error if event_name is a blank String" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => nil}
         subject.options = options
-        expect { subject.send(:validate!) }.to raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to raise_error
 
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}
         subject.options = options
-        expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to_not raise_error
       end
 
       it "should raise an error if data is not either nil or a Hash" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event', :data => []}
         subject.options = options
-        expect { subject.send(:validate!) }.to raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to raise_error
 
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event', :data => nil}
         subject.options = options
-        expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to_not raise_error
 
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event', :data => {}}
         subject.options = options
-        expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to_not raise_error
       end
 
       it "should not raise an error when the keys are Strings" do
         options = {"auth_token" => 'abcd', "identity" => {"email" => 'test@test.com'}, "event_name" => 'test_event', "data" => {}}
         subject.options = options
-        expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+        expect { subject.send(:validate!) }.to_not raise_error
       end
     end
 

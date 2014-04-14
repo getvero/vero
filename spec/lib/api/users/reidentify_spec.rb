@@ -15,7 +15,7 @@ describe Vero::Api::Workers::Users::ReidentifyAPI do
     it "should not raise an error when the keys are Strings" do
       options = {"auth_token" => 'abcd', "id" => 'test@test.com', "new_id" => 'test2@test.com'}
       subject.options = options
-      expect { subject.send(:validate!) }.to_not raise_error(ArgumentError)
+      expect { subject.send(:validate!) }.to_not raise_error
     end
 
     it "should raise an error if id is missing" do
