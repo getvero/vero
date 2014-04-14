@@ -89,6 +89,6 @@ class UserWithPrivateExtras
 
   private
   def properties
-    {age: 26}
+    {:age => 26}
   end
 end
