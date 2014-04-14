@@ -397,6 +397,9 @@ describe Vero::Trackable do
           :gender => "female"
         }
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :gender => "female", :_user_type => "UserWithExtras"}
+
+        user = UserWithPrivateExtras.new
+        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 26, :_user_type => "UserWithPrivateExtras"}
       end
     end
 
