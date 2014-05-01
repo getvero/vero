@@ -24,6 +24,7 @@ module Vero
         autoload :EditAPI,        'vero/api/users/edit_api'
         autoload :EditTagsAPI,    'vero/api/users/edit_tags_api'
         autoload :UnsubscribeAPI, 'vero/api/users/unsubscribe_api'
+        autoload :ResubscribeAPI, 'vero/api/users/resubscribe_api'
         autoload :ReidentifyAPI,  'vero/api/users/reidentify_api'
       end
     end
