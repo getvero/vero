@@ -23,13 +23,24 @@ following:
 
     # config/initializers/vero.rb
     Vero::App.init do |config|
-      config.api_key = "Your API key goes here"
-      config.secret = "Your API secret goes here"
+      if Rails.env.production?
+        config.api_key = "Your Production API key goes here"
+        config.secret = "Your Production API secret goes here"
+      else
+        config.api_key = "Your Test API key goes here"
+        config.secret = "Your Test API secret goes here"
+      end
     end
 
 You will be able to find your API key and secret by logging into Vero
 ([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
+
+We still support development_mode for older customer but we suggest to move towards multiple project. Contact support@getvero.com if you have any questions.
+
+  Vero::App.init do |config|
+    config.development_mode = true
+  end
 
 By default, events are sent asynchronously using a background thread.
 We recommend that you select one of the supported queue-based alternatives:
