@@ -60,10 +60,6 @@ module Vero
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
-
-      if defined?(Rails)
-        self.development_mode = !Rails.env.production?
-      end
     end
 
     def update_attributes(attributes = {})
