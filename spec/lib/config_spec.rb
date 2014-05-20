@@ -75,21 +75,29 @@ describe Vero::Config do
   end
 
   describe :development_mode do
-    it "by default it should return true when Rails.env is either development or test" do
+    it "by default it should return false which ever enviroment it is" do
       stub_env('development') {
         config = Vero::Config.new
-        config.development_mode.should be(true)
+        config.development_mode.should be(false)
       }
 
       stub_env('test') {
         config = Vero::Config.new
-        config.development_mode.should be(true)
+        config.development_mode.should be(false)
       }
 
       stub_env('production') {
         config = Vero::Config.new
         config.development_mode.should be(false)
       }
+    end
+
+    it "can be overritten with the config block" do
+      @config.development_mode.should be_false
+      @config.development_mode = true
+
+      @config.reset!
+      @config.development_mode.should be_false
     end
   end
 end
