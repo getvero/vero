@@ -36,6 +36,7 @@ module Vero
     autoload :Base,               'vero/senders/base'
     autoload :DelayedJob,         'vero/senders/delayed_job'
     autoload :Resque,             'vero/senders/resque'
+    autoload :Sidekiq,            'vero/senders/sidekiq'
     autoload :Invalid,            'vero/senders/invalid'
     autoload :Thread,             'vero/senders/thread'
   end

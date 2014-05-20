@@ -37,6 +37,7 @@ We recommend that you select one of the supported queue-based alternatives:
     config.async = :none            # Synchronously
     config.async = :thread          # Background thread (default)
     config.async = :delayed_job     # DelayedJob
+    config.async = :sidekiq         # Sidekiq
     config.async = :resque          # Resque (recommended)
 
 **Note:** Background threads are not supported by Ruby 1.8.7 or earlier.

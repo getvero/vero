@@ -41,6 +41,7 @@ describe Vero::Sender do
     it "should automatically find senders that are not defined" do
       subject.senders[:delayed_job].should  == Vero::Senders::DelayedJob
       subject.senders[:resque].should       == Vero::Senders::Resque
+      subject.senders[:sidekiq].should      == Vero::Senders::Sidekiq
       subject.senders[:invalid].should      == Vero::Senders::Invalid
       subject.senders[:none].should         == Vero::Senders::Base
     end

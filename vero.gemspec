@@ -15,9 +15,10 @@ Gem::Specification.new do |s|
   dependencies = [
     [:development, 'rails', "~> 3.0"],
     [:development, 'rspec'],
-    [:development, 'delayed_job'],
+    [:development, 'delayed_job', "~> 3.0.0"],
     [:development, 'delayed_job_active_record'],
     [:development, 'resque'],
+    [:development, 'sidekiq'],
     [:runtime,     'json'],
     [:runtime,     'rest-client'],
     [:runtime,     'girl_friday', ">= 0.11.2"]
