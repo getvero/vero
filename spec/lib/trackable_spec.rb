@@ -342,6 +342,12 @@ describe Vero::Trackable do
         user = UserWithPrivateExtras.new
         user.to_vero.should == {:email => 'durkster@gmail.com', :age => 26, :_user_type => "UserWithPrivateExtras"}
       end
+
+      it "should allow extras to be provided instead :id or :email" do
+        user = UserWithOnlyExtras.new
+        user.properties = {:email => user.email}
+        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithOnlyExtras"}
+      end
     end
 
     describe :with_vero_context do
