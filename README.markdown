@@ -38,9 +38,12 @@ You will be able to find your API key and secret by logging into Vero
 
 Previously all Vero accounts supported two environments: *test* and *live*.
 This feature has been deprecated in favour of one account with multiple
-projects. The gem will continue to support development_mode but will require
+projects.
+
+The gem will continue to support development_mode but will require
 you to explicitly set it in the initialiser. We recommend migrating your
-account as soon as possible.
+account as soon as possible. If you have any questions, please contact
+support@getvero.com.
 
     Vero::App.init do |config|
       config.development_mode = !Rails.env.production? # or use true
