@@ -36,7 +36,9 @@ You will be able to find your API key and secret by logging into Vero
 ([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
 
-We still support development_mode for older customer but we suggest to move towards multiple project. Contact support@getvero.com if you have any questions.
+The gem will continue to support development_mode for existing customers but we 
+recommend migrating to multiple projects. If you have any questions, please contact 
+support@getvero.com.
 
   Vero::App.init do |config|
     config.development_mode = true
