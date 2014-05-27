@@ -1,3 +1,7 @@
+## 0.8.0
+
+- **"development_mode" flag has been deprecated.** It is recommended to use a multiple projects (with different API credentials). Please contact support@getvero.com for assistance in upgrading your account.
+
 ## 0.7.0
 
 - **girl_friday has been replaced by sucker_punch**. The most significant
