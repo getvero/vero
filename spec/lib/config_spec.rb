@@ -75,7 +75,7 @@ describe Vero::Config do
   end
 
   describe :development_mode do
-    it "by default it should return false which ever enviroment it is" do
+    it "by default it should return false regardless of Rails environment" do
       stub_env('development') {
         config = Vero::Config.new
         config.development_mode.should be_false
