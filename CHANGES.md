@@ -1,3 +1,7 @@
+## HEAD
+
+- **"development_mode" flag has been deprecated.** It is recommended to use a multiple projects (with different API credentials). Please contact support@getvero.com for assistance in upgrading your account.
+
 ## 0.6.0
 
 - **All APIs using the `trackable` interface will now pass up an `:id`** (if
