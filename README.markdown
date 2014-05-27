@@ -40,9 +40,9 @@ The gem will continue to support development_mode for existing customers but we
 recommend migrating to multiple projects. If you have any questions, please contact 
 support@getvero.com.
 
-  Vero::App.init do |config|
-    config.development_mode = true
-  end
+    Vero::App.init do |config|
+      config.development_mode = true
+    end
 
 By default, events are sent asynchronously using a background thread.
 We recommend that you select one of the supported queue-based alternatives:
