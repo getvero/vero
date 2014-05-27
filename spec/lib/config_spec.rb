@@ -93,11 +93,11 @@ describe Vero::Config do
     end
 
     it "can be overritten with the config block" do
-      @config.development_mode.should be_false
       @config.development_mode = true
+      @config.request_params[:development_mode].should be_true
 
       @config.reset!
-      @config.development_mode.should be_false
+      @config.request_params[:development_mode].should be_false
     end
   end
 end
