@@ -10,6 +10,7 @@ module Vero
   autoload :DSL,                  'vero/dsl'
   autoload :Sender,               'vero/sender'
   autoload :ResqueWorker,         'vero/senders/resque'
+  autoload :SidekiqWorker,        'vero/senders/sidekiq'
 
   module Api
     module Workers
