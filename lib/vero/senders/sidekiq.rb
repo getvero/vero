@@ -8,7 +8,7 @@ module Vero
     def perform(api_class, domain, options)
       puts "Sidekiq received api_class: #{api_class}"
       api_class.constantize.new(domain, options).perform
-      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: sidekiq job queued")
+      Vero::App.log(self, "method: #{api_class}, options: #{options.to_json}, response: sidekiq job queued")
     end
   end
 
