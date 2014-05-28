@@ -12,6 +12,9 @@ module Vero
       end
 
       def run_api(api_klass, options)
+        puts "Run API: #{api_klass}"
+        
+        
         validate_configured!
         options.merge!(config.request_params)
 

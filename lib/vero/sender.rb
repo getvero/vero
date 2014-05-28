@@ -39,6 +39,9 @@ module Vero
       else
         self.senders[false]
       end
+      
+      puts "Sender class: #{sender_class}, api_klass: #{api_class}"
+      
       (sender_class.new).call(api_class, domain, options)
     rescue => e
       options_s = JSON.dump(options)
