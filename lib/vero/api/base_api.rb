@@ -14,7 +14,7 @@ module Vero
 
         def initialize(domain, options)
           @domain = domain
-          @options = options
+          self.options = options
           setup_logging
         end
 
@@ -24,6 +24,8 @@ module Vero
         end
 
         def options=(val)
+          puts "OPTIONS SYMMED: #{options_with_symbolized_keys(val)}"
+          
           @options = options_with_symbolized_keys(val)
         end
 

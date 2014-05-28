@@ -45,6 +45,11 @@ describe Vero::Api::Workers::Events::TrackAPI do
         subject.options = options
         expect { subject.send(:validate!) }.to_not raise_error
       end
+      
+      it 'should not raise an error when keys are Strings for initialization' do
+        options = {"auth_token" => 'abcd', "identity" => {"email" => 'test@test.com'}, "event_name" => 'test_event', "data" => {}}
+        expect { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', options).send(:validate!) }.to_not raise_error
+      end
     end
 
     describe :request do

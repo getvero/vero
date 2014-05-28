@@ -12,6 +12,10 @@ module Vero
           end
 
           def validate!
+            puts "Options :event_name #{options[:event_name]}"
+            
+            puts "Options 'event_name' #{options['event_name']}"
+            
             raise ArgumentError.new("Missing :event_name") if options[:event_name].to_s.blank?
             raise ArgumentError.new(":data must be either nil or a Hash") unless (options[:data].nil? || options[:data].is_a?(Hash))
           end
