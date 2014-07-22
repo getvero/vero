@@ -46,11 +46,16 @@ You must explicitly set `config.async` to either `:none`, `:delayed_job` or
 **Note:** If you're using Mongoid with DelayedJob, you must add
 `gem "delayed_job_mongoid"` to your Gemfile.
 
-Finally, vero will automatically choose whether to send requests to your
+vero will automatically choose whether to send requests to your
 **development** or **live** environment if you are using Rails 3.x. You can
 override this in your initializer:
 
     config.development_mode = true # or false
+
+Finally, if you wish to disable vero requests when running your automated tests, 
+add the following line to your initializer:
+
+    config.disabled = Rails.env.test?
 
 ## Setup tracking
 
