@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'vero'
 require 'json'
+require 'sucker_punch/testing/inline'
 
 Dir[::File.expand_path('../support/**/*.rb',  __FILE__)].each { |f| require f }
 

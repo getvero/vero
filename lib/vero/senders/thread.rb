@@ -1,25 +1,27 @@
 require 'json'
-require 'girl_friday'
+require 'sucker_punch'
 
 module Vero
+  class SuckerPunchWorker
+    include SuckerPunch::Job
+
+    def perform(api_class, domain, options)
+      new_options = {}
+      options.each { |k,v| new_options[k.to_sym] = v }
+
+      begin
+        api_class.new(domain, new_options).perform
+        Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+      rescue => e
+        Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
+      end
+    end
+  end
+
   module Senders
     class Thread
-      VERO_SENDER_QUEUE = ::GirlFriday::WorkQueue.new(:vero_queue, :size => 1) do |msg|
-        api_class = msg[:api_class]
-        domain    = msg[:domain]
-        options   = msg[:options]
-
-        options_s = JSON.dump(options)
-        begin
-          api_class.perform(domain, options)
-          Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: job performed")
-        rescue => e
-          Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: #{e.message}")
-        end
-      end
-
       def call(api_class, domain, options)
-        !!VERO_SENDER_QUEUE.push(:api_class => api_class, :domain => domain, :options => options)
+        Vero::SuckerPunchWorker.new.async.perform(api_class, domain, options)
       end
     end
   end
