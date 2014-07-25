@@ -1,4 +1,4 @@
-## HEAD
+## 0.7.0
 
 - **girl_friday has been replaced by sucker_punch**. The most significant
 effect of this change is that Ruby 1.8.7 will no longer be supported.
