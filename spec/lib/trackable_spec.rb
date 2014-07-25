@@ -82,17 +82,6 @@ describe Vero::Trackable do
           @user.stub(:with_vero_context).and_return(@context)
         end
 
-        context 'using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            @context.config.disabled = false
-
-            expect { @user.track!(@request_params[:event_name], @request_params[:data]) }.to raise_error
-            expect { @user.track!(@request_params[:event_name]) }.to raise_error
-          end
-        end
-
         context 'not using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
@@ -128,15 +117,6 @@ describe Vero::Trackable do
         before do
           @context = vero_context(@user, false, true)
           @user.stub(:with_vero_context).and_return(@context)
-        end
-
-        context 'and using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            @context.config.disabled = false
-            expect { @user.identify! }.to raise_error
-          end
         end
 
         context 'and not using Ruby 1.8.7' do
@@ -259,15 +239,6 @@ describe Vero::Trackable do
         before do
           @context = vero_context(@user, false, true)
           @user.stub(:with_vero_context).and_return(@context)
-        end
-
-        context 'and using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            @context.config.disabled = false
-            expect { @user.with_vero_context.unsubscribe! }.to raise_error
-          end
         end
 
         context 'and using Ruby 1.9.3' do
