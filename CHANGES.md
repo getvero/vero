@@ -1,3 +1,8 @@
+## HEAD
+
+- **girl_friday has been replaced by sucker_punch**. The most significant
+effect of this change is that Ruby 1.8.7 will no longer be supported.
+
 ## 0.6.0
 
 - **All APIs using the `trackable` interface will now pass up an `:id`** (if

@@ -39,10 +39,6 @@ We recommend that you select one of the supported queue-based alternatives:
     config.async = :delayed_job     # DelayedJob
     config.async = :resque          # Resque (recommended)
 
-**Note:** Background threads are not supported by Ruby 1.8.7 or earlier.
-You must explicitly set `config.async` to either `:none`, `:delayed_job` or
-`:resque`.
-
 **Note:** If you're using Mongoid with DelayedJob, you must add
 `gem "delayed_job_mongoid"` to your Gemfile.
 
@@ -52,7 +48,7 @@ override this in your initializer:
 
     config.development_mode = true # or false
 
-Finally, if you wish to disable vero requests when running your automated tests, 
+Finally, if you wish to disable vero requests when running your automated tests,
 add the following line to your initializer:
 
     config.disabled = Rails.env.test?

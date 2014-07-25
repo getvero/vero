@@ -1,10 +1,11 @@
 require 'spec_helper'
 
-def vero_context(user, logging = true, async = false)
+def vero_context(user, logging = true, async = false, disabled = true)
   context = Vero::Context.new(Vero::App.default_context)
   context.subject = user
   context.config.logging = logging
   context.config.async = async
+  context.config.disabled = disabled
 
   context
 end
@@ -76,23 +77,17 @@ describe Vero::Trackable do
       end
 
       context 'when set to be async' do
-        before { @user.stub(:with_vero_context).and_return vero_context(@user, true, true) }
-
-        context 'using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            expect { @user.track!(@request_params[:event_name], @request_params[:data]) }.to raise_error
-            expect { @user.track!(@request_params[:event_name]) }.to raise_error
-          end
+        before do
+          @context = vero_context(@user, true, true)
+          @user.stub(:with_vero_context).and_return(@context)
         end
 
         context 'not using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.track!(@request_params[:event_name], @request_params[:data]).should be_true
-            @user.track!(@request_params[:event_name]).should be_true
+            @user.track!(@request_params[:event_name], @request_params[:data]).should be_nil
+            @user.track!(@request_params[:event_name]).should be_nil
           end
         end
       end
@@ -120,23 +115,15 @@ describe Vero::Trackable do
 
       context 'when set to use async' do
         before do
-          context = vero_context(@user, false, true)
-          @user.stub(:with_vero_context).and_return(context)
-        end
-
-        context 'and using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            expect { @user.identify! }.to raise_error
-          end
+          @context = vero_context(@user, false, true)
+          @user.stub(:with_vero_context).and_return(@context)
         end
 
         context 'and not using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.identify!.should be_true
+            @user.identify!.should be_nil
           end
         end
       end
@@ -165,19 +152,16 @@ describe Vero::Trackable do
       end
 
       context 'when set to use async' do
-        let(:my_context) { Vero::Context.new(Vero::App.default_context) }
-
         before do
-          my_context.subject = @user
-          my_context.config.async = true
-
-          @user.stub(:with_vero_context).and_return(my_context)
+          @context = vero_context(@user, false, true)
+          @user.stub(:with_vero_context).and_return(@context)
         end
 
         context 'and using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.8.7') }
 
           it 'raises an error' do
+            @context.config.disabled = false
             expect { @user.with_vero_context.update_user! }.to raise_error
           end
         end
@@ -186,7 +170,7 @@ describe Vero::Trackable do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.with_vero_context.update_user!.should be_true
+            @user.with_vero_context.update_user!.should be_nil
           end
         end
       end
@@ -224,7 +208,7 @@ describe Vero::Trackable do
 
           @user.stub(:with_vero_context).and_return(context)
 
-          @user.with_vero_context.update_user_tags!.should be_true
+          @user.with_vero_context.update_user_tags!.should be_nil
         end
       end
     end
@@ -252,28 +236,16 @@ describe Vero::Trackable do
       end
 
       context 'when using async' do
-        let(:my_context) { Vero::Context.new(Vero::App.default_context) }
-
         before do
-          my_context.subject = @user
-          my_context.config.async = true
-
-          @user.stub(:with_vero_context).and_return(my_context)
-        end
-
-        context 'and using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            expect { @user.with_vero_context.unsubscribe! }.to raise_error
-          end
+          @context = vero_context(@user, false, true)
+          @user.stub(:with_vero_context).and_return(@context)
         end
 
         context 'and using Ruby 1.9.3' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.with_vero_context.unsubscribe!.should be_true
+            @user.with_vero_context.unsubscribe!.should be_nil
           end
         end
       end
