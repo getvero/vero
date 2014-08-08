@@ -12,7 +12,7 @@ describe Vero::App do
   describe :init do
     it "should ignore configuring the config if no block is provided" do
       Vero::App.init
-      context.configured?.should be_false
+      context.configured?.should be(false)
     end
 
     it "should pass configuration defined in the block to the config file" do
@@ -29,22 +29,22 @@ describe Vero::App do
       Vero::App.init do |c|
         c.async = false
       end
-      context.config.async.should be_false
+      context.config.async.should be(false)
 
       Vero::App.init do |c|
         c.async = true
       end
-      context.config.async.should be_true
+      context.config.async.should be(true)
     end
   end
 
   describe :disable_requests! do
     it "should change config.disabled" do
       Vero::App.init {}
-      context.config.disabled.should be_false
+      context.config.disabled.should be(false)
 
       Vero::App.disable_requests!
-      context.config.disabled.should be_true            
+      context.config.disabled.should be(true)
     end
   end
 

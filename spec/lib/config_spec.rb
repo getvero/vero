@@ -6,7 +6,7 @@ describe Vero::Config do
   end
 
   it "should be async by default" do
-    @config.async.should be_true
+    @config.async.should be(true)
   end
 
   describe :reset! do
@@ -78,17 +78,17 @@ describe Vero::Config do
     it "by default it should return true when Rails.env is either development or test" do
       stub_env('development') {
         config = Vero::Config.new
-        config.development_mode.should be_true
+        config.development_mode.should be(true)
       }
 
       stub_env('test') {
         config = Vero::Config.new
-        config.development_mode.should be_true
+        config.development_mode.should be(true)
       }
 
       stub_env('production') {
         config = Vero::Config.new
-        config.development_mode.should be_false
+        config.development_mode.should be(false)
       }
     end
   end
