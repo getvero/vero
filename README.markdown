@@ -23,13 +23,31 @@ following:
 
     # config/initializers/vero.rb
     Vero::App.init do |config|
-      config.api_key = "Your API key goes here"
-      config.secret = "Your API secret goes here"
+      if Rails.env.production?
+        config.api_key = "Your Production API key goes here"
+        config.secret = "Your Production API secret goes here"
+      else
+        config.api_key = "Your Test API key goes here"
+        config.secret = "Your Test API secret goes here"
+      end
     end
 
 You will be able to find your API key and secret by logging into Vero
 ([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
+
+Previously all Vero accounts supported two environments: *test* and *live*.
+This feature has been deprecated in favour of one account with multiple
+projects.
+
+The gem will continue to support development_mode but will require
+you to explicitly set it in the initialiser. We recommend migrating your
+account as soon as possible. If you have any questions, please contact
+support@getvero.com.
+
+    Vero::App.init do |config|
+      config.development_mode = !Rails.env.production? # or use true
+    end
 
 By default, events are sent asynchronously using a background thread.
 We recommend that you select one of the supported queue-based alternatives:
@@ -42,16 +60,12 @@ We recommend that you select one of the supported queue-based alternatives:
 **Note:** If you're using Mongoid with DelayedJob, you must add
 `gem "delayed_job_mongoid"` to your Gemfile.
 
-vero will automatically choose whether to send requests to your
-**development** or **live** environment if you are using Rails 3.x. You can
-override this in your initializer:
-
-    config.development_mode = true # or false
-
 Finally, if you wish to disable vero requests when running your automated tests,
 add the following line to your initializer:
 
     config.disabled = Rails.env.test?
+
+If you have any additional questions, please contact support@getvero.com.
 
 ## Setup tracking
 

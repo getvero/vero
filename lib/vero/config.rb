@@ -18,14 +18,10 @@ module Vero
     end
 
     def request_params
-      [:auth_token, :development_mode].inject({}) do |h, symbol|
-        method_name = "from_#{symbol}".to_sym
-        if respond_to?(symbol)
-          temp = send(symbol)
-          h[symbol] = temp unless temp.blank?
-        end
-        h
-      end
+      {
+        :auth_token => self.auth_token,
+        :development_mode => self.development_mode
+      }.reject { |_, v| v.nil? }
     end
 
     def domain
@@ -60,10 +56,6 @@ module Vero
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
-
-      if defined?(Rails)
-        self.development_mode = !Rails.env.production?
-      end
     end
 
     def update_attributes(attributes = {})
