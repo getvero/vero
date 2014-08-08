@@ -1,4 +1,4 @@
-## HEAD
+## 0.8.0
 
 - **"development_mode" flag has been deprecated.** It is recommended to use a multiple projects (with different API credentials). Please contact support@getvero.com for assistance in upgrading your account.
 
