@@ -82,7 +82,7 @@ describe Vero::Api::Users do
   describe :unsubscribe! do
     it "should call the TrackAPI object via the configured sender" do
       input = {:email => "james@getvero"}
-      expected = input.merge(:auth_token => "abc123")
+      expected = input.merge(:auth_token => "abc123", :development_mode => false)
 
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)

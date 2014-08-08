@@ -21,7 +21,7 @@ module Vero
       {
         :auth_token => self.auth_token,
         :development_mode => self.development_mode
-      }
+      }.reject { |_, v| v.nil? }
     end
 
     def domain
