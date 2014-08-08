@@ -61,7 +61,7 @@ Finally, if you wish to disable vero requests when running your automated tests,
 add the following line to your initializer:
 
     config.disabled = Rails.env.test?
-
+    
 If you have any additional questions, please contact support@getvero.com.
 
 ## Setup tracking
