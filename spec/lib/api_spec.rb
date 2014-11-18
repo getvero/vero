@@ -11,6 +11,7 @@ describe Vero::Api::Events do
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)
       mock_context.config.stub(:auth_token).and_return("abc123")
+      mock_context.config.stub(:development_mode).and_return(true)
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
@@ -32,6 +33,7 @@ describe Vero::Api::Users do
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)
       mock_context.config.stub(:auth_token).and_return("abc123")
+      mock_context.config.stub(:development_mode).and_return(true)
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
@@ -49,6 +51,7 @@ describe Vero::Api::Users do
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)
       mock_context.config.stub(:auth_token).and_return("abc123")
+      mock_context.config.stub(:development_mode).and_return(true)
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
@@ -66,6 +69,7 @@ describe Vero::Api::Users do
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)
       mock_context.config.stub(:auth_token).and_return("abc123")
+      mock_context.config.stub(:development_mode).and_return(true)
 
       Vero::App.stub(:default_context).and_return(mock_context)
 
@@ -78,7 +82,7 @@ describe Vero::Api::Users do
   describe :unsubscribe! do
     it "should call the TrackAPI object via the configured sender" do
       input = {:email => "james@getvero"}
-      expected = input.merge(:auth_token => "abc123", :development_mode => true)
+      expected = input.merge(:auth_token => "abc123", :development_mode => false)
 
       mock_context = Vero::Context.new
       mock_context.config.stub(:configured?).and_return(true)

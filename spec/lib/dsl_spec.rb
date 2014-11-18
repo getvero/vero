@@ -19,7 +19,7 @@ describe Vero::DSL::Proxy do
     end
 
     it "should respond to reidentify!" do
-      expect(proxy.users.respond_to?(:reidentify!)).to be_true
+      expect(proxy.users.respond_to?(:reidentify!)).to be(true)
     end
   end
 

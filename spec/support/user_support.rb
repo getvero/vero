@@ -92,3 +92,14 @@ class UserWithPrivateExtras
     {:age => 26}
   end
 end
+
+class UserWithOnlyExtras
+  include Vero::Trackable
+  trackable({:extras => :properties})
+
+  attr_accessor :properties
+
+  def email
+    'durkster@gmail.com'
+  end
+end

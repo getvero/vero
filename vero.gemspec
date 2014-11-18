@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     [:development, 'resque'],
     [:runtime,     'json'],
     [:runtime,     'rest-client'],
-    [:runtime,     'girl_friday', ">= 0.11.2"]
+    [:runtime,     'sucker_punch', '~> 1.0']
   ]
 
   s.files         = Dir['**/*']
