@@ -36,19 +36,6 @@ You will be able to find your API key and secret by logging into Vero
 ([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
 
-Previously all Vero accounts supported two environments: *test* and *live*.
-This feature has been deprecated in favour of one account with multiple
-projects.
-
-The gem will continue to support development_mode but will require
-you to explicitly set it in the initialiser. We recommend migrating your
-account as soon as possible. If you have any questions, please contact
-support@getvero.com.
-
-    Vero::App.init do |config|
-      config.development_mode = !Rails.env.production? # or use true
-    end
-
 By default, events are sent asynchronously using a background thread.
 We recommend that you select one of the supported queue-based alternatives:
 
