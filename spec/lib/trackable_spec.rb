@@ -16,7 +16,7 @@ describe Vero::Trackable do
       :event_name => 'test_event',
       :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
       :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-      :data => { :test => 1 },
+      :data => {:test => 1},
       :development_mode => true
     }
     @url = "https://api.getvero.com/api/v1/track.json"
@@ -28,10 +28,10 @@ describe Vero::Trackable do
   context "the gem has not been configured" do
     before { Vero::App.reset! }
     it "should raise an error when API requests are made" do
-      expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
+      expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError)
 
       allow(@user).to receive(:post_later).and_return('success')
-      expect { @user.identity! }.to raise_error
+      expect { @user.identity! }.to raise_error(NoMethodError)
     end
   end
 
@@ -56,9 +56,9 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track!(nil) }.to raise_error
-        expect { @user.track!('') }.to raise_error
-        expect { @user.track!('test', '') }.to raise_error
+        expect { @user.track!(nil) }.to raise_error(ArgumentError)
+        expect { @user.track!('') }.to raise_error(ArgumentError)
+        expect { @user.track!('test', '') }.to raise_error(ArgumentError)
       end
 
       it "should send a `track!` request when async is set to false" do
@@ -162,7 +162,7 @@ describe Vero::Trackable do
 
           it 'raises an error' do
             @context.config.disabled = false
-            expect { @user.with_vero_context.update_user! }.to raise_error
+            expect { @user.with_vero_context.update_user! }.to raise_error(RuntimeError)
           end
         end
 

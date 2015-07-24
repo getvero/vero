@@ -15,7 +15,7 @@ describe Vero::Api::Workers::Users::TrackAPI do
     it "should raise an error if email and id are are blank String" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => nil, :email => nil}
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => nil, :email => 'test@test.com'}
       subject.options = options
@@ -23,7 +23,7 @@ describe Vero::Api::Workers::Users::TrackAPI do
 
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => "", :email => nil}
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :id => "user123", :email => nil}
       subject.options = options
@@ -33,7 +33,7 @@ describe Vero::Api::Workers::Users::TrackAPI do
     it "should raise an error if data is not either nil or a Hash" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com', :data => []}
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com', :data => nil}
       subject.options = options

@@ -20,12 +20,12 @@ describe Vero::Api::Workers::Users::ReidentifyAPI do
 
     it "should raise an error if id is missing" do
       subject.options = {:auth_token => 'abcd', :new_id => 'test2@test.com'}
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
     it "should raise an error if new_id is missing" do
       subject.options = {:auth_token => 'abcd', :id => 'test@test.com'}
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
   end
 

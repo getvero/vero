@@ -16,7 +16,7 @@ describe Vero::Api::Workers::Users::EditTagsAPI do
     it "should raise an error if email is a blank String" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => nil, :add => []}
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com', :add => []}
       subject.options = options
@@ -27,21 +27,21 @@ describe Vero::Api::Workers::Users::EditTagsAPI do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com', :add => "foo" }
 
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
     it "should raise an error if remove is not an Array or missing" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com', :remove => "foo" }
 
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
     it "should raise an error if botha add and remove are missing" do
       options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :email => 'test@test.com'}
 
       subject.options = options
-      expect { subject.send(:validate!) }.to raise_error
+      expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
     it "should not raise an error if the correct arguments are passed" do
