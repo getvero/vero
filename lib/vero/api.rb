@@ -59,6 +59,10 @@ module Vero
         new(context).unsubscribe!(options)
       end
 
+      def self.resubscribe!(options, context = Vero::App.default_context)
+        new(context).resubscribe!(options)
+      end
+
       def track!(options)
         run_api(Vero::Api::Workers::Users::TrackAPI, options)
       end
@@ -73,6 +77,10 @@ module Vero
 
       def unsubscribe!(options)
         run_api(Vero::Api::Workers::Users::UnsubscribeAPI, options)
+      end
+
+      def resubscribe!(options)
+        run_api(Vero::Api::Workers::Users::ResubscribeAPI, options)
       end
 
       def reidentify!(options)

@@ -208,6 +208,9 @@ outlined in Installation. Now you can call the API using the following methods:
 
         # Changing a user's id
         vero.users.reidentify!({:id => 123, :new_id => "honeybadger@getvero.com"})
+
+        # Resubscribing a user
+        vero.users.resubscribe!({:id => 123})
       end
 
       def destroy
