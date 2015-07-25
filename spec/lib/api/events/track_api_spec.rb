@@ -1,20 +1,13 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Events::TrackAPI do
+  subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}) }
 
-  context "request without properties" do
-    subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {}) }
-    it "should inherit from Vero::Api::Workers::BaseCaller" do
-      expect(subject).to be_a(Vero::Api::Workers::BaseAPI)
-    end
-
-    it "should map to current version of Vero API" do
-      expect(subject.send(:url)).to eq("https://api.getvero.com/api/v2/events/track.json")
-    end
+  it_behaves_like "a Vero wrapper" do
+    let(:end_point) { "/api/v2/events/track.json" }
   end
 
   context "request with properties" do
-    subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}) }
     describe :validate! do
       it "should raise an error if event_name is a blank String" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => nil}

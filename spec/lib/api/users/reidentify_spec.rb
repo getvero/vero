@@ -1,16 +1,12 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Users::ReidentifyAPI do
-  subject { Vero::Api::Workers::Users::ReidentifyAPI.new('https://api.getvero.com', {}) }
-  it "should inherit from Vero::Api::Workers::BaseCaller" do
-    expect(subject).to be_a(Vero::Api::Workers::BaseAPI)
-  end
-
-  it "should map to current version of Vero API" do
-    expect(subject.send(:url)).to eq("https://api.getvero.com/api/v2/users/reidentify.json")
-  end
-
   subject { Vero::Api::Workers::Users::ReidentifyAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :id => 'test@test.com', :new_id => 'test2@test.com'}) }
+
+  it_behaves_like "a Vero wrapper" do
+    let(:end_point) { "/api/v2/users/reidentify.json" }
+  end
+
   describe :validate! do
     it "should not raise an error when the keys are Strings" do
       options = {"auth_token" => 'abcd', "id" => 'test@test.com', "new_id" => 'test2@test.com'}
