@@ -5,53 +5,53 @@ describe Vero::Context do
 
   it "accepts multiple parameter types in contructor" do
     context1 = Vero::Context.new({ :api_key => 'blah', :secret => 'didah' })
-    context1.should be_a(Vero::Context)
-    context1.config.api_key.should == 'blah'
-    context1.config.secret.should == 'didah'
+    expect(context1).to be_a(Vero::Context)
+    expect(context1.config.api_key).to eq('blah')
+    expect(context1.config.secret).to eq('didah')
 
     context2 = Vero::Context.new(context1)
-    context2.should be_a(Vero::Context)
-    context2.should_not be(context1)
-    context2.config.api_key.should == 'blah'
-    context2.config.secret.should == 'didah'
+    expect(context2).to be_a(Vero::Context)
+    expect(context2).not_to be(context1)
+    expect(context2.config.api_key).to eq('blah')
+    expect(context2.config.secret).to eq('didah')
 
     context3 = Vero::Context.new VeroUser.new('api_key', 'secret')
-    context3.should be_a(Vero::Context)
-    context3.config.api_key.should == 'api_key'
-    context3.config.secret.should == 'secret'
+    expect(context3).to be_a(Vero::Context)
+    expect(context3.config.api_key).to eq('api_key')
+    expect(context3.config.secret).to eq('secret')
   end
 
   describe :configure do
     it "should ignore configuring the config if no block is provided" do
       context.configure
-      context.configured?.should be(false)
+      expect(context.configured?).to be(false)
     end
 
     it "should pass configuration defined in the block to the config file" do
       context.configure do |c|
         c.api_key = "abcd1234"
       end
-      context.config.api_key.should == "abcd1234"
+      expect(context.config.api_key).to eq("abcd1234")
     end
 
     it "should init should be able to set async" do
       context.configure do |c|
         c.async = false
       end
-      context.config.async.should be(false)
+      expect(context.config.async).to be(false)
 
       context.configure do |c|
         c.async = true
       end
-      context.config.async.should be(true)
+      expect(context.config.async).to be(true)
     end
   end
 
   describe :disable_requests! do
     it "should change config.disabled" do
-      context.config.disabled.should be(false)
+      expect(context.config.disabled).to be(false)
       context.disable_requests!
-      context.config.disabled.should be(true)            
+      expect(context.config.disabled).to be(true)            
     end
   end
 end
