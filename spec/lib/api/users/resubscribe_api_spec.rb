@@ -1,18 +1,12 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Users::ResubscribeAPI do
-  describe 'config' do
-    subject { Vero::Api::Workers::Users::ResubscribeAPI.new('https://api.getvero.com', {}) }
-    it "should inherit from Vero::Api::Workers::BaseCaller" do
-      subject.should be_a(Vero::Api::Workers::BaseAPI)
-    end
+  subject { Vero::Api::Workers::Users::ResubscribeAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :id => '1234'}) }
 
-    it "should map to current version of Vero API" do
-      subject.send(:url).should == "https://api.getvero.com/api/v2/users/resubscribe.json"
-    end
+  it_behaves_like "a Vero wrapper" do
+    let(:end_point) { "/api/v2/users/resubscribe.json" }
   end
 
-  subject { Vero::Api::Workers::Users::ResubscribeAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :id => '1234'}) }
   describe :validate! do
     it "should not raise an error when the keys are Strings" do
       subject.options = {"auth_token" => 'abcd', "id" => '1234'}
