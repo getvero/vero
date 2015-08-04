@@ -16,7 +16,7 @@ describe Vero::Trackable do
       :event_name => 'test_event',
       :auth_token => 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
       :identity => {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"},
-      :data => { :test => 1 },
+      :data => {:test => 1},
       :development_mode => true
     }
     @url = "https://api.getvero.com/api/v1/track.json"
@@ -28,10 +28,10 @@ describe Vero::Trackable do
   context "the gem has not been configured" do
     before { Vero::App.reset! }
     it "should raise an error when API requests are made" do
-      expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error
+      expect { @user.track(@request_params[:event_name], @request_params[:data]) }.to raise_error(RuntimeError)
 
-      @user.stub(:post_later).and_return('success')
-      expect { @user.identity! }.to raise_error
+      allow(@user).to receive(:post_later).and_return('success')
+      expect { @user.identity! }.to raise_error(NoMethodError)
     end
   end
 
@@ -56,38 +56,38 @@ describe Vero::Trackable do
       end
 
       it "should not send a track request when the required parameters are invalid" do
-        expect { @user.track!(nil) }.to raise_error
-        expect { @user.track!('') }.to raise_error
-        expect { @user.track!('test', '') }.to raise_error
+        expect { @user.track!(nil) }.to raise_error(ArgumentError)
+        expect { @user.track!('') }.to raise_error(ArgumentError)
+        expect { @user.track!('test', '') }.to raise_error(ArgumentError)
       end
 
       it "should send a `track!` request when async is set to false" do
         context = vero_context(@user)
-        @user.stub(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-        RestClient.stub(:post).and_return(200)
+        allow(RestClient).to receive(:post).and_return(200)
 
-        Vero::Api::Events.stub(:track!).and_return(200)
-        Vero::Api::Events.should_receive(:track!).with(@request_params, context)
-        @user.track!(@request_params[:event_name], @request_params[:data]).should == 200
+        allow(Vero::Api::Events).to receive(:track!).and_return(200)
+        expect(Vero::Api::Events).to receive(:track!).with(@request_params, context)
+        expect(@user.track!(@request_params[:event_name], @request_params[:data])).to eq(200)
 
-        Vero::Api::Events.stub(:track!).and_return(200)
-        Vero::Api::Events.should_receive(:track!).with(@request_params.merge(:data => {}), context)
-        @user.track!(@request_params[:event_name]).should == 200
+        allow(Vero::Api::Events).to receive(:track!).and_return(200)
+        expect(Vero::Api::Events).to receive(:track!).with(@request_params.merge(:data => {}), context)
+        expect(@user.track!(@request_params[:event_name])).to eq(200)
       end
 
       context 'when set to be async' do
         before do
           @context = vero_context(@user, true, true)
-          @user.stub(:with_vero_context).and_return(@context)
+          allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
         context 'not using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.track!(@request_params[:event_name], @request_params[:data]).should be_nil
-            @user.track!(@request_params[:event_name]).should be_nil
+            expect(@user.track!(@request_params[:event_name], @request_params[:data])).to be_nil
+            expect(@user.track!(@request_params[:event_name])).to be_nil
           end
         end
       end
@@ -105,25 +105,25 @@ describe Vero::Trackable do
 
       it "should send an `identify` request when async is set to false" do
         context = vero_context(@user)
-        @user.stub(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-        Vero::Api::Users.stub(:track!).and_return(200)
-        Vero::Api::Users.should_receive(:track!).with(@request_params, context)
+        allow(Vero::Api::Users).to receive(:track!).and_return(200)
+        expect(Vero::Api::Users).to receive(:track!).with(@request_params, context)
 
-        @user.identify!.should == 200
+        expect(@user.identify!).to eq(200)
       end
 
       context 'when set to use async' do
         before do
           @context = vero_context(@user, false, true)
-          @user.stub(:with_vero_context).and_return(@context)
+          allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
         context 'and not using Ruby 1.8.7' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.identify!.should be_nil
+            expect(@user.identify!).to be_nil
           end
         end
       end
@@ -143,18 +143,18 @@ describe Vero::Trackable do
         context = Vero::Context.new(Vero::App.default_context)
         context.subject = @user
 
-        @user.stub(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-        Vero::Api::Users.stub(:edit_user!).and_return(200)
-        Vero::Api::Users.should_receive(:edit_user!).with(@request_params, context)
+        allow(Vero::Api::Users).to receive(:edit_user!).and_return(200)
+        expect(Vero::Api::Users).to receive(:edit_user!).with(@request_params, context)
 
-        @user.with_vero_context.update_user!.should == 200
+        expect(@user.with_vero_context.update_user!).to eq(200)
       end
 
       context 'when set to use async' do
         before do
           @context = vero_context(@user, false, true)
-          @user.stub(:with_vero_context).and_return(@context)
+          allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
         context 'and using Ruby 1.8.7' do
@@ -162,7 +162,7 @@ describe Vero::Trackable do
 
           it 'raises an error' do
             @context.config.disabled = false
-            expect { @user.with_vero_context.update_user! }.to raise_error
+            expect { @user.with_vero_context.update_user! }.to raise_error(RuntimeError)
           end
         end
 
@@ -170,7 +170,7 @@ describe Vero::Trackable do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.with_vero_context.update_user!.should be_nil
+            expect(@user.with_vero_context.update_user!).to be_nil
           end
         end
       end
@@ -192,12 +192,12 @@ describe Vero::Trackable do
         context.subject = @user
         context.config.async = false
 
-        @user.stub(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-        Vero::Api::Users.stub(:edit_user_tags!).and_return(200)
-        Vero::Api::Users.should_receive(:edit_user_tags!).with(@request_params, context)
+        allow(Vero::Api::Users).to receive(:edit_user_tags!).and_return(200)
+        expect(Vero::Api::Users).to receive(:edit_user_tags!).with(@request_params, context)
 
-        @user.with_vero_context.update_user_tags!.should == 200
+        expect(@user.with_vero_context.update_user_tags!).to eq(200)
       end
 
       if RUBY_VERSION =~ /1\.9\./
@@ -206,9 +206,9 @@ describe Vero::Trackable do
           context.subject = @user
           context.config.async = true
 
-          @user.stub(:with_vero_context).and_return(context)
+          allow(@user).to receive(:with_vero_context).and_return(context)
 
-          @user.with_vero_context.update_user_tags!.should be_nil
+          expect(@user.with_vero_context.update_user_tags!).to be_nil
         end
       end
     end
@@ -227,25 +227,25 @@ describe Vero::Trackable do
         context.subject = @user
         context.config.async = false
 
-        @user.stub(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-        Vero::Api::Users.stub(:unsubscribe!).and_return(200)
-        Vero::Api::Users.should_receive(:unsubscribe!).with(@request_params, context)
+        allow(Vero::Api::Users).to receive(:unsubscribe!).and_return(200)
+        expect(Vero::Api::Users).to receive(:unsubscribe!).with(@request_params, context)
 
-        @user.with_vero_context.unsubscribe!.should == 200
+        expect(@user.with_vero_context.unsubscribe!).to eq(200)
       end
 
       context 'when using async' do
         before do
           @context = vero_context(@user, false, true)
-          @user.stub(:with_vero_context).and_return(@context)
+          allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
         context 'and using Ruby 1.9.3' do
           before { stub_const('RUBY_VERSION', '1.9.3') }
 
           it 'sends' do
-            @user.with_vero_context.unsubscribe!.should be_nil
+            expect(@user.with_vero_context.unsubscribe!).to be_nil
           end
         end
       end
@@ -306,18 +306,18 @@ describe Vero::Trackable do
 
       it "should build an array of trackable params" do
         User.trackable :email, :age
-        User.trackable_map.should == [:email, :age]
+        expect(User.trackable_map).to eq([:email, :age])
       end
 
       it "should append new trackable items to an existing trackable map" do
         User.trackable :email, :age
         User.trackable :hair_colour
-        User.trackable_map.should == [:email, :age, :hair_colour]
+        expect(User.trackable_map).to eq([:email, :age, :hair_colour])
       end
 
       it "should append an extra's hash to the trackable map" do
         User.trackable :email, {:extras => :properties}
-        User.trackable_map.should == [:email, {:extras => :properties}]
+        expect(User.trackable_map).to eq([:email, {:extras => :properties}])
       end
     end
 
@@ -329,54 +329,54 @@ describe Vero::Trackable do
 
       it "should return a hash of all values mapped by trackable" do
         user = User.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 20, :_user_type => "User"})
 
         user = UserWithoutEmail.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutEmail"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutEmail"})
 
         user = UserWithEmailAddress.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithEmailAddress"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithEmailAddress"})
 
         user = UserWithoutInterface.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutInterface"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 20, :_user_type => "UserWithoutInterface"})
 
         user = UserWithNilAttributes.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithNilAttributes"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :_user_type => "UserWithNilAttributes"})
       end
 
       it "should take into account any defined extras" do
         user = UserWithExtras.new
         user.properties = nil
-        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"})
 
         user.properties = "test"
-        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"})
 
         user.properties = {}
-        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :_user_type => "UserWithExtras"})
 
         user.properties = {
           :age => 20,
           :gender => "female"
         }
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 20, :gender => "female", :_user_type => "UserWithExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 20, :gender => "female", :_user_type => "UserWithExtras"})
 
         user = UserWithPrivateExtras.new
-        user.to_vero.should == {:email => 'durkster@gmail.com', :age => 26, :_user_type => "UserWithPrivateExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :age => 26, :_user_type => "UserWithPrivateExtras"})
       end
 
       it "should allow extras to be provided instead :id or :email" do
         user = UserWithOnlyExtras.new
         user.properties = {:email => user.email}
-        user.to_vero.should == {:email => 'durkster@gmail.com', :_user_type => "UserWithOnlyExtras"}
+        expect(user.to_vero).to eq({:email => 'durkster@gmail.com', :_user_type => "UserWithOnlyExtras"})
       end
     end
 
     describe :with_vero_context do
       it "should be able to change contexts" do
         user = User.new
-        user.with_default_vero_context.config.config_params.should == {:api_key=>"abcd1234", :secret=>"efgh5678"}
-        user.with_vero_context({:api_key => "boom", :secret => "tish"}).config.config_params.should == {:api_key=>"boom", :secret=>"tish"}
+        expect(user.with_default_vero_context.config.config_params).to eq({:api_key=>"abcd1234", :secret=>"efgh5678"})
+        expect(user.with_vero_context({:api_key => "boom", :secret => "tish"}).config.config_params).to eq({:api_key=>"boom", :secret=>"tish"})
       end
     end
 
@@ -394,12 +394,12 @@ describe Vero::Trackable do
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user
-      context.stub(:post_now).and_return(200)
+      allow(context).to receive(:post_now).and_return(200)
 
-      user.stub(:with_vero_context).and_return(context)
+      allow(user).to receive(:with_vero_context).and_return(context)
 
-      RestClient.stub(:post).and_return(200)
-      user.vero_track(request_params[:event_name], request_params[:data]).should == 200
+      allow(RestClient).to receive(:post).and_return(200)
+      expect(user.vero_track(request_params[:event_name], request_params[:data])).to eq(200)
     end
   end
 end

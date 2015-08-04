@@ -1,25 +1,18 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Events::TrackAPI do
+  subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}) }
 
-  context "request without properties" do
-    subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {}) }
-    it "should inherit from Vero::Api::Workers::BaseCaller" do
-      subject.should be_a(Vero::Api::Workers::BaseAPI)
-    end
-
-    it "should map to current version of Vero API" do
-      subject.send(:url).should == "https://api.getvero.com/api/v2/events/track.json"
-    end
+  it_behaves_like "a Vero wrapper" do
+    let(:end_point) { "/api/v2/events/track.json" }
   end
 
   context "request with properties" do
-    subject { Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}) }
     describe :validate! do
       it "should raise an error if event_name is a blank String" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => nil}
         subject.options = options
-        expect { subject.send(:validate!) }.to raise_error
+        expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}
         subject.options = options
@@ -29,7 +22,7 @@ describe Vero::Api::Workers::Events::TrackAPI do
       it "should raise an error if data is not either nil or a Hash" do
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event', :data => []}
         subject.options = options
-        expect { subject.send(:validate!) }.to raise_error
+        expect { subject.send(:validate!) }.to raise_error(ArgumentError)
 
         options = {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event', :data => nil}
         subject.options = options
@@ -49,8 +42,8 @@ describe Vero::Api::Workers::Events::TrackAPI do
 
     describe :request do
       it "should send a JSON request to the Vero API" do
-        RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}.to_json, {:content_type => :json, :accept => :json})
-        RestClient.stub(:post).and_return(200)
+        expect(RestClient).to receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'}.to_json, {:content_type => :json, :accept => :json})
+        allow(RestClient).to receive(:post).and_return(200)
         subject.send(:request)
       end
     end
@@ -60,7 +53,7 @@ describe Vero::Api::Workers::Events::TrackAPI do
     it "should not raise any errors" do
       obj = Vero::Api::Workers::Events::TrackAPI.new('https://api.getvero.com', {:auth_token => 'abcd', :identity => {:email => 'test@test.com'}, :event_name => 'test_event'})
 
-      RestClient.stub(:post).and_return(200)
+      allow(RestClient).to receive(:post).and_return(200)
       expect { obj.perform }.to_not raise_error
     end
   end

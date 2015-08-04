@@ -23,7 +23,7 @@ module Vero
       protected
       def validate_configured!
         unless config.configured?
-          raise "You must configure the 'vero' gem. Visit https://github.com/semblancesystems/vero for more details."
+          raise "You must configure the 'vero' gem. Visit https://github.com/getvero/vero for more details."
         end
       end
     end
