@@ -12,12 +12,10 @@ module Vero
       end
 
       def run_api(api_klass, options)
+        return if config.disabled
         validate_configured!
         options.merge!(config.request_params)
-
-        unless config.disabled
-          Vero::Sender.send(api_klass, config.async, config.domain, options)
-        end
+        Vero::Sender.send(api_klass, config.async, config.domain, options)
       end
 
       protected

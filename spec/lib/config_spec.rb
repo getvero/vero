@@ -98,4 +98,14 @@ describe Vero::Config do
       expect(config.request_params[:development_mode]).to be(false)
     end
   end
+
+  describe :test_mode do
+    it 'should not raise error even though not configured properly' do
+      input = {:event_name => "test_event"}
+      mock_context = Vero::Context.new
+      allow(mock_context.config).to receive(:configured?).and_return(false)
+
+      expect { Vero::Api::Events.track!(input) }.to_not raise_error
+    end
+  end
 end
