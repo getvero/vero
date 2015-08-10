@@ -27,8 +27,8 @@ following:
         config.api_key = "Your Production API key goes here"
         config.secret = "Your Production API secret goes here"
       else
-        config.api_key = "Your Test API key goes here"
-        config.secret = "Your Test API secret goes here"
+        config.api_key = "Your Development API key goes here"
+        config.secret = "Your Development API secret goes here"
       end
     end
 
@@ -47,7 +47,7 @@ We recommend that you select one of the supported queue-based alternatives:
 **Note:** If you're using Mongoid with DelayedJob, you must add
 `gem "delayed_job_mongoid"` to your Gemfile.
 
-Finally, if you wish to disable vero requests when running your automated tests,
+Finally, if you wish to disable Vero requests when running your automated tests,
 add the following line to your initializer:
 
     config.disabled = Rails.env.test?
