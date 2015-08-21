@@ -251,6 +251,56 @@ describe Vero::Trackable do
       end
     end
 
+    describe :resubscribe! do
+      before do
+        @request_params = {
+          :id => nil,
+          :email => 'durkster@gmail.com'
+        }
+        @url = "https://api.getvero.com/api/v2/users/resubscribe.json"
+      end
+
+      it "should send an `update_user` request when async is set to false" do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = false
+
+        @user.stub(:with_vero_context).and_return(context)
+
+        Vero::Api::Users.stub(:resubscribe!).and_return(200)
+        Vero::Api::Users.should_receive(:resubscribe!).with(@request_params, context)
+
+        @user.with_vero_context.resubscribe!.should == 200
+      end
+
+      context 'when using async' do
+        let(:my_context) { Vero::Context.new(Vero::App.default_context) }
+
+        before do
+          my_context.subject = @user
+          my_context.config.async = true
+
+          @user.stub(:with_vero_context).and_return(my_context)
+        end
+
+        context 'and using Ruby 1.8.7' do
+          before { stub_const('RUBY_VERSION', '1.8.7') }
+
+          it 'raises an error' do
+            expect { @user.with_vero_context.resubscribe! }.to raise_error
+          end
+        end
+
+        context 'and using Ruby 1.9.3' do
+          before { stub_const('RUBY_VERSION', '1.9.3') }
+
+          it 'sends' do
+            @user.with_vero_context.resubscribe!.should be_true
+          end
+        end
+      end
+    end
+
     describe :trackable do
       before { User.reset_trackable_map! }
 

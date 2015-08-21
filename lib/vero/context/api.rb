@@ -29,6 +29,12 @@ module Vero
       Vero::Api::Users.unsubscribe!(options, self)
     end
 
+    def resubscribe!
+      identity = subject.to_vero
+      options = {:id => identity[:id], :email => identity[:email]}
+      Vero::Api::Users.resubscribe!(options, self)
+    end
+
     def reidentify!(previous_id)
       identity = subject.to_vero
       options = {:id => previous_id, :new_id => identity[:id]}
