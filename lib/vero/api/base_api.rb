@@ -14,7 +14,7 @@ module Vero
 
         def initialize(domain, options)
           @domain = domain
-          @options = options
+          self.options = options
           setup_logging
         end
 
