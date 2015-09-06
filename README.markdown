@@ -42,6 +42,7 @@ We recommend that you select one of the supported queue-based alternatives:
     config.async = :none            # Synchronously
     config.async = :thread          # Background thread (default)
     config.async = :delayed_job     # DelayedJob
+    config.async = :sidekiq         # Sidekiq
     config.async = :resque          # Resque (recommended)
 
 **Note:** If you're using Mongoid with DelayedJob, you must add

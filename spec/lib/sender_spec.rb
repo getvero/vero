@@ -26,6 +26,7 @@ describe Vero::Sender do
     it "should automatically find senders that are not defined" do
       expect(subject.senders[:delayed_job]).to  eq(Vero::Senders::DelayedJob)
       expect(subject.senders[:resque]).to       eq(Vero::Senders::Resque)
+      expect(subject.senders[:sidekiq]).to      eq(Vero::Senders::Sidekiq)
       expect(subject.senders[:invalid]).to      eq(Vero::Senders::Invalid)
       expect(subject.senders[:none]).to         eq(Vero::Senders::Base)
     end
