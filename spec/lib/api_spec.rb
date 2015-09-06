@@ -77,4 +77,15 @@ describe Vero::Api::Users do
       end
     end
   end
+
+  describe :resubscribe! do
+    context "should call the TrackAPI object via the configured sender" do
+      let(:input) { {:email => "james@getvero"} }
+
+      specify do
+        Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::ResubscribeAPI, true, "https://api.getvero.com", expected)
+        subject.resubscribe!(input)
+      end
+    end
+  end
 end
