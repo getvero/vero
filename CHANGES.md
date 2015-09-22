@@ -1,3 +1,7 @@
+## 0.9.0
+
+- *Added support for Sidekiq**. You can now use Sidekiq to deliver API requests to Vero. To do so, just specify `config.async = :sidekiq` in your config.rb file.
+
 ## 0.8.0
 
 - **"development_mode" flag has been deprecated.** It is recommended to use a multiple projects (with different API credentials). Please contact support@getvero.com for assistance in upgrading your account.
