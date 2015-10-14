@@ -19,14 +19,12 @@ module Vero
       t.merge!({
         true          => Vero::Senders::Invalid,
         false         => Vero::Senders::Base,
-        :none         => Vero::Senders::Base,
-        :thread       => Vero::Senders::Invalid
+        :none         => Vero::Senders::Base
       })
 
       if RUBY_VERSION !~ /1\.8\./
         t.merge!(
-          true        => Vero::Senders::Thread,
-          :thread     => Vero::Senders::Thread
+          true        => Vero::Senders::Base
         )
       end
 
@@ -39,7 +37,7 @@ module Vero
       else
         self.senders[false]
       end
-      
+
       (sender_class.new).call(api_class, domain, options)
     rescue => e
       options_s = JSON.dump(options)
