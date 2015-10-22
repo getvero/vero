@@ -33,14 +33,14 @@ module Vero
       t
     end
 
-    def self.send(api_class, sender_strategy, domain, options)
+    def self.send(api_class, sender_strategy, domain, options, config)
       sender_class = if self.senders[sender_strategy]
         self.senders[sender_strategy]
       else
         self.senders[false]
       end
-      
-      (sender_class.new).call(api_class, domain, options)
+
+      (sender_class.new).call(api_class, domain, options, config)
     rescue => e
       options_s = JSON.dump(options)
       Vero::App.log(self.new, "method: #{api_class.name}, options: #{options_s}, error: #{e.message}")

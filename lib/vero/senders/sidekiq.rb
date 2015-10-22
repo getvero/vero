@@ -13,8 +13,9 @@ module Vero
 
   module Senders
     class Sidekiq
-      def call(api_class, domain, options)
-        response = ::Vero::SidekiqWorker.perform_async(api_class.to_s, domain, options)
+      def call(api_class, domain, options, config)
+        worker = config.worker ? Module.const_get(config.worker.to_s) : ::Vero::SidekiqWorker
+        response = worker.send(:perform_async, api_class.to_s, domain, options)
         Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: sidekiq job queued")
         response
       end

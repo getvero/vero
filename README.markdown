@@ -55,6 +55,29 @@ add the following line to your initializer:
 
 If you have any additional questions, please contact support@getvero.com.
 
+## Custom Sidekiq worker
+
+You can use custom sidekiq worker:
+
+    config.worker = GetVeroWorker
+
+
+    class GetVeroWorker
+      include Sidekiq::Worker
+
+      sidekiq_options retry: 5, queue: :vero
+
+      sidekiq_retries_exhausted do |msg|
+        Rails.logger.error "*"*90
+        Rails.logger.error "Failed ----#{msg['jid']}---- #{msg['class']} with #{msg['args']}: #{msg['error_message']}"
+      end
+
+      def perform(api_class, domain, options)
+        api_class.constantize.new(domain, options).perform
+        Vero::App.log(self, "method: #{api_class}, options: #{options.to_json}, response: sidekiq job queued")
+      end
+    end
+
 ## Setup tracking
 
 You will need to define who should be tracked and what information about them

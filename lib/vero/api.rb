@@ -15,7 +15,13 @@ module Vero
         return if config.disabled
         validate_configured!
         options.merge!(config.request_params)
-        Vero::Sender.send(api_klass, config.async, config.domain, options)
+        Vero::Sender.send(
+          api_klass,
+          config.async,
+          config.domain,
+          options,
+          config
+        )
       end
 
       protected

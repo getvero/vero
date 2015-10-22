@@ -15,7 +15,8 @@ describe Vero::Api::Events do
 
       allow(Vero::App).to receive(:default_context).and_return(mock_context)
 
-      expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Events::TrackAPI, true, "https://api.getvero.com", expected)
+      expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Events::TrackAPI,
+                                                  true, "https://api.getvero.com", expected, mock_context.config)
 
       subject.track!(input)
     end
@@ -39,7 +40,8 @@ describe Vero::Api::Users do
       let(:input) { {:email => "james@getvero.com", :data => {:age => 25}} }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::TrackAPI, true, "https://api.getvero.com", expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::TrackAPI,
+                                                    true, "https://api.getvero.com", expected, mock_context.config)
         subject.track!(input)
       end
     end
@@ -50,7 +52,8 @@ describe Vero::Api::Users do
       let(:input) { {:email => "james@getvero.com", :changes => {:age => 25}} }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditAPI, true, "https://api.getvero.com", expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditAPI,
+                                                    true, "https://api.getvero.com", expected, mock_context.config)
         subject.edit_user!(input)
       end
     end
@@ -61,7 +64,8 @@ describe Vero::Api::Users do
       let(:input) { {:add => ["boom"], :remove => ["tish"]} }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI, true, "https://api.getvero.com", expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI,
+                                                    true, "https://api.getvero.com", expected, mock_context.config)
         subject.edit_user_tags!(input)
       end
     end
@@ -72,7 +76,8 @@ describe Vero::Api::Users do
       let(:input) { {:email => "james@getvero"} }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI, true, "https://api.getvero.com", expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI,
+                                                    true, "https://api.getvero.com", expected, mock_context.config)
         subject.unsubscribe!(input)
       end
     end
@@ -83,7 +88,8 @@ describe Vero::Api::Users do
       let(:input) { {:email => "james@getvero"} }
 
       specify do
-        Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::ResubscribeAPI, true, "https://api.getvero.com", expected)
+        Vero::Sender.should_receive(:send).with(Vero::Api::Workers::Users::ResubscribeAPI,
+                                                true, "https://api.getvero.com", expected, mock_context.config)
         subject.resubscribe!(input)
       end
     end

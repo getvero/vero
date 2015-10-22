@@ -19,8 +19,9 @@ module Vero
 
   module Senders
     class Resque
-      def call(api_class, domain, options)
-        ::Resque.enqueue(ResqueWorker, api_class.to_s, domain, options)
+      def call(api_class, domain, options, config)
+        worker = config.worker ? Module.const_get(config.worker) : ResqueWorker
+        ::Resque.enqueue(worker, api_class.to_s, domain, options)
       end
     end
   end

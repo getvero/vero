@@ -4,7 +4,7 @@ require 'delayed_job'
 module Vero
   module Senders
     class DelayedJob
-      def call(api_class, domain, options)
+      def call(api_class, domain, options, _config)
         response = ::Delayed::Job.enqueue api_class.new(domain, options)
         options_s = JSON.dump(options)
         Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: delayed job queued")
