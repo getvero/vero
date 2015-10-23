@@ -1,4 +1,3 @@
-
 # -*- encoding: utf-8 -*-
 $:.push('lib')
 require "vero/version"
@@ -21,7 +20,7 @@ Gem::Specification.new do |s|
     [:development, 'sidekiq', "~> 2.0"],
     [:runtime,     'json'],
     [:runtime,     'rest-client'],
-    [:runtime,     'sucker_punch', '1.5.1']
+    [:runtime,     'sucker_punch', '~> 1.6.0']
   ]
 
   s.files         = Dir['**/*']
