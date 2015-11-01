@@ -1,4 +1,3 @@
-require 'json'
 require 'sucker_punch'
 
 module Vero
@@ -11,9 +10,9 @@ module Vero
 
       begin
         api_class.new(domain, new_options).perform
-        Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+        Vero::App.log(self, "method: #{api_class.name}, options: #{JSON.dump(options)}, response: job performed")
       rescue => e
-        Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
+        Vero::App.log(self, "method: #{api_class.name}, options: #{JSON.dump(options)}, response: #{e.message}")
       end
     end
   end

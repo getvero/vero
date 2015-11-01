@@ -1,6 +1,3 @@
-require 'json'
-require 'rest-client'
-
 module Vero
   module Api
     module Workers
