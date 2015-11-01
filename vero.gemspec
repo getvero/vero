@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.authors  = ['James Lamont']
 
   dependencies = [
+    [:development, 'byebug'],
     [:development, 'rails', "~> 3.0"],
     [:development, 'rspec'],
     [:development, 'delayed_job', "~> 3.0.0"],
