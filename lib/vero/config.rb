@@ -3,10 +3,12 @@ require 'base64'
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
+    attr_accessor :api_key, :secret, :development_mode, :async, :disabled
+    attr_accessor :logging, :sender_class
 
     def self.available_attributes
-      [:api_key, :secret, :development_mode, :async, :disabled, :logging, :domain]
+      [:api_key, :secret, :development_mode, :async, :disabled, :logging,
+        :domain, :sender_class]
     end
 
     def initialize

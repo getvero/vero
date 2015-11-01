@@ -1,10 +1,36 @@
 require 'spec_helper'
 
+class SomeOtherSidekiqWorker < Vero::SidekiqWorker
+end
+
 describe Vero::Senders::Sidekiq do
   subject { Vero::Senders::Sidekiq.new }
   describe :call do
     it "should perform_async a Vero::SidekiqWorker" do
-      Vero::SidekiqWorker.should_receive(:perform_async).with('Vero::Api::Workers::Events::TrackAPI', "abc", {:test => "abc"}).once
+      Vero::SidekiqWorker.should_receive(:perform_async)
+        .with('Vero::Api::Workers::Events::TrackAPI', "abc", {:test => "abc"})
+        .once
+
+      subject.call(Vero::Api::Workers::Events::TrackAPI, "abc", {:test => "abc"})
+    end
+
+    it "should default to Vero::SidekiqWorker when the sender_class is invalid" do
+      Vero::App.default_context.config.sender_class = String
+
+      Vero::SidekiqWorker.should_receive(:perform_async)
+        .with('Vero::Api::Workers::Events::TrackAPI', "abc", {:test => "abc"})
+        .once
+
+      subject.call(Vero::Api::Workers::Events::TrackAPI, "abc", {:test => "abc"})
+    end
+
+    it "should allow you to define a different Sidekiq sender class" do
+      Vero::App.default_context.config.sender_class = SomeOtherSidekiqWorker
+
+      SomeOtherSidekiqWorker.should_receive(:perform_async)
+        .with('Vero::Api::Workers::Events::TrackAPI', "abc", {:test => "abc"})
+        .once
+
       subject.call(Vero::Api::Workers::Events::TrackAPI, "abc", {:test => "abc"})
     end
   end

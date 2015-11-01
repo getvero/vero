@@ -29,7 +29,13 @@ module Vero
       end
 
       def sender_class
-        ::Vero::SidekiqWorker
+        klass = Vero::App.default_context.config.sender_class
+
+        if klass && klass.new.is_a?(::Sidekiq::Worker)
+          klass
+        else
+          Vero::SidekiqWorker
+        end
       end
     end
   end
