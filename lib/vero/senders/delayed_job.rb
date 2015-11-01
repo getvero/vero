@@ -1,4 +1,3 @@
-require 'json'
 require 'delayed_job'
 
 module Vero
@@ -6,8 +5,7 @@ module Vero
     class DelayedJob
       def call(api_class, domain, options)
         response = ::Delayed::Job.enqueue api_class.new(domain, options)
-        options_s = JSON.dump(options)
-        Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: delayed job queued")
+        Vero::App.log(self, "method: #{api_class.name}, options: #{JSON.dump(options)}, response: delayed job queued")
         response
       rescue => e
         if e.message == "Could not find table 'delayed_jobs'"
