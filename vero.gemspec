@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
     [:development, 'delayed_job', "~> 3.0.0"],
     [:development, 'delayed_job_active_record'],
     [:development, 'resque'],
-    [:development, 'sidekiq', "~> 2.0"],
+    [:development, 'sidekiq', "~> 3.5.1"],
     [:runtime,     'json'],
     [:runtime,     'rest-client'],
     [:runtime,     'sucker_punch', '~> 1.6.0']
