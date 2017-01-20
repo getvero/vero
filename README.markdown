@@ -42,8 +42,8 @@ You will be able to find your API key and secret by logging into Vero
 ([sign up](http://getvero.com) if you haven't already) and clicking the
 'Your Account' link at the top of the page then select 'API Keys'.
 
-By default, events are sent asynchronously using a background thread.
-We recommend that you select one of the supported queue-based alternatives:
+By default, events are sent synchronously.
+We recommend that you select one of the supported background thread/queue-based alternatives:
 
 ```ruby
 config.async = :none            # Synchronously

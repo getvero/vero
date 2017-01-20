@@ -19,9 +19,9 @@ Gem::Specification.new do |s|
     [:development, 'delayed_job_active_record'],
     [:development, 'resque'],
     [:development, 'sidekiq', "~> 3.5.1"],
+    [:development, 'sucker_punch', '~> 1.6.0'],
     [:runtime,     'json'],
-    [:runtime,     'rest-client'],
-    [:runtime,     'sucker_punch', '~> 1.6.0']
+    [:runtime,     'rest-client']
   ]
 
   s.files         = Dir['**/*']

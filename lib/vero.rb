@@ -9,6 +9,7 @@ module Vero
   autoload :Trackable,            'vero/trackable'
   autoload :DSL,                  'vero/dsl'
   autoload :Sender,               'vero/sender'
+  autoload :SuckerPunchWorker,    'vero/senders/sucker_punch'
   autoload :ResqueWorker,         'vero/senders/resque'
   autoload :SidekiqWorker,        'vero/senders/sidekiq'
 
@@ -40,7 +41,7 @@ module Vero
     autoload :Resque,             'vero/senders/resque'
     autoload :Sidekiq,            'vero/senders/sidekiq'
     autoload :Invalid,            'vero/senders/invalid'
-    autoload :Thread,             'vero/senders/thread'
+    autoload :SuckerPunch,         'vero/senders/sucker_punch'
   end
 
   module Utility
