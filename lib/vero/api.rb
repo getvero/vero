@@ -61,6 +61,10 @@ module Vero
         new(context).resubscribe!(options)
       end
 
+      def self.delete!(options, context = Vero::App.default_context)
+        new(context).delete!(options)
+      end
+
       def track!(options)
         run_api(Vero::Api::Workers::Users::TrackAPI, options)
       end
@@ -83,6 +87,10 @@ module Vero
 
       def reidentify!(options)
         run_api(Vero::Api::Workers::Users::ReidentifyAPI, options)
+      end
+
+      def delete!(options)
+        run_api(Vero::Api::Workers::Users::DeleteAPI, options)
       end
     end
   end
