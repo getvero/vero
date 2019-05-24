@@ -7,7 +7,7 @@ module Vero
 
       module ClassMethods
         def log(object, message)
-          return unless Vero::App.default_context.config.logging && !defined?(RSpec)
+          return unless logging_enabled?
 
           message = "#{object.class.name}: #{message}"
 
@@ -24,6 +24,10 @@ module Vero
           else
             nil
           end
+        end
+
+        def logging_enabled?
+          logger && (Vero::App.default_context.config.logging || defined?(RSpec))
         end
       end
     end
