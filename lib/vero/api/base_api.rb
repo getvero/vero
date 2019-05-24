@@ -29,7 +29,7 @@ module Vero
 
         protected
         def setup_logging
-          return unless Vero::App.logger
+          return unless Vero::App.logging_enabled?
 
           RestClient.log = Object.new.tap do |proxy|
             def proxy.<<(message)
