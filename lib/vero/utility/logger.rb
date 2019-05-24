@@ -27,7 +27,7 @@ module Vero
         end
 
         def logging_enabled?
-          logger && Vero::App.default_context.config.logging && !defined(RSpec)
+          logger && (Vero::App.default_context.config.logging || defined(RSpec))
         end
       end
     end
