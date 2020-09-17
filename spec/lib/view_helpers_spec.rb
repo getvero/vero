@@ -28,7 +28,7 @@ describe Vero::ViewHelpers::Javascript do
     end
 
     context "Vero::App has been properly configured" do
-      before :each do
+      before do
         @tracking_api_key = "abcd1234"
 
         Vero::App.init do |c|

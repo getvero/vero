@@ -4,21 +4,34 @@ require "spec_helper"
 
 describe Vero::Api::Events do
   let(:subject) { Vero::Api::Events }
+  let(:mock_context) { Vero::Context.new }
+
+  let(:input) { {event_name: "test_event", identity: {email: "james@getvero.com"}, data: {test: "test"}} }
+  let(:expected) { input.merge(tracking_api_key: "abc123", _config: {http_timeout: 60}) }
+
+  before do
+    allow(mock_context.config).to receive(:configured?).and_return(true)
+    allow(mock_context.config).to receive(:tracking_api_key).and_return("abc123")
+    allow(Vero::App).to receive(:default_context).and_return(mock_context)
+  end
+
+  it "should pass http_timeout to API requests" do
+    allow(mock_context.config).to receive(:http_timeout).and_return(30)
+
+    expect(Vero::Sender).to(
+      receive(:call).with(
+        Vero::Api::Workers::Events::TrackAPI, true, "https://api.getvero.com", expected.merge(_config: {http_timeout: 30})
+      )
+    )
+    subject.track!(input)
+  end
 
   describe :track! do
-    it "should call the TrackAPI object via the configured sender" do
-      input = {event_name: "test_event", identity: {email: "james@getvero.com"}, data: {test: "test"}}
-      expected = input.merge(tracking_api_key: "abc123")
-
-      mock_context = Vero::Context.new
-      allow(mock_context.config).to receive(:configured?).and_return(true)
-      allow(mock_context.config).to receive(:tracking_api_key).and_return("abc123")
-
-      allow(Vero::App).to receive(:default_context).and_return(mock_context)
-
-      expect(Vero::Sender).to receive(:call).with(Vero::Api::Workers::Events::TrackAPI, true, "https://api.getvero.com", expected)
-
-      subject.track!(input)
+    context "should call the TrackAPI object via the configured sender" do
+      specify do
+        expect(Vero::Sender).to receive(:call).with(Vero::Api::Workers::Events::TrackAPI, true, "https://api.getvero.com", expected)
+        subject.track!(input)
+      end
     end
   end
 end
@@ -26,9 +39,9 @@ end
 describe Vero::Api::Users do
   let(:subject) { Vero::Api::Users }
   let(:mock_context) { Vero::Context.new }
-  let(:expected) { input.merge(tracking_api_key: "abc123") }
+  let(:expected) { input.merge(tracking_api_key: "abc123", _config: {http_timeout: 60}) }
 
-  before :each do
+  before do
     allow(mock_context.config).to receive(:configured?).and_return(true)
     allow(mock_context.config).to receive(:tracking_api_key).and_return("abc123")
     allow(Vero::App).to receive(:default_context).and_return(mock_context)

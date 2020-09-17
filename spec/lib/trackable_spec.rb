@@ -13,7 +13,7 @@ def vero_context(user, logging = true, async = false, disabled = true)
 end
 
 describe Vero::Trackable do
-  before :each do
+  before do
     @request_params = {
       event_name: "test_event",
       tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
@@ -64,8 +64,6 @@ describe Vero::Trackable do
       it "should send a `track!` request when async is set to false" do
         context = vero_context(@user)
         allow(@user).to receive(:with_vero_context).and_return(context)
-
-        allow(RestClient).to receive(:post).and_return(200)
 
         allow(Vero::Api::Events).to receive(:track!).and_return(200)
         expect(Vero::Api::Events).to receive(:track!).with(@request_params, context)
@@ -310,17 +308,21 @@ describe Vero::Trackable do
         event_name: "test_event",
         tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
         identity: {email: "user@getvero.com", age: 20, _user_type: "UserWithoutInterface"},
-        data: {test: 1}
+        data: {test: 1},
+        extras: {}
       }
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user
       allow(context).to receive(:post_now).and_return(200)
-
       allow(user).to receive(:with_vero_context).and_return(context)
 
-      allow(RestClient).to receive(:post).and_return(200)
-      expect(user.vero_track(request_params[:event_name], request_params[:data])).to eq(200)
+      stub_request(:post, "https://api.getvero.com/api/v2/events/track.json")
+        .with(body: request_params, headers: {content_type: "application/json"})
+        .to_return(status: 200)
+
+      resp = user.vero_track(request_params[:event_name], request_params[:data])
+      expect(resp.code).to eq(200)
     end
   end
 end

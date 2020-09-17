@@ -8,6 +8,8 @@
 
 - Added Zeitwerk for improved code autoloading
 
+- Added `http_timeout` configuration option. By default it is set to 60 (seconds).
+
 ## 0.9.0
 
 - **Added support for Sidekiq**. You can now use Sidekiq to deliver API requests to Vero. To do so, just specify `config.async = :sidekiq` in your config.rb file.

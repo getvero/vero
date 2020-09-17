@@ -2,3 +2,4 @@ info
 *.gem
 Gemfile.lock
 .ruby-version
+.zed

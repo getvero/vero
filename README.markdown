@@ -25,6 +25,8 @@ To get started with a Ruby on Rails application, add the following initializer:
 # config/initializers/vero.rb
 Vero::App.init do |config|
   config.tracking_api_key = ENV['VERO_TRACKING_API_KEY']
+
+  config.http_timeout = 30 # default timeout per API request is set to 60 (seconds)
 end
 ```
 

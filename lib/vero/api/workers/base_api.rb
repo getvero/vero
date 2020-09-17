@@ -13,7 +13,6 @@ class Vero::Api::Workers::BaseAPI
   def initialize(domain, options)
     @domain = domain
     self.options = options
-    setup_logging
   end
 
   def perform
@@ -22,20 +21,10 @@ class Vero::Api::Workers::BaseAPI
   end
 
   def options=(val)
-    @options = options_with_symbolized_keys(val)
+    @options = val.transform_keys(&:to_sym)
   end
 
   protected
-
-  def setup_logging
-    return unless Vero::App.logger
-
-    RestClient.log = Object.new.tap do |proxy|
-      def proxy.<<(message)
-        Vero::App.logger.info message
-      end
-    end
-  end
 
   def url
   end
@@ -45,20 +34,17 @@ class Vero::Api::Workers::BaseAPI
   end
 
   def request
-    request_headers = {content_type: :json, accept: :json}
-
-    if request_method == :get
-      RestClient.get(url, request_headers)
-    else
-      RestClient.send(request_method, url, JSON.dump(@options), request_headers)
-    end
+    http_client.do_request(request_method, url, @options.except(:_config))
   end
 
   def request_method
     raise NotImplementedError, "#{self.class.name}#request_method should be overridden"
   end
 
-  def options_with_symbolized_keys(val)
-    val.transform_keys(&:to_sym)
+  def http_client
+    Vero::HttpClient.new(
+      logger: Vero::App.logger,
+      http_timeout: @options.dig(:_config, :http_timeout)
+    )
   end
 end
