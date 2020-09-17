@@ -5,9 +5,14 @@ require 'bundler/setup'
 require 'vero'
 require 'json'
 
-Dir[::File.expand_path('../support/**/*.rb', __FILE__)].sort.each { |f| require f }
+Dir[::File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
 
 RSpec.configure do |config|
+  config.expect_with :rspec do |expectations|
+    expectations.syntax = [:expect]
+  end
+
+  config.raise_errors_for_deprecations!
 end
 
 def stub_env(new_env, &block)
