@@ -3,7 +3,15 @@
 require 'spec_helper'
 
 describe Vero::Api::Workers::Users::ReidentifyAPI do
-  subject { Vero::Api::Workers::Users::ReidentifyAPI.new('https://api.getvero.com', { auth_token: 'abcd', id: 'test@test.com', new_id: 'test2@test.com' }) }
+  let(:payload) do
+    {
+      auth_token: 'abcd',
+      id: 'test@test.com',
+      new_id: 'test2@test.com'
+    }
+  end
+
+  subject { Vero::Api::Workers::Users::ReidentifyAPI.new('https://api.getvero.com', payload) }
 
   it_behaves_like 'a Vero wrapper' do
     let(:end_point) { '/api/v2/users/reidentify.json' }
@@ -17,27 +25,37 @@ describe Vero::Api::Workers::Users::ReidentifyAPI do
     end
 
     it 'should raise an error if id is missing' do
-      subject.options = { auth_token: 'abcd', new_id: 'test2@test.com' }
+      payload.delete(:id)
+      subject.options = payload
       expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
     it 'should raise an error if new_id is missing' do
-      subject.options = { auth_token: 'abcd', id: 'test@test.com' }
+      payload.delete(:new_id)
+      subject.options = payload
       expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
   end
 
   describe :request do
     it 'should send a request to the Vero API' do
-      expect(RestClient).to receive(:put).with('https://api.getvero.com/api/v2/users/reidentify.json', { auth_token: 'abcd', id: 'test@test.com', new_id: 'test2@test.com' }.to_json, { content_type: :json, accept: :json })
-      allow(RestClient).to receive(:put).and_return(200)
+      expect(RestClient::Request).to(
+        receive(:execute).with(
+          method: :put,
+          url: 'https://api.getvero.com/api/v2/users/reidentify.json',
+          payload: { auth_token: 'abcd', id: 'test@test.com', new_id: 'test2@test.com' }.to_json,
+          headers: { content_type: :json, accept: :json },
+          timeout: 60
+        )
+      )
+      allow(RestClient::Request).to receive(:execute).and_return(200)
       subject.send(:request)
     end
   end
 
   describe 'integration test' do
     it 'should not raise any errors' do
-      allow(RestClient).to receive(:put).and_return(200)
+      allow(RestClient::Request).to receive(:execute).and_return(200)
       expect { subject.perform }.to_not raise_error
     end
   end
