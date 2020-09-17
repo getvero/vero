@@ -19,16 +19,10 @@ module Vero
       t = Vero::SenderHash.new
 
       t.merge!({
-                 true => Vero::Senders::Invalid,
+                 true => Vero::Senders::Base,
                  false => Vero::Senders::Base,
                  :none => Vero::Senders::Base
                })
-
-      if RUBY_VERSION !~ /1\.8\./
-        t.merge!(
-          true => Vero::Senders::Base
-        )
-      end
 
       t
     end

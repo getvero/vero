@@ -10,18 +10,12 @@ describe Vero::Sender do
       expect(subject.senders).to be_a(Hash)
     end
 
-    context 'when using Ruby with verion greater than 1.8.7' do
-      before do
-        stub_const('RUBY_VERSION', '1.9.3')
-      end
-
-      it 'should have a default set of senders (true, false, none)' do
-        expect(subject.senders).to eq({
-                                        true => Vero::Senders::Base,
-                                        false => Vero::Senders::Base,
-                                        :none => Vero::Senders::Base
-                                      })
-      end
+    it 'should have a default set of senders (true, false, none)' do
+      expect(subject.senders).to eq({
+                                      true => Vero::Senders::Base,
+                                      false => Vero::Senders::Base,
+                                      :none => Vero::Senders::Base
+                                    })
     end
 
     it 'should automatically find senders that are not defined' do
