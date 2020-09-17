@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'base64'
 
 module Vero
@@ -6,21 +8,21 @@ module Vero
     attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
 
     def self.available_attributes
-      [:api_key, :secret, :development_mode, :async, :disabled, :logging, :domain]
+      %i[api_key secret development_mode async disabled logging domain]
     end
 
     def initialize
-      self.reset!
+      reset!
     end
 
     def config_params
-      options = {:api_key => self.api_key, :secret => self.secret}
+      { api_key: api_key, secret: secret }
     end
 
     def request_params
       {
-        :auth_token => self.auth_token,
-        :development_mode => self.development_mode
+        auth_token: auth_token,
+        development_mode: development_mode
       }.reject { |_, v| v.nil? }
     end
 
@@ -28,13 +30,14 @@ module Vero
       if @domain.blank?
         'https://api.getvero.com'
       else
-        @domain =~ /http[s]?\:\/\/.+/ ? @domain : "http://#{@domain}"
+        @domain =~ %r{https?://.+} ? @domain : "http://#{@domain}"
       end
     end
 
     def auth_token
       return unless auth_token?
-      ::Base64::encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
+
+      ::Base64.encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
     end
 
     def auth_token?
@@ -63,7 +66,7 @@ module Vero
 
       Vero::Config.available_attributes.each do |symbol|
         method_name = "#{symbol}=".to_sym
-        self.send(method_name, attributes[symbol]) if self.respond_to?(method_name) && attributes.has_key?(symbol)
+        send(method_name, attributes[symbol]) if respond_to?(method_name) && attributes.key?(symbol)
       end
     end
   end

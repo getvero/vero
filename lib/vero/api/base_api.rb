@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'rest-client'
 
@@ -5,10 +7,11 @@ module Vero
   module Api
     module Workers
       class BaseAPI
-        attr_accessor :domain, :options
+        attr_accessor :domain
+        attr_reader :options
 
         def self.perform(domain, options)
-          caller = self.new(domain, options)
+          caller = new(domain, options)
           caller.perform
         end
 
@@ -28,6 +31,7 @@ module Vero
         end
 
         protected
+
         def setup_logging
           return unless Vero::App.logger
 
@@ -38,18 +42,16 @@ module Vero
           end
         end
 
-        def url
-        end
+        def url; end
 
         def validate!
           raise "#{self.class.name}#validate! should be overridden"
         end
 
-        def request
-        end
+        def request; end
 
         def request_content_type
-          {:content_type => :json, :accept => :json}
+          { content_type: :json, accept: :json }
         end
 
         def request_params_as_json
@@ -57,9 +59,8 @@ module Vero
         end
 
         def options_with_symbolized_keys(val)
-          val.inject({}) do |h,(k,v)|
+          val.each_with_object({}) do |(k, v), h|
             h[k.to_sym] = v
-            h
           end
         end
       end

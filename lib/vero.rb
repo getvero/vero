@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rest-client'
 require 'vero/utility/ext'
 
@@ -15,7 +17,7 @@ module Vero
 
   module Api
     module Workers
-      autoload :BaseAPI,          'vero/api/base_api'
+      autoload :BaseAPI, 'vero/api/base_api'
 
       module Events
         autoload :TrackAPI,       'vero/api/events/track_api'
@@ -41,11 +43,11 @@ module Vero
     autoload :Resque,             'vero/senders/resque'
     autoload :Sidekiq,            'vero/senders/sidekiq'
     autoload :Invalid,            'vero/senders/invalid'
-    autoload :SuckerPunch,         'vero/senders/sucker_punch'
+    autoload :SuckerPunch, 'vero/senders/sucker_punch'
   end
 
   module Utility
-    autoload :Logger,             'vero/utility/logger'
+    autoload :Logger, 'vero/utility/logger'
   end
 end
 

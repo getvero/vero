@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   module Api
     module Workers
@@ -8,12 +10,12 @@ module Vero
           end
 
           def request
-            RestClient.post(url, self.request_params_as_json, self.request_content_type)
+            RestClient.post(url, request_params_as_json, request_content_type)
           end
 
           def validate!
-            raise ArgumentError.new("Missing :id or :email") if options[:id].to_s.blank? && options[:email].to_s.blank?
-            raise ArgumentError.new(":data must be either nil or a Hash") unless (options[:data].nil? || options[:data].is_a?(Hash))
+            raise ArgumentError, 'Missing :id or :email' if options[:id].to_s.blank? && options[:email].to_s.blank?
+            raise ArgumentError, ':data must be either nil or a Hash' unless options[:data].nil? || options[:data].is_a?(Hash)
           end
         end
       end
