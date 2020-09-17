@@ -5,8 +5,8 @@ module Vero
     module Workers
       module Users
         class TrackAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/track.json"
+          def api_url
+            'users/track.json'
           end
 
           def request

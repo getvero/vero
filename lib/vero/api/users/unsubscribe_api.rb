@@ -5,8 +5,8 @@ module Vero
     module Workers
       module Users
         class UnsubscribeAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/unsubscribe.json"
+          def api_url
+            'users/unsubscribe.json'
           end
 
           def request

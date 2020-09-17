@@ -11,8 +11,7 @@ module Vero
         attr_reader :options
 
         def self.perform(domain, options)
-          caller = new(domain, options)
-          caller.perform
+          new(domain, options).perform
         end
 
         def initialize(domain, options)
@@ -42,7 +41,13 @@ module Vero
           end
         end
 
-        def url; end
+        def url
+          "#{@domain}/api/v2/#{api_url}"
+        end
+
+        def api_url
+          raise NotImplementedError
+        end
 
         def validate!
           raise "#{self.class.name}#validate! should be overridden"

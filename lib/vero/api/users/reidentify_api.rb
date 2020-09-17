@@ -5,8 +5,8 @@ module Vero
     module Workers
       module Users
         class ReidentifyAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/reidentify.json"
+          def api_url
+            'users/reidentify.json'
           end
 
           def request

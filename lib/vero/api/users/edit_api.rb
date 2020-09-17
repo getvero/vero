@@ -5,8 +5,8 @@ module Vero
     module Workers
       module Users
         class EditAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/edit.json"
+          def api_url
+            'users/edit.json'
           end
 
           def request
