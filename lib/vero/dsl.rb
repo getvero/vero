@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   ##
   # A lightweight DSL for using the Vero API. You may find this desirable in

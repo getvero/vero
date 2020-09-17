@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Vero::DSL do
@@ -18,7 +20,7 @@ describe Vero::DSL::Proxy do
       expect(proxy.users).to eql(Vero::Api::Users)
     end
 
-    it "should respond to reidentify!" do
+    it 'should respond to reidentify!' do
       expect(proxy.users.respond_to?(:reidentify!)).to be(true)
     end
   end

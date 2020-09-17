@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   module Utility
     module Logger
@@ -19,11 +21,7 @@ module Vero
         end
 
         def logger
-          if defined?(Rails)
-            Rails.logger
-          else
-            nil
-          end
+          Rails.logger if defined?(Rails)
         end
       end
     end

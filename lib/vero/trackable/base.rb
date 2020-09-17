@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   module Trackable
     module Base
@@ -9,9 +11,9 @@ module Vero
       module ClassMethods
         def trackable(*args)
           @vero_trackable_map = case @vero_trackable_map
-          when Array then (@vero_trackable_map << args).flatten
-          else
-            args
+                                when Array then (@vero_trackable_map << args).flatten
+                                else
+                                  args
           end
         end
 
@@ -27,15 +29,14 @@ module Vero
       def to_vero
         klass = self.class
         symbols, other = klass.trackable_map.partition { |i| i.is_a?(Symbol) }
-        
-        result = symbols.inject({}) do |hash, symbol|
+
+        result = symbols.each_with_object({}) do |symbol, hash|
           t = respond_to?(symbol) ? send(symbol) : nil
           hash[symbol] = t unless t.nil?
-          hash
         end
 
         if other.is_a?(Array) && !other.empty?
-          other.reject! { |i| !(i.is_a?(Hash) && i.has_key?(:extras)) }
+          other.select! { |i| (i.is_a?(Hash) && i.key?(:extras)) }
           other.each do |h|
             symbol = h[:extras]
             t = respond_to?(symbol, true) ? send(symbol) : nil
@@ -43,7 +44,7 @@ module Vero
           end
         end
 
-        result[:email] = result.delete(:email_address) if result.has_key?(:email_address)
+        result[:email] = result.delete(:email_address) if result.key?(:email_address)
         result[:_user_type] = self.class.name
         result
       end

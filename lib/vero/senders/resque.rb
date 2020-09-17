@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'resque'
 
@@ -8,7 +10,7 @@ module Vero
     def self.perform(api_class_name, domain, options)
       api_class = eval(api_class_name)
       new_options = {}
-      options.each do |k,v|
+      options.each do |k, v|
         new_options[k.to_sym] = v
       end
 

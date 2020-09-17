@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'delayed_job'
 
@@ -9,9 +11,9 @@ module Vero
         options_s = JSON.dump(options)
         Vero::App.log(self, "method: #{api_class.name}, options: #{options_s}, response: delayed job queued")
         response
-      rescue => e
+      rescue StandardError => e
         if e.message == "Could not find table 'delayed_jobs'"
-          raise "To send ratings asynchronously, you must configure delayed_job. Run `rails generate delayed_job:active_record` then `rake db:migrate`."
+          raise 'To send ratings asynchronously, you must configure delayed_job. Run `rails generate delayed_job:active_record` then `rake db:migrate`.'
         else
           raise e
         end

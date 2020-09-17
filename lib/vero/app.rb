@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   class App
     include Vero::Utility::Logger

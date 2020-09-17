@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   class Context
     include Vero::APIContext
@@ -6,27 +8,24 @@ module Vero
     def initialize(object = {})
       case object
       when Hash
-        #stub
+        # stub
       when Vero::Context
         @config = object.config
         @subject = object.subject
       else
-        object = Vero::Config.available_attributes.inject({}) do |hash, symbol|
+        object = Vero::Config.available_attributes.each_with_object({}) do |symbol, hash|
           hash[symbol] = object.respond_to?(symbol) ? object.send(symbol) : nil
-          hash
         end
       end
 
       if object.is_a?(Hash)
         @config = Vero::Config.new
-        self.configure(object)
+        configure(object)
       end
     end
 
     def configure(hash = {}, &block)
-      if hash.is_a?(Hash) && hash.any?
-        @config.update_attributes(hash)
-      end
+      @config.update_attributes(hash) if hash.is_a?(Hash) && hash.any?
 
       block.call(@config) if block_given?
     end

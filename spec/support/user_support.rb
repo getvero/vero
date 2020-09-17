@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'vero'
 
 class User
@@ -17,7 +19,9 @@ class UserWithoutEmail
   include Vero::Trackable
   trackable :email, :age
 
-  def email; self.primary_contact; end
+  def email
+    primary_contact
+  end
 
   def primary_contact
     'durkster@gmail.com'
@@ -65,12 +69,15 @@ class UserWithNilAttributes
   def email_address
     'durkster@gmail.com'
   end
-  def age; nil; end
+
+  def age
+    nil
+  end
 end
 
 class UserWithExtras
   include Vero::Trackable
-  trackable :email, {:extras => :properties}
+  trackable :email, { extras: :properties }
 
   attr_accessor :properties
 
@@ -81,21 +88,22 @@ end
 
 class UserWithPrivateExtras
   include Vero::Trackable
-  trackable :email, {:extras => :properties}
+  trackable :email, { extras: :properties }
 
   def email
     'durkster@gmail.com'
   end
 
   private
+
   def properties
-    {:age => 26}
+    { age: 26 }
   end
 end
 
 class UserWithOnlyExtras
   include Vero::Trackable
-  trackable({:extras => :properties})
+  trackable({ extras: :properties })
 
   attr_accessor :properties
 
