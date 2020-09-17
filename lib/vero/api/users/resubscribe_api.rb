@@ -9,8 +9,8 @@ module Vero
             'users/resubscribe.json'
           end
 
-          def request
-            RestClient.post(url, @options)
+          def http_method
+            :post
           end
 
           def validate!

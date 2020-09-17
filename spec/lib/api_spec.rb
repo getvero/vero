@@ -5,6 +5,21 @@ require 'spec_helper'
 describe Vero::Api::Events do
   let(:subject) { Vero::Api::Events }
 
+  it 'should pass http_timeout to API requests' do
+    mock_context = Vero::Context.new
+    allow(mock_context.config).to receive(:configured?).and_return(true)
+    allow(mock_context.config).to receive(:auth_token).and_return('abc123')
+    allow(mock_context.config).to receive(:http_timeout).and_return(30)
+    allow(Vero::App).to receive(:default_context).and_return(mock_context)
+
+    expect(Vero::Sender).to(
+      receive(:send).with(
+        Vero::Api::Workers::Events::TrackAPI, true, 'https://api.getvero.com', hash_including(_config: { http_timeout: 30 })
+      )
+    )
+    subject.track!({})
+  end
+
   describe :track! do
     it 'should call the TrackAPI object via the configured sender' do
       input = { event_name: 'test_event', identity: { email: 'james@getvero.com' }, data: { test: 'test' } }
@@ -17,7 +32,7 @@ describe Vero::Api::Events do
 
       allow(Vero::App).to receive(:default_context).and_return(mock_context)
 
-      expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Events::TrackAPI, true, 'https://api.getvero.com', expected)
+      expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Events::TrackAPI, true, 'https://api.getvero.com', hash_including(expected))
 
       subject.track!(input)
     end
@@ -41,7 +56,7 @@ describe Vero::Api::Users do
       let(:input) { { email: 'james@getvero.com', data: { age: 25 } } }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::TrackAPI, true, 'https://api.getvero.com', expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::TrackAPI, true, 'https://api.getvero.com', hash_including(expected))
         subject.track!(input)
       end
     end
@@ -52,7 +67,7 @@ describe Vero::Api::Users do
       let(:input) { { email: 'james@getvero.com', changes: { age: 25 } } }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditAPI, true, 'https://api.getvero.com', expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditAPI, true, 'https://api.getvero.com', hash_including(expected))
         subject.edit_user!(input)
       end
     end
@@ -63,7 +78,7 @@ describe Vero::Api::Users do
       let(:input) { { add: ['boom'], remove: ['tish'] } }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI, true, 'https://api.getvero.com', expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::EditTagsAPI, true, 'https://api.getvero.com', hash_including(expected))
         subject.edit_user_tags!(input)
       end
     end
@@ -74,7 +89,7 @@ describe Vero::Api::Users do
       let(:input) { { email: 'james@getvero' } }
 
       specify do
-        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI, true, 'https://api.getvero.com', expected)
+        expect(Vero::Sender).to receive(:send).with(Vero::Api::Workers::Users::UnsubscribeAPI, true, 'https://api.getvero.com', hash_including(expected))
         subject.unsubscribe!(input)
       end
     end
@@ -87,7 +102,7 @@ describe Vero::Api::Users do
       specify do
         expect(Vero::Sender).to(
           receive(:send)
-          .with(Vero::Api::Workers::Users::ResubscribeAPI, true, 'https://api.getvero.com', expected)
+          .with(Vero::Api::Workers::Users::ResubscribeAPI, true, 'https://api.getvero.com', hash_including(expected))
         )
         subject.resubscribe!(input)
       end

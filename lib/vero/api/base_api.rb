@@ -7,6 +7,9 @@ module Vero
   module Api
     module Workers
       class BaseAPI
+        DEFAULT_API_TIMEOUT = 60
+        ALLOWED_HTTP_METHODS = %i[post put].freeze
+
         attr_accessor :domain
         attr_reader :options
 
@@ -26,7 +29,13 @@ module Vero
         end
 
         def options=(val)
-          @options = options_with_symbolized_keys(val)
+          new_options = options_with_symbolized_keys(val)
+
+          if (extra_config = new_options.delete(:_config)) && extra_config.is_a?(Hash)
+            @http_timeout = extra_config[:http_timeout]
+          end
+
+          @options = new_options
         end
 
         protected
@@ -45,6 +54,10 @@ module Vero
           "#{@domain}/api/v2/#{api_url}"
         end
 
+        def http_method
+          raise NotImplementedError
+        end
+
         def api_url
           raise NotImplementedError
         end
@@ -53,14 +66,35 @@ module Vero
           raise "#{self.class.name}#validate! should be overridden"
         end
 
-        def request; end
-
-        def request_content_type
-          { content_type: :json, accept: :json }
+        def request
+          do_request(http_method, url, @options)
         end
 
-        def request_params_as_json
-          JSON.dump(@options)
+        def do_request(method, a_url, params)
+          raise ArgumentError, ":method must be one of the follow: #{ALLOWED_HTTP_METHODS.join(', ')}" unless ALLOWED_HTTP_METHODS.include?(method)
+
+          rest_client_args = {
+            method: method,
+            url: a_url,
+            timeout: http_timeout
+          }
+
+          if method == :get
+            rest_client_args.merge!(headers: { params: params })
+          else
+            rest_client_args.merge!(payload: JSON.dump(params), headers: { content_type: :json, accept: :json })
+          end
+
+          RestClient::Request.execute(
+            method: method,
+            url: a_url,
+            headers: { params: params },
+            timeout: http_timeout
+          )
+        end
+
+        def http_timeout
+          @http_timeout || DEFAULT_API_TIMEOUT
         end
 
         def options_with_symbolized_keys(val)

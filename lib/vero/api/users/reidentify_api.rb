@@ -9,8 +9,8 @@ module Vero
             'users/reidentify.json'
           end
 
-          def request
-            RestClient.put(url, request_params_as_json, request_content_type)
+          def http_method
+            :put
           end
 
           def validate!

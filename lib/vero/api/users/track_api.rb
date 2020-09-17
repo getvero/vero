@@ -9,8 +9,8 @@ module Vero
             'users/track.json'
           end
 
-          def request
-            RestClient.post(url, request_params_as_json, request_content_type)
+          def http_method
+            :post
           end
 
           def validate!

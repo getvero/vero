@@ -5,10 +5,10 @@ require 'base64'
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
+    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging, :http_timeout
 
     def self.available_attributes
-      %i[api_key secret development_mode async disabled logging domain]
+      %i[api_key secret development_mode async disabled logging domain http_timeout]
     end
 
     def initialize
@@ -22,7 +22,8 @@ module Vero
     def request_params
       {
         auth_token: auth_token,
-        development_mode: development_mode
+        development_mode: development_mode,
+        _config: { http_timeout: http_timeout }
       }.compact
     end
 
@@ -53,12 +54,13 @@ module Vero
     end
 
     def reset!
-      self.disabled         = false
+      self.disabled = false
       self.development_mode = false
-      self.async            = true
-      self.logging          = false
-      self.api_key          = nil
-      self.secret           = nil
+      self.async = true
+      self.logging = false
+      self.api_key = nil
+      self.secret = nil
+      self.http_timeout = nil
     end
 
     def update_attributes(attributes = {})
