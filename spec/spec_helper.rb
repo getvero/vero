@@ -6,6 +6,11 @@ require 'json'
 Dir[::File.expand_path('../support/**/*.rb',  __FILE__)].each { |f| require f }
 
 RSpec.configure do |config|
+  config.expect_with :rspec do |expectations|
+    expectations.syntax = [:expect]
+  end
+
+  config.raise_errors_for_deprecations!
 end
 
 def stub_env(new_env, &block)
