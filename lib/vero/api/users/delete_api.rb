@@ -4,9 +4,9 @@ module Vero
   module Api
     module Workers
       module Users
-        class UnsubscribeAPI < BaseAPI
+        class DeleteAPI < BaseAPI
           def api_url
-            'users/unsubscribe.json'
+            'users/delete.json'
           end
 
           def http_method
@@ -14,7 +14,7 @@ module Vero
           end
 
           def validate!
-            raise ArgumentError, 'Missing :id or :email' if options[:id].to_s.blank? && options[:email].to_s.blank?
+            raise ArgumentError, 'Missing :id' if options[:id].to_s.blank?
           end
         end
       end

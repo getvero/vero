@@ -30,6 +30,7 @@ module Vero
         autoload :UnsubscribeAPI, 'vero/api/users/unsubscribe_api'
         autoload :ResubscribeAPI, 'vero/api/users/resubscribe_api'
         autoload :ReidentifyAPI,  'vero/api/users/reidentify_api'
+        autoload :DeleteAPI,      'vero/api/users/delete_api'
       end
     end
 

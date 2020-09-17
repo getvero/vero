@@ -35,6 +35,8 @@ Vero::App.init do |config|
     config.api_key = "Your Development API key goes here"
     config.secret = "Your Development API secret goes here"
   end
+
+  config.http_timeout = 30 # default timeout per API request is set to 60 (seconds)
 end
 ```
 
