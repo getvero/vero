@@ -1,23 +1,11 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 2.4
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
+  NewCops: enable
 
 Layout/LineLength:
   Enabled: false
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
 
 Metrics/AbcSize:
   Enabled: false
@@ -40,14 +28,14 @@ Style/Documentation:
 Style/ExponentialNotation:
   Enabled: false
 
-Style/HashEachMethods:
-  Enabled: true
-
 Style/HashTransformKeys:
   Enabled: false
 
 Style/HashTransformValues:
   Enabled: true
+
+Style/OptionalBooleanParameter:
+  Enabled: false
 
 Style/SlicingWithRange:
   Enabled: false
