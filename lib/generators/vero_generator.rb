@@ -15,22 +15,20 @@ class VeroGenerator < Rails::Generators::Base
   private
 
   def standard_initializer_content
-    text = <<~END_TEXT
+    <<~END_TEXT
       Vero::App.init do |config|
         config.api_key  = '#{options[:api_key]}'
         config.secret   = '#{options[:api_secret]}'
       end
     END_TEXT
-    text
   end
 
   def heroku_initializer_content
-    text = <<~END_TEXT
+    <<~END_TEXT
       Vero::App.init do |config|
         config.api_key  = ENV['VERO_API_KEY']
         config.secret   = ENV['VERO_API_SECRET']
       end
     END_TEXT
-    text
   end
 end

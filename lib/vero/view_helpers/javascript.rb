@@ -10,7 +10,7 @@ module Vero
 
         method = :default unless %i[default mixpanel kissmetrics].include?(method)
 
-        method_name = method.to_s + '_vero_javascript_tag'
+        method_name = "#{method}_vero_javascript_tag"
         send(method_name.to_sym, config.config_params)
       end
 
