@@ -84,13 +84,9 @@ describe Vero::Trackable do
           allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
-        context 'not using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.9.3') }
-
-          it 'sends' do
-            expect(@user.track!(@request_params[:event_name], @request_params[:data])).to be_nil
-            expect(@user.track!(@request_params[:event_name])).to be_nil
-          end
+        it 'sends' do
+          expect(@user.track!(@request_params[:event_name], @request_params[:data])).to be_nil
+          expect(@user.track!(@request_params[:event_name])).to be_nil
         end
       end
     end
@@ -121,12 +117,8 @@ describe Vero::Trackable do
           allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
-        context 'and not using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.9.3') }
-
-          it 'sends' do
-            expect(@user.identify!).to be_nil
-          end
+        it 'sends' do
+          expect(@user.identify!).to be_nil
         end
       end
     end
@@ -159,21 +151,8 @@ describe Vero::Trackable do
           allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
-        context 'and using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.8.7') }
-
-          it 'raises an error' do
-            @context.config.disabled = false
-            expect { @user.with_vero_context.update_user! }.to raise_error(RuntimeError)
-          end
-        end
-
-        context 'and not using Ruby 1.8.7' do
-          before { stub_const('RUBY_VERSION', '1.9.3') }
-
-          it 'sends' do
-            expect(@user.with_vero_context.update_user!).to be_nil
-          end
+        it 'sends' do
+          expect(@user.with_vero_context.update_user!).to be_nil
         end
       end
     end
@@ -202,16 +181,14 @@ describe Vero::Trackable do
         expect(@user.with_vero_context.update_user_tags!).to eq(200)
       end
 
-      if RUBY_VERSION =~ /1\.9\./
-        it 'should send using another thread when async is set to true' do
-          context = Vero::Context.new(Vero::App.default_context)
-          context.subject = @user
-          context.config.async = true
+      it 'should send using another thread when async is set to true' do
+        context = Vero::Context.new(Vero::App.default_context)
+        context.subject = @user
+        context.config.async = true
 
-          allow(@user).to receive(:with_vero_context).and_return(context)
+        allow(@user).to receive(:with_vero_context).and_return(context)
 
-          expect(@user.with_vero_context.update_user_tags!).to be_nil
-        end
+        expect(@user.with_vero_context.update_user_tags!).to be_nil
       end
     end
 
@@ -243,12 +220,8 @@ describe Vero::Trackable do
           allow(@user).to receive(:with_vero_context).and_return(@context)
         end
 
-        context 'and using Ruby 1.9.3' do
-          before { stub_const('RUBY_VERSION', '1.9.3') }
-
-          it 'sends' do
-            expect(@user.with_vero_context.unsubscribe!).to be_nil
-          end
+        it 'sends' do
+          expect(@user.with_vero_context.unsubscribe!).to be_nil
         end
       end
     end

@@ -3,40 +3,25 @@
 require 'json'
 
 module Vero
-  class SenderHash < ::Hash
+  class SenderLookup
     def [](key)
-      if key?(key)
-        super
-      else
-        klass_name = key.to_s.split('_').map(&:capitalize).join
+      klass_name = key.to_s.split('_').map(&:capitalize).join
+
+      if Vero::Senders.const_defined?(klass_name)
         Vero::Senders.const_get(klass_name)
+      else
+        Vero::Senders::Base
       end
     end
   end
 
   class Sender
     def self.senders
-      t = Vero::SenderHash.new
-
-      t.merge!({
-                 true => Vero::Senders::Invalid,
-                 false => Vero::Senders::Base,
-                 :none => Vero::Senders::Base
-               })
-
-      if RUBY_VERSION !~ /1\.8\./
-        t.merge!(
-          true => Vero::Senders::Base
-        )
-      end
-
-      t
+      @senders ||= Vero::SenderLookup.new
     end
 
     def self.send(api_class, sender_strategy, domain, options)
-      sender_class = senders[sender_strategy] || senders[false]
-
-      sender_class.new.call(api_class, domain, options)
+      senders[sender_strategy].new.call(api_class, domain, options)
     rescue StandardError => e
       options_s = JSON.dump(options)
       Vero::App.log(new, "method: #{api_class.name}, options: #{options_s}, error: #{e.message}")

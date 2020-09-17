@@ -43,11 +43,12 @@ You will be able to find your API key and secret by logging into Vero
 'Your Account' link at the top of the page then select 'API Keys'.
 
 By default, events are sent synchronously.
-We recommend that you select one of the supported background thread/queue-based alternatives:
+We recommend that you select one of the supported background thread/queue-based alternatives and add their
+respective gem to your Gemfile:
 
 ```ruby
 config.async = :none            # Synchronously
-config.async = :thread          # Background thread (default)
+config.async = :sucker_punch    # SuckerPunch
 config.async = :delayed_job     # DelayedJob
 config.async = :sidekiq         # Sidekiq
 config.async = :resque          # Resque (recommended)
