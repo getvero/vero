@@ -14,7 +14,7 @@ module Vero
                                 when Array then (@vero_trackable_map << args).flatten
                                 else
                                   args
-          end
+                                end
         end
 
         def trackable_map

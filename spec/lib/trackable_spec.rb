@@ -342,7 +342,6 @@ describe Vero::Trackable do
         data: { test: 1 },
         development_mode: true
       }
-      url = 'https://api.getvero.com/api/v1/track.json'
 
       context = Vero::Context.new(Vero::App.default_context)
       context.subject = user

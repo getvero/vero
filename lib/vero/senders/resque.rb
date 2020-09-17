@@ -7,15 +7,13 @@ module Vero
   class ResqueWorker
     @queue = :vero
 
-    def self.perform(api_class_name, domain, options)
-      api_class = eval(api_class_name)
-      new_options = {}
-      options.each do |k, v|
-        new_options[k.to_sym] = v
+    def self.perform(api_class, domain, options)
+      new_options = options.each_with_object({}) do |(k, v), o|
+        o[k.to_sym] = v
       end
 
-      api_class.new(domain, new_options).perform
-      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: resque job queued")
+      api_class.constantize.new(domain, new_options).perform
+      Vero::App.log(self, "method: #{api_class}, options: #{options.to_json}, response: resque job queued")
     end
   end
 

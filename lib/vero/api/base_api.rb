@@ -7,7 +7,8 @@ module Vero
   module Api
     module Workers
       class BaseAPI
-        attr_accessor :domain, :options
+        attr_accessor :domain
+        attr_reader :options
 
         def self.perform(domain, options)
           caller = new(domain, options)

@@ -7,9 +7,11 @@ require 'action_view'
 require 'active_support'
 require 'vero/view_helpers/javascript'
 
+# rubocop:disable Style/MixinUsage
 include Vero::ViewHelpers::Javascript
 include ActionView::Helpers
 include ActionView::Context
+# rubocop:enable Style/MixinUsage
 
 describe Vero::ViewHelpers::Javascript do
   before do

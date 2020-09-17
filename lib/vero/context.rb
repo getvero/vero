@@ -17,11 +17,10 @@ module Vero
           hash[symbol] = object.respond_to?(symbol) ? object.send(symbol) : nil
         end
       end
+      return unless object.is_a?(Hash)
 
-      if object.is_a?(Hash)
-        @config = Vero::Config.new
-        configure(object)
-      end
+      @config = Vero::Config.new
+      configure(object)
     end
 
     def configure(hash = {}, &block)

@@ -16,7 +16,7 @@ module Vero
     end
 
     def config_params
-      options = { api_key: api_key, secret: secret }
+      { api_key: api_key, secret: secret }
     end
 
     def request_params
