@@ -3,7 +3,7 @@ require 'base64'
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
+    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging, :senders_config
 
     def self.available_attributes
       [:api_key, :secret, :development_mode, :async, :disabled, :logging, :domain]
@@ -56,6 +56,10 @@ module Vero
       self.logging          = false
       self.api_key          = nil
       self.secret           = nil
+      self.senders_config   = [:delayed_job, :resque, :sidekiq, :sucker_punch].inject({}) do |hash,e|
+        hash[e] = {}
+        hash
+      end
     end
 
     def update_attributes(attributes = {})
