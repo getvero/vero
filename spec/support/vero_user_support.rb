@@ -1,2 +1,4 @@
-class VeroUser < Struct.new(:api_key, :secret)
+# frozen_string_literal: true
+
+VeroUser = Struct.new(:api_key, :secret) do
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Vero
   ##
   # A lightweight DSL for using the Vero API. You may find this desirable in
@@ -15,7 +17,7 @@ module Vero
   #   end
   module DSL
     def vero
-      @_vero_proxy ||= Proxy.new
+      @vero ||= Proxy.new
     end
 
     # :nodoc:

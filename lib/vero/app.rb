@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Vero
   class App
     include Vero::Utility::Logger
 
     def self.default_context
-      @@default_context ||= Context.new
+      @@default_context ||= Context.new # rubocop:disable Style/ClassVars
     end
 
     def self.init(&block)
