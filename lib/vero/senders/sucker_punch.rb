@@ -23,7 +23,7 @@ module Vero
   module Senders
     class SuckerPunch
       def call(api_class, domain, options)
-        Vero::SuckerPunchWorker.new.async.perform(api_class, domain, options)
+        Vero::SuckerPunchWorker.perform_async(api_class, domain, options)
       end
     end
   end

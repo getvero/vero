@@ -10,7 +10,7 @@ group :development, :test do
   gem 'rails', '~> 3.0'
   gem 'resque'
   gem 'sidekiq', '~> 3.5.1'
-  gem 'sucker_punch', '~> 1.6.0'
+  gem 'sucker_punch', '~> 2.1.2'
 end
 
 gem 'rspec', group: :test
