@@ -54,6 +54,17 @@ config.async = :sidekiq         # Sidekiq
 config.async = :resque          # Resque (recommended)
 ```
 
+If you want to configure Sidekiq worker you can:
+```ruby
+Vero::SidekiqWorker.sidekiq_options_hash = Vero::SidekiqWorker.get_sidekiq_options.merge("queue" => "low")
+```
+or define the class within the initializer
+```ruby
+class MyVeroSidekiqWorker < Vero::SidekiqWorker
+   sidekiq_options queue: 'low'
+end
+```
+
 **Note:** If you're using Mongoid with DelayedJob, you must add
 `gem "delayed_job_mongoid"` to your Gemfile.
 
