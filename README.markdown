@@ -1,6 +1,4 @@
 # vero
-[![Build Status](https://travis-ci.org/getvero/vero.png?branch=master)](https://travis-ci.org/getvero/vero)
-
 [vero](https://github.com/getvero/vero) makes it easy to interact with Vero's
 REST API from your Ruby app. Vero is an email marketing platform that allows you
 to engage and re-engage your customer base based on the actions they perform in
