@@ -23,7 +23,7 @@ describe Vero::ViewHelpers::Javascript do
     it 'should return an empty string if Vero::App is not properly configured' do
       expect(subject.vero_javascript_tag).to eq('')
 
-      Vero::App.init {}
+      Vero::App.init
       expect(subject.vero_javascript_tag).to eq('')
     end
 

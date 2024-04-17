@@ -23,7 +23,7 @@ module Vero
       {
         auth_token: auth_token,
         development_mode: development_mode
-      }.reject { |_, v| v.nil? }
+      }.compact
     end
 
     def domain

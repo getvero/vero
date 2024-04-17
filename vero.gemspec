@@ -6,7 +6,6 @@ require 'vero/version'
 Gem::Specification.new do |spec|
   spec.name     = 'vero'
   spec.version  = Vero::VERSION.dup
-  spec.date     = Time.now.strftime('%Y-%m-%d')
   spec.authors  = ['James Lamont']
   spec.email    = ['support@getvero.com']
 
@@ -15,7 +14,6 @@ Gem::Specification.new do |spec|
   spec.homepage = 'http://www.getvero.com/'
 
   spec.files         = Dir['**/*']
-  spec.test_files    = Dir['test/**/*'] + Dir['spec/**/*']
   spec.executables   = Dir['bin/*'].map { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
@@ -23,4 +21,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'json'
   spec.add_runtime_dependency 'rest-client'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

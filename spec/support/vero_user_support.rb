@@ -1,4 +1,3 @@
 # frozen_string_literal: true
 
-VeroUser = Struct.new(:api_key, :secret) do
-end
+VeroUser = Struct.new(:api_key, :secret)
