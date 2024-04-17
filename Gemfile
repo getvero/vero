@@ -7,12 +7,12 @@ gemspec
 group :development do
   gem 'rubocop'
 
-  gem 'delayed_job', '~> 3.0.0'
+  gem 'delayed_job'
   gem 'delayed_job_active_record'
-  gem 'rails', '~> 3.0'
+  gem 'rails'
   gem 'resque'
-  gem 'sidekiq', '~> 3.5.1'
-  gem 'sucker_punch', '~> 2.1.2'
+  gem 'sidekiq'
+  gem 'sucker_punch'
 end
 
 group :test do
