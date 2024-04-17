@@ -25,8 +25,7 @@ describe Vero::Api::Workers::Users::DeleteAPI do
 
   describe :request do
     it "should send a request to the Vero API" do
-      RestClient.should_receive(:post).with("https://api.getvero.com/api/v2/users/delete.json", {:auth_token => 'abcd', :id => '1234'})
-      RestClient.stub(:post).and_return(200)
+      expect(RestClient).to receive(:post).with("https://api.getvero.com/api/v2/users/delete.json", {:auth_token => 'abcd', :id => '1234'}).and_return(200)
       subject.send(:request)
     end
   end
