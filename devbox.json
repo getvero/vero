@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetpack-io/devbox/main/.schema/devbox.schema.json",
+  "packages": ["ruby@2.6.8"],
+  "shell": {
+    "scripts": {
+      "test": ["bundle exec rspec $@"]
+    }
+  }
+}
