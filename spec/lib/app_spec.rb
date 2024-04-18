@@ -42,7 +42,7 @@ describe Vero::App do
 
   describe :disable_requests! do
     it 'should change config.disabled' do
-      Vero::App.init {}
+      Vero::App.init
       expect(context.config.disabled).to be(false)
 
       Vero::App.disable_requests!
@@ -52,7 +52,7 @@ describe Vero::App do
 
   describe :log do
     it 'should have a log method' do
-      Vero::App.init {}
+      Vero::App.init
       expect(Vero::App).to receive(:log)
       Vero::App.log(Object, 'test')
     end
