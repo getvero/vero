@@ -5,12 +5,12 @@ module Vero
     module Workers
       module Users
         class EditAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/edit.json"
+          def api_url
+            'users/edit.json'
           end
 
-          def request
-            RestClient.put(url, request_params_as_json, request_content_type)
+          def http_method
+            :put
           end
 
           def validate!

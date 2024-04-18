@@ -47,14 +47,14 @@ describe Vero::Config do
       config.api_key = nil
       config.secret = nil
       config.development_mode = nil
-      expect(config.request_params).to eq({})
+      expect(config.request_params).to eq(_config: { http_timeout: nil })
 
       config.api_key = 'abcd1234'
       config.secret = 'abcd1234'
-      expect(config.request_params).to eq({ auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ=' })
+      expect(config.request_params).to match(hash_including(auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ='))
 
       config.development_mode = true
-      expect(config.request_params).to eq({ auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ=', development_mode: true })
+      expect(config.request_params).to match(hash_including(auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ=', development_mode: true))
     end
   end
 

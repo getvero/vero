@@ -322,7 +322,7 @@ describe Vero::Trackable do
 
       allow(user).to receive(:with_vero_context).and_return(context)
 
-      allow(RestClient).to receive(:post).and_return(200)
+      allow(RestClient::Request).to receive(:execute).and_return(200)
       expect(user.vero_track(request_params[:event_name], request_params[:data])).to eq(200)
     end
   end

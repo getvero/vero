@@ -5,12 +5,12 @@ module Vero
     module Workers
       module Users
         class ResubscribeAPI < BaseAPI
-          def url
-            "#{@domain}/api/v2/users/resubscribe.json"
+          def api_url
+            'users/resubscribe.json'
           end
 
-          def request
-            RestClient.post(url, @options)
+          def http_method
+            :post
           end
 
           def validate!
