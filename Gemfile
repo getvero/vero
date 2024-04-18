@@ -4,7 +4,9 @@ source 'http://rubygems.org'
 
 gemspec
 
-group :development, :test do
+group :development do
+  gem 'rubocop'
+
   gem 'delayed_job', '~> 3.0.0'
   gem 'delayed_job_active_record'
   gem 'rails', '~> 3.0'
@@ -13,5 +15,6 @@ group :development, :test do
   gem 'sucker_punch', '~> 2.1.2'
 end
 
-gem 'rspec', group: :test
-gem 'rubocop', group: :development
+group :test do
+  gem 'rspec'
+end
