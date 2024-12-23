@@ -16,7 +16,7 @@ describe Vero::Trackable do
   before :each do
     @request_params = {
       event_name: 'test_event',
-      auth_token: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+      tracking_api_key: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
       identity: { email: 'durkster@gmail.com', age: 20, _user_type: 'User' },
       data: { test: 1 },
       development_mode: true
@@ -40,8 +40,7 @@ describe Vero::Trackable do
   context 'the gem has been configured' do
     before do
       Vero::App.init do |c|
-        c.api_key = 'abcd1234'
-        c.secret = 'efgh5678'
+        c.tracking_api_key = 'YWJjZDEyMzQ6ZWZnaDU2Nzg='
         c.async = false
       end
     end
@@ -300,8 +299,8 @@ describe Vero::Trackable do
     describe :with_vero_context do
       it 'should be able to change contexts' do
         user = User.new
-        expect(user.with_default_vero_context.config.config_params).to eq({ api_key: 'abcd1234', secret: 'efgh5678' })
-        expect(user.with_vero_context({ api_key: 'boom', secret: 'tish' }).config.config_params).to eq({ api_key: 'boom', secret: 'tish' })
+        expect(user.with_default_vero_context.config.config_params).to eq({ tracking_api_key: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=' })
+        expect(user.with_vero_context({ tracking_api_key: 'boom' }).config.config_params).to eq({ tracking_api_key: 'boom' })
       end
     end
 
@@ -310,7 +309,7 @@ describe Vero::Trackable do
 
       request_params = {
         event_name: 'test_event',
-        auth_token: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
+        tracking_api_key: 'YWJjZDEyMzQ6ZWZnaDU2Nzg=',
         identity: { email: 'durkster@gmail.com', age: 20, _user_type: 'UserWithoutInterface' },
         data: { test: 1 },
         development_mode: true

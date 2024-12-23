@@ -8,11 +8,11 @@ describe Vero::Api::Events do
   describe :track! do
     it 'should call the TrackAPI object via the configured sender' do
       input = { event_name: 'test_event', identity: { email: 'james@getvero.com' }, data: { test: 'test' } }
-      expected = input.merge(auth_token: 'abc123', development_mode: true)
+      expected = input.merge(tracking_api_key: 'abc123', development_mode: true)
 
       mock_context = Vero::Context.new
       allow(mock_context.config).to receive(:configured?).and_return(true)
-      allow(mock_context.config).to receive(:auth_token).and_return('abc123')
+      allow(mock_context.config).to receive(:tracking_api_key).and_return('abc123')
       allow(mock_context.config).to receive(:development_mode).and_return(true)
 
       allow(Vero::App).to receive(:default_context).and_return(mock_context)
@@ -27,11 +27,11 @@ end
 describe Vero::Api::Users do
   let(:subject) { Vero::Api::Users }
   let(:mock_context) { Vero::Context.new }
-  let(:expected) { input.merge(auth_token: 'abc123', development_mode: true) }
+  let(:expected) { input.merge(tracking_api_key: 'abc123', development_mode: true) }
 
   before :each do
     allow(mock_context.config).to receive(:configured?).and_return(true)
-    allow(mock_context.config).to receive(:auth_token).and_return('abc123')
+    allow(mock_context.config).to receive(:tracking_api_key).and_return('abc123')
     allow(mock_context.config).to receive(:development_mode).and_return(true)
     allow(Vero::App).to receive(:default_context).and_return(mock_context)
   end
