@@ -27,10 +27,11 @@ module Vero
     end
 
     def domain
-      if @domain.blank?
+      if @domain.nil? || @domain.empty?
         "https://api.getvero.com"
       else
-        %r{https?://.+}.match?(@domain) ? @domain : "http://#{@domain}"
+        a_domain = @domain.to_s
+        %r{https?://.+}.match?(a_domain) ? a_domain : "http://#{a_domain}"
       end
     end
 
