@@ -36,7 +36,7 @@ module Vero
         end
 
         if other.is_a?(Array) && !other.empty?
-          other.select! { |i| (i.is_a?(Hash) && i.key?(:extras)) }
+          other.select! { |i| i.is_a?(Hash) && i.key?(:extras) }
           other.each do |h|
             symbol = h[:extras]
             t = respond_to?(symbol, true) ? send(symbol) : nil

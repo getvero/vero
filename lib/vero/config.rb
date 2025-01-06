@@ -54,7 +54,7 @@ module Vero
       return unless attributes.is_a?(Hash)
 
       Vero::Config.available_attributes.each do |symbol|
-        method_name = "#{symbol}=".to_sym
+        method_name = "#{symbol}="
         send(method_name, attributes[symbol]) if respond_to?(method_name) && attributes.key?(symbol)
       end
     end

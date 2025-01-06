@@ -12,14 +12,14 @@ Gem::Specification.new do |spec|
   spec.summary  = 'Ruby gem for Vero'
   spec.description = 'Ruby gem for Vero'
   spec.homepage = 'http://www.getvero.com/'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.files         = Dir['**/*']
   spec.executables   = Dir['bin/*'].map { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.6.6'
+  spec.required_ruby_version = '>= 2.7'
 
-  spec.add_runtime_dependency 'json'
-  spec.add_runtime_dependency 'rest-client'
-  spec.metadata['rubygems_mfa_required'] = 'true'
+  spec.add_dependency 'json'
+  spec.add_dependency 'rest-client'
 end
