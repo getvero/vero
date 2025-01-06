@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "json"
-
 module Vero
   class SenderLookup
     def [](key)
