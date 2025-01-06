@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'rest-client'
+require "json"
+require "rest-client"
 
 module Vero
   module Api
@@ -42,16 +42,18 @@ module Vero
           end
         end
 
-        def url; end
+        def url
+        end
 
         def validate!
           raise "#{self.class.name}#validate! should be overridden"
         end
 
-        def request; end
+        def request
+        end
 
         def request_content_type
-          { content_type: :json, accept: :json }
+          {content_type: :json, accept: :json}
         end
 
         def request_params_as_json

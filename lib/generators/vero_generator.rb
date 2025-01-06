@@ -6,10 +6,10 @@ class VeroGenerator < Rails::Generators::Base
   class_option :api_secret
 
   def create_initializer_file
-    type = options[:heroku] || 'standard'
+    type = options[:heroku] || "standard"
 
-    abort('You must provide an API KEY and API SECRET to proceed.') if options[:heroku].blank? && (options[:api_key].blank? || options[:api_secret].blank?)
-    create_file 'config/initializers/vero.rb', send("#{type}_initializer_content")
+    abort("You must provide an API KEY and API SECRET to proceed.") if options[:heroku].blank? && (options[:api_key].blank? || options[:api_secret].blank?)
+    create_file "config/initializers/vero.rb", send(:"#{type}_initializer_content")
   end
 
   private

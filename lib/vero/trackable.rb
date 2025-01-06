@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'vero/trackable/base'
-require 'vero/trackable/interface'
+require "vero/trackable/base"
+require "vero/trackable/interface"
 
 module Vero
   module Trackable

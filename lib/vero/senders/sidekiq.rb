@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'sidekiq'
+require "json"
+require "sidekiq"
 
 module Vero
   class SidekiqWorker

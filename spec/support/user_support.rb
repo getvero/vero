@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'vero'
+require "vero"
 
 class User
   include Vero::Trackable
   trackable :email, :age
 
   def email
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   def age
@@ -24,7 +24,7 @@ class UserWithoutEmail
   end
 
   def primary_contact
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   def age
@@ -37,7 +37,7 @@ class UserWithEmailAddress
   trackable :email_address, :age
 
   def email_address
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   def age
@@ -50,7 +50,7 @@ class UserWithoutInterface
   trackable :email_address, :age
 
   def email_address
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   def age
@@ -67,7 +67,7 @@ class UserWithNilAttributes
   trackable :email_address, :age
 
   def email_address
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   def age
@@ -77,37 +77,37 @@ end
 
 class UserWithExtras
   include Vero::Trackable
-  trackable :email, { extras: :properties }
+  trackable :email, {extras: :properties}
 
   attr_accessor :properties
 
   def email
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 end
 
 class UserWithPrivateExtras
   include Vero::Trackable
-  trackable :email, { extras: :properties }
+  trackable :email, {extras: :properties}
 
   def email
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 
   private
 
   def properties
-    { age: 26 }
+    {age: 26}
   end
 end
 
 class UserWithOnlyExtras
   include Vero::Trackable
-  trackable({ extras: :properties })
+  trackable({extras: :properties})
 
   attr_accessor :properties
 
   def email
-    'durkster@gmail.com'
+    "durkster@gmail.com"
   end
 end
