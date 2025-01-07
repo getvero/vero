@@ -2,6 +2,8 @@
 
 require "rubygems"
 require "bundler/setup"
+require "rspec"
+require "webmock/rspec"
 
 require "vero"
 
@@ -13,6 +15,8 @@ RSpec.configure do |config|
   end
 
   config.raise_errors_for_deprecations!
+
+  WebMock.disable_net_connect!
 end
 
 def stub_env(new_env, &block)

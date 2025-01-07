@@ -17,7 +17,7 @@ describe Vero::Trackable do
     @request_params = {
       event_name: "test_event",
       tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
-      identity: {email: "durkster@gmail.com", age: 20, _user_type: "User"},
+      identity: {email: "user@getvero.com", age: 20, _user_type: "User"},
       data: {test: 1},
       development_mode: true
     }
@@ -49,7 +49,7 @@ describe Vero::Trackable do
       before do
         @request_params = {
           event_name: "test_event",
-          identity: {email: "durkster@gmail.com", age: 20, _user_type: "User"},
+          identity: {email: "user@getvero.com", age: 20, _user_type: "User"},
           data: {test: 1},
           extras: {}
         }
@@ -94,8 +94,8 @@ describe Vero::Trackable do
       before do
         @request_params = {
           id: nil,
-          email: "durkster@gmail.com",
-          data: {email: "durkster@gmail.com", age: 20, _user_type: "User"}
+          email: "user@getvero.com",
+          data: {email: "user@getvero.com", age: 20, _user_type: "User"}
         }
         @url = "https://api.getvero.com/api/v2/users/track.json"
       end
@@ -126,8 +126,8 @@ describe Vero::Trackable do
       before do
         @request_params = {
           id: nil,
-          email: "durkster@gmail.com",
-          changes: {email: "durkster@gmail.com", age: 20, _user_type: "User"}
+          email: "user@getvero.com",
+          changes: {email: "user@getvero.com", age: 20, _user_type: "User"}
         }
         @url = "https://api.getvero.com/api/v2/users/edit.json"
       end
@@ -160,7 +160,7 @@ describe Vero::Trackable do
       before do
         @request_params = {
           id: nil,
-          email: "durkster@gmail.com",
+          email: "user@getvero.com",
           add: [],
           remove: []
         }
@@ -195,7 +195,7 @@ describe Vero::Trackable do
       before do
         @request_params = {
           id: nil,
-          email: "durkster@gmail.com"
+          email: "user@getvero.com"
         }
         @url = "https://api.getvero.com/api/v2/users/unsubscribe.json"
       end
@@ -253,46 +253,46 @@ describe Vero::Trackable do
 
       it "should return a hash of all values mapped by trackable" do
         user = User.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 20, _user_type: "User"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, _user_type: "User"})
 
         user = UserWithoutEmail.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 20, _user_type: "UserWithoutEmail"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, _user_type: "UserWithoutEmail"})
 
         user = UserWithEmailAddress.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 20, _user_type: "UserWithEmailAddress"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, _user_type: "UserWithEmailAddress"})
 
         user = UserWithoutInterface.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 20, _user_type: "UserWithoutInterface"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, _user_type: "UserWithoutInterface"})
 
         user = UserWithNilAttributes.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", _user_type: "UserWithNilAttributes"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithNilAttributes"})
       end
 
       it "should take into account any defined extras" do
         user = UserWithExtras.new
         user.properties = nil
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", _user_type: "UserWithExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithExtras"})
 
         user.properties = "test"
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", _user_type: "UserWithExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithExtras"})
 
         user.properties = {}
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", _user_type: "UserWithExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithExtras"})
 
         user.properties = {
           age: 20,
           gender: "female"
         }
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 20, gender: "female", _user_type: "UserWithExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, gender: "female", _user_type: "UserWithExtras"})
 
         user = UserWithPrivateExtras.new
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", age: 26, _user_type: "UserWithPrivateExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", age: 26, _user_type: "UserWithPrivateExtras"})
       end
 
       it "should allow extras to be provided instead :id or :email" do
         user = UserWithOnlyExtras.new
         user.properties = {email: user.email}
-        expect(user.to_vero).to eq({email: "durkster@gmail.com", _user_type: "UserWithOnlyExtras"})
+        expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithOnlyExtras"})
       end
     end
 
@@ -310,7 +310,7 @@ describe Vero::Trackable do
       request_params = {
         event_name: "test_event",
         tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
-        identity: {email: "durkster@gmail.com", age: 20, _user_type: "UserWithoutInterface"},
+        identity: {email: "user@getvero.com", age: 20, _user_type: "UserWithoutInterface"},
         data: {test: 1},
         development_mode: true
       }

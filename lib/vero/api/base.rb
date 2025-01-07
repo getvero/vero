@@ -16,12 +16,14 @@ class Vero::Api::Base
 
     validate_configured!
     options.merge!(config.request_params)
-    Vero::Sender.send(api_klass, config.async, config.domain, options)
+    Vero::Sender.call(api_klass, config.async, config.domain, options)
   end
 
   protected
 
   def validate_configured!
-    raise "You must configure the 'vero' gem. Visit https://github.com/getvero/vero for more details." unless config.configured?
+    return if config.configured?
+
+    raise "You must configure the 'vero' gem. Visit https://github.com/getvero/vero for more details."
   end
 end

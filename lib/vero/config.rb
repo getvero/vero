@@ -4,8 +4,13 @@ class Vero::Config
   attr_writer :domain
   attr_accessor :tracking_api_key, :development_mode, :async, :disabled, :logging
 
-  def self.available_attributes
-    %i[tracking_api_key development_mode async disabled logging domain]
+  ACCEPTED_ATTRIBUTES = %i[tracking_api_key development_mode async disabled logging domain]
+
+  # Extracts accepted attributes from the given object. It isn't necessarily a Vero::Config instance.
+  def self.extract_accepted_attrs_from(object)
+    Vero::Config::ACCEPTED_ATTRIBUTES.each_with_object({}) do |method_name, hash|
+      hash[method_name] = object.public_send(method_name) if object.respond_to?(method_name)
+    end
   end
 
   def initialize
@@ -51,9 +56,9 @@ class Vero::Config
   def update_attributes(attributes = {})
     return unless attributes.is_a?(Hash)
 
-    Vero::Config.available_attributes.each do |symbol|
-      method_name = "#{symbol}="
-      send(method_name, attributes[symbol]) if respond_to?(method_name) && attributes.key?(symbol)
+    Vero::Config::ACCEPTED_ATTRIBUTES.each do |symbol|
+      method_name = :"#{symbol}="
+      send(method_name, attributes[symbol]) if attributes.key?(symbol) && respond_to?(method_name)
     end
   end
 end

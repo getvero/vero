@@ -5,8 +5,8 @@ class Vero::Api::Workers::Users::UnsubscribeAPI < Vero::Api::Workers::BaseAPI
     "#{@domain}/api/v2/users/unsubscribe.json"
   end
 
-  def request
-    RestClient.post(url, @options)
+  def request_method
+    :post
   end
 
   def validate!

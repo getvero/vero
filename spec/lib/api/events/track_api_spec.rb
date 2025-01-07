@@ -47,11 +47,18 @@ describe Vero::Api::Workers::Events::TrackAPI do
       end
     end
 
-    describe :request do
-      it "should send a JSON request to the Vero API" do
-        expect(RestClient).to receive(:post).with("https://api.getvero.com/api/v2/events/track.json", {auth_token: "abcd", identity: {email: "test@test.com"}, event_name: "test_event"}.to_json, {content_type: :json, accept: :json})
-        allow(RestClient).to receive(:post).and_return(200)
+    describe "request" do
+      it "should send a request to the Vero API" do
+        stub = stub_request(:post, "https://api.getvero.com/api/v2/events/track.json")
+          .with(
+            body: {auth_token: "abcd", identity: {email: "test@test.com"}, event_name: "test_event"}.to_json,
+            headers: {"Content-Type" => "application/json", "Accept" => "application/json"}
+          )
+          .to_return(status: 200)
+
         subject.send(:request)
+
+        expect(stub).to have_been_requested
       end
     end
   end
