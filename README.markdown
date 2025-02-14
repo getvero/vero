@@ -1,7 +1,7 @@
 # vero
 
 [vero](https://github.com/getvero/vero) makes it easy to interact with Vero's
-REST API from your Ruby app. Vero is an customer engagement platform that allows you to message your customers based on the actions they perform on your website or application.
+REST API from your Ruby app. Vero is a customer engagement platform that allows you to message your customers based on the actions they perform on your website or application.
 
 For more information about the platform, [click here](http://www.getvero.com).
 
