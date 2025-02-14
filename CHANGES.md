@@ -1,3 +1,7 @@
+## 1.0.0
+
+- **BREAKING**: You are now required to use the tracking API key to authenticate. Visit https://connect.getvero.com/settings/project/tracking-api-keys to manage your tracking API keys. The original way of using API key and secret is no longer supported in this version.
+
 ## 0.9.0
 
 - *Added support for Sidekiq**. You can now use Sidekiq to deliver API requests to Vero. To do so, just specify `config.async = :sidekiq` in your config.rb file.

@@ -20,11 +20,11 @@ describe Vero::App do
     it 'should pass configuration defined in the block to the config file' do
       Vero::App.init
 
-      expect(context.config.api_key).to be_nil
+      expect(context.config.tracking_api_key).to be_nil
       Vero::App.init do |c|
-        c.api_key = 'abcd1234'
+        c.tracking_api_key = 'abcd1234'
       end
-      expect(context.config.api_key).to eq('abcd1234')
+      expect(context.config.tracking_api_key).to eq('abcd1234')
     end
 
     it 'should init should be able to set async' do

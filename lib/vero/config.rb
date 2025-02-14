@@ -5,10 +5,10 @@ require 'base64'
 module Vero
   class Config
     attr_writer :domain
-    attr_accessor :api_key, :secret, :development_mode, :async, :disabled, :logging
+    attr_accessor :tracking_api_key, :development_mode, :async, :disabled, :logging
 
     def self.available_attributes
-      %i[api_key secret development_mode async disabled logging domain]
+      %i[tracking_api_key development_mode async disabled logging domain]
     end
 
     def initialize
@@ -16,12 +16,12 @@ module Vero
     end
 
     def config_params
-      { api_key: api_key, secret: secret }
+      { tracking_api_key: tracking_api_key }
     end
 
     def request_params
       {
-        auth_token: auth_token,
+        tracking_api_key: tracking_api_key,
         development_mode: development_mode
       }.compact
     end
@@ -34,18 +34,8 @@ module Vero
       end
     end
 
-    def auth_token
-      return unless auth_token?
-
-      ::Base64.encode64("#{api_key}:#{secret}").gsub(/[\n ]/, '')
-    end
-
-    def auth_token?
-      !api_key.blank? && !secret.blank?
-    end
-
     def configured?
-      auth_token?
+      !tracking_api_key.blank?
     end
 
     def disable_requests!
@@ -57,8 +47,7 @@ module Vero
       self.development_mode = false
       self.async            = true
       self.logging          = false
-      self.api_key          = nil
-      self.secret           = nil
+      self.tracking_api_key = nil
     end
 
     def update_attributes(attributes = {})

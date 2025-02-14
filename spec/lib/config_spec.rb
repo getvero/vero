@@ -11,50 +11,36 @@ describe Vero::Config do
 
   describe :reset! do
     it 'should reset all attributes' do
-      config.api_key = 'abcd1234'
-      config.secret  = 'abcd1234'
+      config.tracking_api_key = 'abcd1234'
       config.reset!
 
-      expect(config.api_key).to be_nil
-      expect(config.secret).to be_nil
+      expect(config.tracking_api_key).to be_nil
     end
   end
 
-  describe :auth_token do
-    it 'should return nil if either api_key or secret are not set' do
-      config.api_key = nil
-      config.secret = 'abcd'
-      expect(config.auth_token).to be_nil
-
-      config.api_key = 'abcd'
-      config.secret = nil
-      expect(config.auth_token).to be_nil
-
-      config.api_key = 'abcd'
-      config.secret = 'abcd'
-      expect(config.auth_token).not_to be_nil
+  describe :tracking_api_key do
+    it 'should return nil if tracking_api_key is not set' do
+      config.tracking_api_key = nil
+      expect(config.tracking_api_key).to be_nil
     end
 
-    it 'should return an expected auth_token' do
-      config.api_key = 'abcd1234'
-      config.secret = 'efgh5678'
-      expect(config.auth_token).to eq('YWJjZDEyMzQ6ZWZnaDU2Nzg=')
+    it 'should return an expected tracking_api_key' do
+      config.tracking_api_key = 'abcd1234'
+      expect(config.tracking_api_key).to eq('abcd1234')
     end
   end
 
   describe :request_params do
-    it 'should return a hash of auth_token and development_mode if they are set' do
-      config.api_key = nil
-      config.secret = nil
+    it 'should return a hash of tracking_api_key and development_mode if they are set' do
+      config.tracking_api_key = nil
       config.development_mode = nil
       expect(config.request_params).to eq({})
 
-      config.api_key = 'abcd1234'
-      config.secret = 'abcd1234'
-      expect(config.request_params).to eq({ auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ=' })
+      config.tracking_api_key = 'abcd1234'
+      expect(config.request_params).to eq({ tracking_api_key: 'abcd1234' })
 
       config.development_mode = true
-      expect(config.request_params).to eq({ auth_token: 'YWJjZDEyMzQ6YWJjZDEyMzQ=', development_mode: true })
+      expect(config.request_params).to eq({ tracking_api_key: 'abcd1234', development_mode: true })
     end
   end
 
