@@ -1,10 +1,9 @@
 # vero
-[vero](https://github.com/getvero/vero) makes it easy to interact with Vero's
-REST API from your Ruby app. Vero is an email marketing platform that allows you
-to engage and re-engage your customer base based on the actions they perform in
-your software.
 
-For more information about the platform, [click here](http://getvero.com).
+[vero](https://github.com/getvero/vero) makes it easy to interact with Vero's
+REST API from your Ruby app. Vero is an customer engagement platform that allows you to message your customers based on the actions they perform on your website or application.
+
+For more information about the platform, [click here](http://www.getvero.com).
 
 ## Installation
 
@@ -20,25 +19,16 @@ Or install the gem:
 gem install vero
 ```
 
-Create an initializer in your config/initializers folder called vero.rb with the
-following:
+To get started with a Ruby on Rails application, add the following initializer:
 
 ```ruby
 # config/initializers/vero.rb
 Vero::App.init do |config|
-  if Rails.env.production?
-    config.api_key = "Your Production API key goes here"
-    config.secret = "Your Production API secret goes here"
-  else
-    config.api_key = "Your Development API key goes here"
-    config.secret = "Your Development API secret goes here"
-  end
+  config.tracking_api_key = ENV['VERO_TRACKING_API_KEY']
 end
 ```
 
-You will be able to find your API key and secret by logging into Vero
-([sign up](http://getvero.com) if you haven't already) and clicking the
-'Your Account' link at the top of the page then select 'API Keys'.
+You will be able to find your Tracking API key by visiting the [Settings page](https://connect.getvero.com/settings/project/tracking-api-keys).
 
 By default, events are sent synchronously.
 We recommend that you select one of the supported background thread/queue-based alternatives and add their
@@ -245,7 +235,7 @@ end
 
 This gem is distributed under the MIT License.
 
-Copyright (C) 2014 Vero (Invc Me Inc.)
+Copyright (C) 2025 Vero (Invc Me Inc.)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
