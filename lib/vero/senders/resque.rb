@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'resque'
+require "json"
+require "resque"
 
 module Vero
   class ResqueWorker

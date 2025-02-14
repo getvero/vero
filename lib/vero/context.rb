@@ -26,7 +26,7 @@ module Vero
     def configure(hash = {}, &block)
       @config.update_attributes(hash) if hash.is_a?(Hash) && hash.any?
 
-      block.call(@config) if block_given?
+      block&.call(@config)
     end
 
     def reset!

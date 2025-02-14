@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'sucker_punch'
+require "json"
+require "sucker_punch"
 
 module Vero
   class SuckerPunchWorker
@@ -14,7 +14,7 @@ module Vero
       begin
         api_class.new(domain, new_options).perform
         Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
-      rescue StandardError => e
+      rescue => e
         Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
       end
     end

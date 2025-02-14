@@ -9,7 +9,7 @@ module Vero
     end
 
     def self.init(&block)
-      default_context.configure(&block) if block_given?
+      default_context.configure(&block) if block
     end
 
     def self.reset!

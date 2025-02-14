@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'base64'
+require "base64"
 
 module Vero
   class Config
@@ -16,7 +16,7 @@ module Vero
     end
 
     def config_params
-      { tracking_api_key: tracking_api_key }
+      {tracking_api_key: tracking_api_key}
     end
 
     def request_params
@@ -28,9 +28,9 @@ module Vero
 
     def domain
       if @domain.blank?
-        'https://api.getvero.com'
+        "https://api.getvero.com"
       else
-        @domain =~ %r{https?://.+} ? @domain : "http://#{@domain}"
+        %r{https?://.+}.match?(@domain) ? @domain : "http://#{@domain}"
       end
     end
 
@@ -43,10 +43,10 @@ module Vero
     end
 
     def reset!
-      self.disabled         = false
+      self.disabled = false
       self.development_mode = false
-      self.async            = true
-      self.logging          = false
+      self.async = true
+      self.logging = false
       self.tracking_api_key = nil
     end
 

@@ -11,10 +11,10 @@ module Vero
       module ClassMethods
         def trackable(*args)
           @vero_trackable_map = case @vero_trackable_map
-                                when Array then (@vero_trackable_map << args).flatten
-                                else
-                                  args
-                                end
+          when Array then (@vero_trackable_map << args).flatten
+          else
+            args
+          end
         end
 
         def trackable_map
