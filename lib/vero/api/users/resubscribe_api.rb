@@ -14,7 +14,9 @@ module Vero
           end
 
           def validate!
-            raise ArgumentError, "Missing :id or :email" if options[:id].to_s.blank? && options[:email].to_s.blank?
+            return unless options[:id].to_s.strip.empty? && options[:email].to_s.strip.empty?
+
+            raise ArgumentError, "Missing :id or :email"
           end
         end
       end

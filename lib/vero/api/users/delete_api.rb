@@ -14,7 +14,7 @@ module Vero
           end
 
           def validate!
-            raise ArgumentError, "Missing :id" if options[:id].to_s.blank?
+            raise ArgumentError, "Missing :id" if options[:id].to_s.strip.empty?
           end
         end
       end
