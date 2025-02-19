@@ -18,10 +18,10 @@ module Vero
               raise ArgumentError, "Missing :id or :email"
             end
 
-            raise ArgumentError, ':add must be an Array if present' unless options[:add].nil? || options[:add].is_a?(Array)
+            raise ArgumentError, ":add must be an Array if present" unless options[:add].nil? || options[:add].is_a?(Array)
 
             unless options[:remove].nil? || options[:remove].is_a?(Array)
-              raise ArgumentError, ":remove must an Array if present"
+              raise ArgumentError, ":remove must be an Array if present"
             end
 
             return unless options[:remove].nil? && options[:add].nil?

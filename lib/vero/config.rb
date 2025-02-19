@@ -27,7 +27,7 @@ module Vero
     end
 
     def domain
-      if @domain.nil? || @domain.empty?
+      if @domain.nil? || @domain.to_s.empty?
         "https://api.getvero.com"
       else
         a_domain = @domain.to_s
