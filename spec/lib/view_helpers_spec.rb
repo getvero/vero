@@ -30,11 +30,9 @@ describe Vero::ViewHelpers::Javascript do
     context "Vero::App has been properly configured" do
       before :each do
         @tracking_api_key = "abcd1234"
-        @api_dev_mode = false
 
         Vero::App.init do |c|
           c.tracking_api_key = @tracking_api_key
-          c.development_mode = @api_dev_mode
         end
       end
 

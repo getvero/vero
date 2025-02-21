@@ -18,8 +18,7 @@ describe Vero::Trackable do
       event_name: "test_event",
       tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
       identity: {email: "user@getvero.com", age: 20, _user_type: "User"},
-      data: {test: 1},
-      development_mode: true
+      data: {test: 1}
     }
     @url = "https://api.getvero.com/api/v1/track.json"
     @user = User.new
@@ -311,8 +310,7 @@ describe Vero::Trackable do
         event_name: "test_event",
         tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg=",
         identity: {email: "user@getvero.com", age: 20, _user_type: "UserWithoutInterface"},
-        data: {test: 1},
-        development_mode: true
+        data: {test: 1}
       }
 
       context = Vero::Context.new(Vero::App.default_context)

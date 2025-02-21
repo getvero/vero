@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class Vero::Config
-  attr_writer :domain
-  attr_accessor :tracking_api_key, :development_mode, :async, :disabled, :logging
+  attr_writer :development_mode # Deprecated field
 
-  ACCEPTED_ATTRIBUTES = %i[tracking_api_key development_mode async disabled logging domain]
+  attr_writer :domain
+  attr_accessor :tracking_api_key, :async, :disabled, :logging
+
+  ACCEPTED_ATTRIBUTES = %i[tracking_api_key async disabled logging domain]
 
   # Extracts accepted attributes from the given object. It isn't necessarily a Vero::Config instance.
   def self.extract_accepted_attrs_from(object)
@@ -22,10 +24,7 @@ class Vero::Config
   end
 
   def request_params
-    {
-      tracking_api_key: tracking_api_key,
-      development_mode: development_mode
-    }.compact
+    {tracking_api_key: tracking_api_key}.compact
   end
 
   def domain
@@ -47,7 +46,6 @@ class Vero::Config
 
   def reset!
     self.disabled = false
-    self.development_mode = false
     self.async = true
     self.logging = false
     self.tracking_api_key = nil
