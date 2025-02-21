@@ -2,16 +2,6 @@
 
 require "spec_helper"
 
-describe Vero::DSL do
-  subject(:dsl) { Class.new.extend(Vero::DSL) }
-
-  describe "#vero" do
-    it "is a proxy to the API" do
-      expect(dsl.vero).to be_an_instance_of(Vero::DSL::Proxy)
-    end
-  end
-end
-
 describe Vero::DSL::Proxy do
   subject(:proxy) { described_class.new }
 
@@ -20,7 +10,7 @@ describe Vero::DSL::Proxy do
       expect(proxy.users).to eql(Vero::Api::Users)
     end
 
-    it "should respond to reidentify!" do
+    it "responds to reidentify!" do
       expect(proxy.users.respond_to?(:reidentify!)).to be(true)
     end
   end
