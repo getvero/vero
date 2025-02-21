@@ -5,7 +5,7 @@ require "spec_helper"
 describe Vero::Context do
   let(:context) { Vero::Context.new }
 
-  describe :initialize do
+  describe "#initialize" do
     it "accepts multiple parameter types" do
       context1 = Vero::Context.new({tracking_api_key: "didah"})
       expect(context1).to be_a(Vero::Context)
@@ -22,20 +22,20 @@ describe Vero::Context do
     end
   end
 
-  describe :configure do
-    it "should ignore configuring the config if no block is provided" do
+  describe "#configure" do
+    it "ignores configuring the config if no block is provided" do
       context.configure
       expect(context.configured?).to be(false)
     end
 
-    it "should pass configuration defined in the block to the config file" do
+    it "passes configuration defined in the block to the config file" do
       context.configure do |c|
         c.tracking_api_key = "abcd1234"
       end
       expect(context.config.tracking_api_key).to eq("abcd1234")
     end
 
-    it "should init should be able to set async" do
+    it "allows init to set async" do
       context.configure do |c|
         c.async = false
       end
@@ -48,8 +48,8 @@ describe Vero::Context do
     end
   end
 
-  describe :disable_requests! do
-    it "should change config.disabled" do
+  describe "#disable_requests!" do
+    it "changes config.disabled" do
       expect(context.config.disabled).to be(false)
       context.disable_requests!
       expect(context.config.disabled).to be(true)

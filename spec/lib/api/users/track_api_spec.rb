@@ -3,10 +3,13 @@
 require "spec_helper"
 
 describe Vero::Api::Workers::Users::TrackAPI do
-  subject { Vero::Api::Workers::Users::TrackAPI.new("https://api.getvero.com", {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com"}) }
+  let(:payload) { {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com"} }
+
+  subject { Vero::Api::Workers::Users::TrackAPI.new("https://api.getvero.com", payload) }
 
   it_behaves_like "a Vero wrapper" do
-    let(:end_point) { "/api/v2/users/track.json" }
+    let(:request_method) { :post }
+    let(:endpoint) { "/api/v2/users/track.json" }
   end
 
   describe :validate! do
@@ -40,27 +43,6 @@ describe Vero::Api::Workers::Users::TrackAPI do
       options = {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com", data: {}}
       subject.options = options
       expect { subject.send(:validate!) }.to_not raise_error
-    end
-
-    it "should not raise an error when the keys are Strings" do
-      options = {"auth_token" => "abcd", "identity" => {"email" => "test@test.com"}, "email" => "test@test.com", "data" => {}}
-      subject.options = options
-      expect { subject.send(:validate!) }.to_not raise_error
-    end
-  end
-
-  describe "request" do
-    it "should send a request to the Vero API" do
-      stub = stub_request(:post, "https://api.getvero.com/api/v2/users/track.json")
-        .with(
-          body: {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com"}.to_json,
-          headers: {"Content-Type" => "application/json", "Accept" => "application/json"}
-        )
-        .to_return(status: 200)
-
-      subject.send(:request)
-
-      expect(stub).to have_been_requested
     end
   end
 

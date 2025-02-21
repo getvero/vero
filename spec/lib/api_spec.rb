@@ -15,7 +15,7 @@ describe Vero::Api::Events do
     allow(Vero::App).to receive(:default_context).and_return(mock_context)
   end
 
-  it "should pass http_timeout to API requests" do
+  it "passes http_timeout to API requests" do
     allow(mock_context.config).to receive(:http_timeout).and_return(30)
 
     expect(Vero::Sender).to(

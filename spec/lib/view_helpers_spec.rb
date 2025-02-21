@@ -20,7 +20,7 @@ describe Vero::ViewHelpers::Javascript do
 
   subject { Vero::ViewHelpers::Javascript }
   describe :vero_javascript_tag do
-    it "should return an empty string if Vero::App is not properly configured" do
+    it "returns an empty string if Vero::App is not properly configured" do
       expect(subject.vero_javascript_tag).to eq("")
 
       Vero::App.init
@@ -36,7 +36,7 @@ describe Vero::ViewHelpers::Javascript do
         end
       end
 
-      it "should return a properly formatted javascript snippet" do
+      it "returns a properly formatted javascript snippet" do
         expect(subject.vero_javascript_tag).to eq(<<~HTML.strip)
           <script type="text/javascript">var _veroq = _veroq || [];setTimeout(function(){if(typeof window.Semblance=="undefined"){console.log("Vero did not load in time.");for(var i=0;i<_veroq.length;i++){a=_veroq[i];if(a.length==3&&typeof a[2]=="function")a[2](null,false);}}},3000);_veroq.push(['init', {"tracking_api_key": "#{@tracking_api_key}"}]);(function() {var ve = document.createElement('script'); ve.type = 'text/javascript'; ve.async = true; ve.src = '//getvero.com/assets/m.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ve, s);})();</script>
         HTML

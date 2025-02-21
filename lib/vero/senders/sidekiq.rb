@@ -1,9 +1,9 @@
-class Vero::Senders::Sidekiq
-  def call(api_class, domain, options)
-    response = ::Vero::SidekiqWorker.perform_async(api_class.to_s, domain, options)
+class Vero::Senders::Sidekiq < Vero::Senders::Base
+  def enqueue_work(api_class, domain, options)
+    ::Vero::SidekiqWorker.perform_async(api_class.to_s, domain, options)
+  end
 
-    Vero::App.log(self, "method: #{api_class.name}, options: #{JSON.dump(options)}, response: sidekiq job queued")
-
-    response
+  def log_message
+    "sidekiq job queued"
   end
 end

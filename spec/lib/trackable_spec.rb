@@ -225,18 +225,18 @@ describe Vero::Trackable do
     describe :trackable do
       before { User.reset_trackable_map! }
 
-      it "should build an array of trackable params" do
+      it "builds an array of trackable params" do
         User.trackable :email, :age
         expect(User.trackable_map).to eq(%i[email age])
       end
 
-      it "should append new trackable items to an existing trackable map" do
+      it "appends new trackable items to an existing trackable map" do
         User.trackable :email, :age
         User.trackable :hair_colour
         expect(User.trackable_map).to eq(%i[email age hair_colour])
       end
 
-      it "should append an extra's hash to the trackable map" do
+      it "appends an extra's hash to the trackable map" do
         User.trackable :email, {extras: :properties}
         expect(User.trackable_map).to eq([:email, {extras: :properties}])
       end
@@ -248,7 +248,7 @@ describe Vero::Trackable do
         User.trackable :email, :age
       end
 
-      it "should return a hash of all values mapped by trackable" do
+      it "returns a hash of all values mapped by trackable" do
         user = User.new
         expect(user.to_vero).to eq({email: "user@getvero.com", age: 20, _user_type: "User"})
 
@@ -265,7 +265,7 @@ describe Vero::Trackable do
         expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithNilAttributes"})
       end
 
-      it "should take into account any defined extras" do
+      it "takes into account any defined extras" do
         user = UserWithExtras.new
         user.properties = nil
         expect(user.to_vero).to eq({email: "user@getvero.com", _user_type: "UserWithExtras"})
@@ -294,7 +294,7 @@ describe Vero::Trackable do
     end
 
     describe :with_vero_context do
-      it "should be able to change contexts" do
+      it "can change contexts" do
         user = User.new
         expect(user.with_default_vero_context.config.config_params).to eq({tracking_api_key: "YWJjZDEyMzQ6ZWZnaDU2Nzg="})
         expect(user.with_vero_context({tracking_api_key: "boom"}).config.config_params).to eq({tracking_api_key: "boom"})

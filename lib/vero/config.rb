@@ -58,9 +58,8 @@ class Vero::Config
   def update_attributes(attributes = {})
     return unless attributes.is_a?(Hash)
 
-    Vero::Config::ACCEPTED_ATTRIBUTES.each do |symbol|
-      method_name = :"#{symbol}="
-      send(method_name, attributes[symbol]) if attributes.key?(symbol) && respond_to?(method_name)
-    end
+    Vero::Config::ACCEPTED_ATTRIBUTES
+      .select { |attr| attributes.key?(attr) }
+      .each { |attr| public_send(:"#{attr}=", attributes[attr]) }
   end
 end

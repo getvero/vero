@@ -3,42 +3,24 @@
 require "spec_helper"
 
 describe Vero::Api::Workers::Users::ReidentifyAPI do
-  subject { Vero::Api::Workers::Users::ReidentifyAPI.new("https://api.getvero.com", {auth_token: "abcd", id: "test@test.com", new_id: "test2@test.com"}) }
+  let(:payload) { {auth_token: "abcd", id: "test@test.com", new_id: "test2@test.com"} }
+
+  subject { Vero::Api::Workers::Users::ReidentifyAPI.new("https://api.getvero.com", payload) }
 
   it_behaves_like "a Vero wrapper" do
-    let(:end_point) { "/api/v2/users/reidentify.json" }
+    let(:request_method) { :put }
+    let(:endpoint) { "/api/v2/users/reidentify.json" }
   end
 
   describe :validate! do
-    it "should not raise an error when the keys are Strings" do
-      options = {"auth_token" => "abcd", "id" => "test@test.com", "new_id" => "test2@test.com"}
-      subject.options = options
-      expect { subject.send(:validate!) }.to_not raise_error
-    end
-
-    it "should raise an error if id is missing" do
+    it "raises an error if id is missing" do
       subject.options = {auth_token: "abcd", new_id: "test2@test.com"}
       expect { subject.send(:validate!) }.to raise_error(ArgumentError)
     end
 
-    it "should raise an error if new_id is missing" do
+    it "raises an error if new_id is missing" do
       subject.options = {auth_token: "abcd", id: "test@test.com"}
       expect { subject.send(:validate!) }.to raise_error(ArgumentError)
-    end
-  end
-
-  describe "request" do
-    it "should send a request to the Vero API" do
-      stub = stub_request(:put, "https://api.getvero.com/api/v2/users/reidentify.json")
-        .with(
-          body: {auth_token: "abcd", id: "test@test.com", new_id: "test2@test.com"}.to_json,
-          headers: {"Accept" => "application/json", "Content-Type" => "application/json"}
-        )
-        .to_return(status: 200)
-
-      subject.send(:request)
-
-      expect(stub).to have_been_requested
     end
   end
 
