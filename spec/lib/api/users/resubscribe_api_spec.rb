@@ -21,15 +21,15 @@ describe Vero::Api::Workers::Users::ResubscribeAPI do
     end
   end
 
-  describe :request do
+  describe "request" do
     it "should send a request to the Vero API" do
-      expect(RestClient).to(
-        receive(:post)
-        .with("https://api.getvero.com/api/v2/users/resubscribe.json", {auth_token: "abcd", id: "1234"})
-      )
-      allow(RestClient).to receive(:post).and_return(200)
+      stub = stub_request(:post, "https://api.getvero.com/api/v2/users/resubscribe.json")
+        .with(body: {auth_token: "abcd", id: "1234"})
+        .to_return(status: 200)
 
       subject.send(:request)
+
+      expect(stub).to have_been_requested
     end
   end
 end

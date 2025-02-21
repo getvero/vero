@@ -5,8 +5,8 @@ class Vero::Api::Workers::Users::ReidentifyAPI < Vero::Api::Workers::BaseAPI
     "#{@domain}/api/v2/users/reidentify.json"
   end
 
-  def request
-    RestClient.put(url, request_params_as_json, request_content_type)
+  def request_method
+    :put
   end
 
   def validate!

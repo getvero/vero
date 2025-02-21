@@ -7,6 +7,7 @@ class Vero::SidekiqWorker
 
   def perform(api_class, domain, options)
     api_class.constantize.new(domain, options).perform
+
     Vero::App.log(self, "method: #{api_class}, options: #{options.to_json}, response: sidekiq job queued")
   end
 end

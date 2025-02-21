@@ -27,17 +27,26 @@ describe Vero::Api::Workers::Users::ReidentifyAPI do
     end
   end
 
-  describe :request do
+  describe "request" do
     it "should send a request to the Vero API" do
-      expect(RestClient).to receive(:put).with("https://api.getvero.com/api/v2/users/reidentify.json", {auth_token: "abcd", id: "test@test.com", new_id: "test2@test.com"}.to_json, {content_type: :json, accept: :json})
-      allow(RestClient).to receive(:put).and_return(200)
+      stub = stub_request(:put, "https://api.getvero.com/api/v2/users/reidentify.json")
+        .with(
+          body: {auth_token: "abcd", id: "test@test.com", new_id: "test2@test.com"}.to_json,
+          headers: {"Accept" => "application/json", "Content-Type" => "application/json"}
+        )
+        .to_return(status: 200)
+
       subject.send(:request)
+
+      expect(stub).to have_been_requested
     end
   end
 
   describe "integration test" do
     it "should not raise any errors" do
-      allow(RestClient).to receive(:put).and_return(200)
+      stub_request(:put, "https://api.getvero.com/api/v2/users/reidentify.json")
+        .to_return(status: 200)
+
       expect { subject.perform }.to_not raise_error
     end
   end

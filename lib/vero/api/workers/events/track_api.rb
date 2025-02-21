@@ -5,8 +5,8 @@ class Vero::Api::Workers::Events::TrackAPI < Vero::Api::Workers::BaseAPI
     "#{@domain}/api/v2/events/track.json"
   end
 
-  def request
-    RestClient.post(url, request_params_as_json, request_content_type)
+  def request_method
+    :post
   end
 
   def validate!

@@ -7,7 +7,7 @@ class User
   trackable :email, :age
 
   def email
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   def age
@@ -24,7 +24,7 @@ class UserWithoutEmail
   end
 
   def primary_contact
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   def age
@@ -37,7 +37,7 @@ class UserWithEmailAddress
   trackable :email_address, :age
 
   def email_address
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   def age
@@ -50,7 +50,7 @@ class UserWithoutInterface
   trackable :email_address, :age
 
   def email_address
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   def age
@@ -67,7 +67,7 @@ class UserWithNilAttributes
   trackable :email_address, :age
 
   def email_address
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   def age
@@ -82,7 +82,7 @@ class UserWithExtras
   attr_accessor :properties
 
   def email
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 end
 
@@ -91,7 +91,7 @@ class UserWithPrivateExtras
   trackable :email, {extras: :properties}
 
   def email
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 
   private
@@ -108,6 +108,6 @@ class UserWithOnlyExtras
   attr_accessor :properties
 
   def email
-    "durkster@gmail.com"
+    "user@getvero.com"
   end
 end

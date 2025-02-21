@@ -49,17 +49,26 @@ describe Vero::Api::Workers::Users::TrackAPI do
     end
   end
 
-  describe :request do
+  describe "request" do
     it "should send a request to the Vero API" do
-      expect(RestClient).to receive(:post).with("https://api.getvero.com/api/v2/users/track.json", {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com"}.to_json, {content_type: :json, accept: :json})
-      allow(RestClient).to receive(:post).and_return(200)
+      stub = stub_request(:post, "https://api.getvero.com/api/v2/users/track.json")
+        .with(
+          body: {auth_token: "abcd", identity: {email: "test@test.com"}, email: "test@test.com"}.to_json,
+          headers: {"Content-Type" => "application/json", "Accept" => "application/json"}
+        )
+        .to_return(status: 200)
+
       subject.send(:request)
+
+      expect(stub).to have_been_requested
     end
   end
 
   describe "integration test" do
     it "should not raise any errors" do
-      allow(RestClient).to receive(:post).and_return(200)
+      stub_request(:post, "https://api.getvero.com/api/v2/users/track.json")
+        .to_return(status: 200)
+
       expect { subject.perform }.to_not raise_error
     end
   end

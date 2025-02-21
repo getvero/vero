@@ -6,14 +6,12 @@ class Vero::SuckerPunchWorker
   include SuckerPunch::Job
 
   def perform(api_class, domain, options)
-    new_options = {}
-    options.each { |k, v| new_options[k.to_sym] = v }
+    new_options = options.transform_keys(&:to_sym)
 
-    begin
-      api_class.new(domain, new_options).perform
-      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
-    rescue => e
-      Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
-    end
+    api_class.new(domain, new_options).perform
+
+    Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: job performed")
+  rescue => e
+    Vero::App.log(self, "method: #{api_class.name}, options: #{options.to_json}, response: #{e.message}")
   end
 end

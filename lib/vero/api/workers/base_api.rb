@@ -7,8 +7,7 @@ class Vero::Api::Workers::BaseAPI
   attr_reader :options
 
   def self.perform(domain, options)
-    caller = new(domain, options)
-    caller.perform
+    new(domain, options).perform
   end
 
   def initialize(domain, options)
@@ -46,19 +45,20 @@ class Vero::Api::Workers::BaseAPI
   end
 
   def request
+    request_headers = {content_type: :json, accept: :json}
+
+    if request_method == :get
+      RestClient.get(url, request_headers)
+    else
+      RestClient.send(request_method, url, JSON.dump(@options), request_headers)
+    end
   end
 
-  def request_content_type
-    {content_type: :json, accept: :json}
-  end
-
-  def request_params_as_json
-    JSON.dump(@options)
+  def request_method
+    raise NotImplementedError, "#{self.class.name}#request_method should be overridden"
   end
 
   def options_with_symbolized_keys(val)
-    val.each_with_object({}) do |(k, v), h|
-      h[k.to_sym] = v
-    end
+    val.transform_keys(&:to_sym)
   end
 end
