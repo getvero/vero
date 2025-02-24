@@ -45,7 +45,7 @@ class Vero::HttpClient
     log_params = params.dup
 
     if log_params.key?(:payload)
-      log_params[:payload] = body.merge(tracking_api_key: "[FILTERED]").to_json
+      log_params[:payload] = Vero::App.sanitize_log_payload(body).to_json
     end
 
     @logger.info("Request: #{log_params.inspect}")
