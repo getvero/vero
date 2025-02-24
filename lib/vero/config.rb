@@ -4,9 +4,9 @@ class Vero::Config
   attr_writer :development_mode # Deprecated field
 
   attr_writer :domain
-  attr_accessor :tracking_api_key, :async, :disabled, :logging
+  attr_accessor :tracking_api_key, :async, :disabled, :logging, :http_timeout
 
-  ACCEPTED_ATTRIBUTES = %i[tracking_api_key async disabled logging domain]
+  ACCEPTED_ATTRIBUTES = %i[tracking_api_key async disabled logging domain http_timeout]
 
   # Extracts accepted attributes from the given object. It isn't necessarily a Vero::Config instance.
   def self.extract_accepted_attrs_from(object)
@@ -24,7 +24,10 @@ class Vero::Config
   end
 
   def request_params
-    {tracking_api_key: tracking_api_key}.compact
+    {
+      tracking_api_key: tracking_api_key,
+      _config: {http_timeout: http_timeout}
+    }.compact
   end
 
   def domain
@@ -49,6 +52,7 @@ class Vero::Config
     self.async = true
     self.logging = false
     self.tracking_api_key = nil
+    self.http_timeout = Vero::HttpClient::DEFAULT_HTTP_TIMEOUT
   end
 
   def update_attributes(attributes = {})

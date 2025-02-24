@@ -31,12 +31,12 @@ describe Vero::Config do
   end
 
   describe :request_params do
-    it "should return a hash of tracking_api_key and development_mode if they are set" do
+    it "should return a hash containing tracking_api_key if set" do
       config.tracking_api_key = nil
-      expect(config.request_params).to eq({})
+      expect(config.request_params.key?(:tracking_api_key)).to be_falsey
 
       config.tracking_api_key = "abcd1234"
-      expect(config.request_params).to eq({tracking_api_key: "abcd1234"})
+      expect(config.request_params).to include(tracking_api_key: "abcd1234")
     end
   end
 
