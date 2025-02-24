@@ -16,6 +16,7 @@ group :development do
 end
 
 group :test do
+  gem "byebug"
   gem "rspec"
   gem "webmock"
 end
