@@ -3,3 +3,4 @@ info
 Gemfile.lock
 .ruby-version
 .zed
+.byebug_history

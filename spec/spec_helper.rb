@@ -2,6 +2,7 @@
 
 require "rubygems"
 require "bundler/setup"
+require "byebug"
 require "rspec"
 require "webmock/rspec"
 
