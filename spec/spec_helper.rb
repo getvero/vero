@@ -5,6 +5,7 @@ require "bundler/setup"
 require "byebug"
 require "rspec"
 require "webmock/rspec"
+require "sidekiq/testing"
 
 require "vero"
 
