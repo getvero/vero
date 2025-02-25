@@ -7,7 +7,8 @@ module Vero
     end
 
     def self.call(api_class, sender_strategy, domain, options)
-      senders[sender_strategy].new.call(api_class, domain, options)
+      sender = senders[sender_strategy].new
+      sender.call(api_class, domain, options)
     rescue => e
       Vero::App.log(new, "method: #{api_class.name}, options: #{JSON.dump(options)}, error: #{e.message}")
       raise e

@@ -27,25 +27,33 @@ module Vero
       end
 
       def to_vero
-        klass = self.class
-        symbols, other = klass.trackable_map.partition { |i| i.is_a?(Symbol) }
+        trackable_attrs, other = self.class.trackable_map.partition { |i| i.is_a?(Symbol) }
 
-        result = symbols.each_with_object({}) do |symbol, hash|
-          t = respond_to?(symbol) ? send(symbol) : nil
-          hash[symbol] = t unless t.nil?
+        result = trackable_attrs.each_with_object({}) do |attr, hash|
+          value = public_send(attr) if respond_to?(attr)
+          hash[attr] = value unless value.nil?
         end
 
         if other.is_a?(Array) && !other.empty?
           other.select! { |i| i.is_a?(Hash) && i.key?(:extras) }
+
           other.each do |h|
-            symbol = h[:extras]
-            t = respond_to?(symbol, true) ? send(symbol) : nil
-            result.merge!(t) if t.is_a?(Hash)
+            attr = h[:extras]
+
+            # `extras` methods can be private
+            if respond_to?(attr, true)
+              value = send(attr)
+              result.merge!(value) if value.is_a?(Hash)
+            end
           end
         end
 
-        result[:email] = result.delete(:email_address) if result.key?(:email_address)
+        if result.key?(:email_address)
+          result[:email] = result.delete(:email_address)
+        end
+
         result[:_user_type] = self.class.name
+
         result
       end
 

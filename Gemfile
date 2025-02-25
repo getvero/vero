@@ -10,6 +10,7 @@ group :development do
   gem "rails"
   gem "resque"
   gem "rubocop"
+  gem "rubocop-rspec"
   gem "sidekiq"
   gem "sucker_punch"
   gem "standard", ">= 1.35.1"
