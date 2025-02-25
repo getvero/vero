@@ -3,7 +3,7 @@ class Vero::HttpClient
 
   def initialize(http_timeout:, logger: nil)
     @http_timeout = http_timeout
-    setup_logging!(logger) if logger
+    @logger = logger
   end
 
   def get(url, headers = {})
@@ -19,22 +19,35 @@ class Vero::HttpClient
   end
 
   def do_request(method, url, body = nil, headers = {})
-    request_params = {method: method, url: url, headers: default_headers.merge(headers), timeout: @http_timeout}
-    request_params[:payload] = JSON.dump(body) unless method == :get
-    RestClient::Request.execute(request_params)
+    params = request_params(method, url, body, headers)
+
+    log_request(params, body) if @logger
+
+    req = RestClient::Request.new(params)
+    req.execute
   end
 
   private
+
+  def request_params(method, url, body = nil, headers = {})
+    params = {method: method, url: url, headers: default_headers.merge(headers), timeout: @http_timeout}
+    params[:payload] = JSON.dump(body) unless method == :get
+
+    params
+  end
 
   def default_headers
     {content_type: :json, accept: :json}
   end
 
-  def setup_logging!(logger)
-    RestClient.log = Object.new.tap do |proxy|
-      def proxy.<<(message)
-        logger.info message
-      end
+  def log_request(params, body)
+    # Clone params to avoid modifying the original
+    log_params = params.dup
+
+    if log_params.key?(:payload)
+      log_params[:payload] = body.merge(tracking_api_key: "[FILTERED]").to_json
     end
+
+    @logger.info("Request: #{log_params.inspect}")
   end
 end
