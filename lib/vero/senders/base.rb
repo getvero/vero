@@ -5,7 +5,7 @@ class Vero::Senders::Base
     api_class = get_api_class(api_class)
 
     resp = enqueue_work(api_class, domain, options)
-    Vero::App.log(self, "method: #{api_class.name}, options: #{JSON.dump(options)}, response: #{log_message}")
+    Vero::App.log_api_call(api_class.name, options, log_message)
 
     resp
   end
