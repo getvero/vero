@@ -5,6 +5,10 @@ REST API from your Ruby app. Vero is a customer engagement platform that allows 
 
 For more information about the platform, [click here](http://www.getvero.com).
 
+## Latest released version (0.10.0)
+
+This document relates to version 1.0 that is currently in development. For documentation on the latest released version [(0.10.0)](https://rubygems.org/gems/vero/versions/0.10.0) please refer to the [v0.10.0 readme](https://github.com/getvero/vero/blob/babbb05ab9e3da05cbe83d37688889c7ee27514a/README.markdown)
+
 ## Installation
 
 Include in your Gemfile:
